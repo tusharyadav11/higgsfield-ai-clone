@@ -175,7 +175,7 @@ for (const route of ROUTES) {
     for (let i = 0, last = -1, stable = 0; i < (route === "/explore" ? 25 : 4); i++) {
       const h = await page.evaluate(() => { window.scrollTo(0, document.documentElement.scrollHeight); return document.documentElement.scrollHeight; });
       await page.waitForTimeout(route === "/explore" ? 600 : 250);
-      if (h === last && ++stable >= (route === "/explore" ? 2 : 1)) break;
+      if (h === last && ++stable >= (route === "/explore" ? 3 : 1)) break;
       if (h !== last) stable = 0;
       last = h;
     }
@@ -283,8 +283,9 @@ function contrastAudit() {
     if (cs.visibility === "hidden" || cs.display === "none" || r.width < 2 || r.height < 2) continue;
     // background stack
     let ownFill: number[] | null = null;
-    for (const ch of Array.from(el.children)) { const c = getComputedStyle(ch); if (c.position === 'absolute' && c.backgroundImage === 'none') { const b = rgba(c.backgroundColor); const cr = ch.getBoundingClientRect(); if (b[3] > 0.5 && cr.width >= r.width * 0.9 && cr.height >= r.height * 0.9) ownFill = b; } }
-    for (const anc of [el.parentElement, el.parentElement?.parentElement]) if (!ownFill && anc) for (const sib of Array.from(anc.children)) { if (sib === el) continue; const c = getComputedStyle(sib); if (c.position === 'absolute' && c.backgroundImage === 'none') { const b = rgba(c.backgroundColor); const cr = sib.getBoundingClientRect(); if (b[3] > 0.5 && cr.left <= r.left + 2 && cr.right >= r.right - 2 && cr.top <= r.top + 2 && cr.bottom >= r.bottom - 2) ownFill = b; } }
+    const selfBg = rgba(cs.backgroundColor);
+    if (selfBg[3] < 0.5) for (const ch of Array.from(el.children)) { const c = getComputedStyle(ch); if (c.position === 'absolute' && c.backgroundImage === 'none') { const b = rgba(c.backgroundColor); const cr = ch.getBoundingClientRect(); if (b[3] > 0.5 && cr.width >= r.width * 0.9 && cr.height >= r.height * 0.9) ownFill = b; } }
+    for (const anc of [el.parentElement, el.parentElement?.parentElement]) if (!ownFill && selfBg[3] < 0.5 && anc) for (const sib of Array.from(anc.children)) { if (sib === el) continue; const c = getComputedStyle(sib); if (c.position === 'absolute' && c.backgroundImage === 'none') { const b = rgba(c.backgroundColor); const cr = sib.getBoundingClientRect(); if (b[3] > 0.5 && cr.left <= r.left + 2 && cr.right >= r.right - 2 && cr.top <= r.top + 2 && cr.bottom >= r.bottom - 2) ownFill = b; } }
     let bg: number[] = [10, 10, 10]; const layers: number[][] = []; let hasImage = false; let opacity = 1;
     for (let p: Element | null = el; p; p = p.parentElement) {
       const c = getComputedStyle(p); opacity *= parseFloat(c.opacity);

@@ -154,7 +154,7 @@ export function Palette({ onClose }: { onClose: () => void }) {
             spellCheck={false}
             className="h-full min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 text-base leading-none text-fg shadow-none outline-none ring-0 placeholder:text-muted focus:shadow-none focus:outline-none focus-visible:shadow-none focus-visible:outline-none"
           />
-          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close search" className="grid size-11 shrink-0 place-items-center rounded-lg text-muted hover:text-fg sm:size-auto sm:min-h-8 sm:px-0">
+          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close search" className="grid size-11 shrink-0 place-items-center rounded-lg text-muted hover:text-fg sm:size-auto sm:min-h-8 sm:px-0 pointer-coarse:sm:min-h-11 pointer-coarse:sm:min-w-11">
             <X className="size-5 sm:hidden" aria-hidden />
             <kbd className={`${kbd} hidden sm:inline`}>Esc</kbd>
           </button>

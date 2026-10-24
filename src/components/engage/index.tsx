@@ -33,6 +33,9 @@ const promptEmpty = () => {
   return !!el && el.value.trim() === "";
 };
 
+/** Module-level so a remount of the tree (route transitions, Suspense) does not restart the quiet period. */
+let visitStartMs = 0;
+
 export function EngageRoot() {
   const mounted = useMounted();
   return mounted ? <Engine /> : null;
@@ -53,7 +56,8 @@ function Engine() {
   useEffect(() => {
     const eng = useEngage.getState();
     eng.load();
-    const visitStart = Date.now();
+    visitStartMs ||= Date.now();
+    const visitStart = visitStartMs;
     const sensed = new Set<PopupId>();
     let idleSince: number | null = null;
     let trendingReady = false;
@@ -94,10 +98,7 @@ function Engine() {
 
     // returning after an absence
     const now0 = Date.now();
-    if (isAway(useEngage.getState().s.lastVisit, now0)) {
-      sensed.add("welcome-back");
-      loadTrending();
-    }
+    if (isAway(useEngage.getState().s.lastVisit, now0)) addPending("welcome-back"); // persisted: survives a remount/reload
     useEngage.getState().update((s) => ({ ...s, lastVisit: now0 }));
 
     const snapshot = (now: number): Snapshot => {
@@ -135,7 +136,7 @@ function Engine() {
         idleSince = null;
         sensed.delete("idle-create");
       }
-      if (sensed.has("welcome-back")) loadTrending();
+      if (useEngage.getState().s.pending["welcome-back"]) loadTrending();
 
       const jobRunning = useJobs.getState().jobs.some((j) => j.status === "running");
       const overlay = !!document.querySelector(OVERLAY);

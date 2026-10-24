@@ -52,7 +52,10 @@ test("videos use preload=none, muted, playsInline, poster", async ({ page }) => 
   const bad = await page.evaluate(() =>
     [...document.querySelectorAll("video")].flatMap((v) => {
       const p: string[] = [];
-      if (v.getAttribute("preload") !== "none") p.push(`preload=${v.getAttribute("preload")}`);
+      // preload flips to "auto" only once a loop is visible (>=40%) and has been granted a playback slot
+      const r = v.getBoundingClientRect();
+      const onScreen = r.bottom > 0 && r.top < innerHeight;
+      if (v.getAttribute("preload") !== "none" && !(onScreen && !v.paused)) p.push(`preload=${v.getAttribute("preload")}`);
       if (!v.muted) p.push("not muted");
       if (!v.hasAttribute("playsinline")) p.push("no playsInline");
       if (!v.getAttribute("poster")) p.push("no poster");

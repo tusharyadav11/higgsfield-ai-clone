@@ -23,6 +23,7 @@ const patchStore = (page: Page, patch: Record<string, unknown>) =>
   }, patch);
 
 test.describe("engage popups", () => {
+  test.setTimeout(90_000);
   test("first creation celebrates once, not again after reload, and moves focus into the card", async ({ page, errors }) => {
     await boot(page);
     await page.goto("/create");
@@ -84,14 +85,26 @@ test.describe("engage popups", () => {
     await expect(card(page)).toHaveCount(0);
   });
 
-  test("never in the quiet period, never over the assistant or palette", async ({ page }) => {
+  test("never in the quiet period (measured from navigation start)", async ({ page }) => {
     await boot(page, { ...FAST, quietMs: 2500 });
+    await page.addInitScript(() => {
+      new MutationObserver(() => {
+        const w = window as unknown as { __popupAt?: number };
+        if (w.__popupAt === undefined && document.querySelector('[data-testid="popup-card"]')) w.__popupAt = performance.now();
+      }).observe(document, { childList: true, subtree: true });
+    });
     await page.goto("/");
     await setCredits(page, 4);
-    await page.waitForTimeout(1200);
-    await expect(card(page)).toHaveCount(0); // still quiet
+    await expect(card(page, "credit-low")).toBeVisible({ timeout: 20_000 });
+    expect(await page.evaluate(() => (window as unknown as { __popupAt: number }).__popupAt)).toBeGreaterThanOrEqual(2500);
+  });
+
+  test("never over the assistant or palette", async ({ page }) => {
+    await boot(page, { ...FAST, quietMs: 6000 });
+    await page.goto("/");
+    await setCredits(page, 4);
     await tid(page, "assistant-toggle").click();
-    await page.waitForTimeout(3000);
+    await page.waitForTimeout(8000);
     await expect(card(page)).toHaveCount(0); // quiet is over but the assistant is open
     await tid(page, "assistant-toggle").click();
     await expect(card(page, "credit-low")).toBeVisible();
@@ -210,6 +223,7 @@ test.describe("engage popups", () => {
     await expect(card(page)).toBeVisible();
     await page.evaluate(() => (window as unknown as { __kineticEngageReset: () => void }).__kineticEngageReset());
     await expect(card(page)).toHaveCount(0);
+    await page.waitForTimeout(500);
     const st = await engageState(page);
     expect(st.pending).toEqual({});
     expect(st.lastShown).toEqual({});

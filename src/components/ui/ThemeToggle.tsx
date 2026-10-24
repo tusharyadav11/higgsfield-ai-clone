@@ -35,12 +35,12 @@ export function ThemeToggle({ className, compact = false, id = "theme-segmented"
             onClick={() => setMode(t)}
             className={cn(
               "flex items-center justify-center rounded-full outline-none transition-colors focus-visible:ring-2 focus-visible:ring-accent",
-              compact ? "size-9" : "h-11 min-w-11 gap-1.5 px-3 text-sm font-medium",
+              compact ? "size-11" : "h-11 min-w-11 gap-1.5 px-3 text-sm font-medium max-[359px]:px-0",
               on ? "bg-accent text-accent-fg" : "text-muted hover:text-fg",
             )}
           >
             <Icon className="size-4" aria-hidden />
-            {!compact && <span>{LABEL[t]}</span>}
+            {!compact && <span className="max-[359px]:sr-only">{LABEL[t]}</span>}
           </button>
         );
       })}

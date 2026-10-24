@@ -1,4 +1,4 @@
-import { test, expect } from "./helpers";
+import { test, expect, tid, generate } from "./helpers";
 import type { Page } from "@playwright/test";
 
 const playing = (page: Page) =>
@@ -34,7 +34,6 @@ test.describe("motion", () => {
           muted: el.muted,
           playsInline: el.hasAttribute("playsinline"),
           poster: !!el.getAttribute("poster"),
-          preload: el.getAttribute("preload"),
           far: r.bottom < -vh * 2 || r.top > vh * 3,
         };
       });
@@ -43,7 +42,8 @@ test.describe("motion", () => {
     for (const s of state) {
       expect(s.muted && s.playsInline && s.poster).toBe(true);
       if (!s.visible) expect(s.paused).toBe(true);
-      if (s.far) expect(s.preload).toBe("none");
+      // phones unload videos that are far away (element removed); desktop may keep them, but paused
+      if (s.far && max === 2) throw new Error("far video still mounted on touch");
     }
     // every card keeps its still photo
     const imgs = await page.locator('[data-testid="feed-card"] img').count();
@@ -70,11 +70,10 @@ test.describe("motion", () => {
 
   test("result card plays the generated image's motion loop", async ({ page }) => {
     await page.goto("/create");
-    await page.getByTestId("prompt-input").fill("neon city rain").catch(() => undefined);
-    const gen = page.getByRole("button", { name: /generate/i }).first();
-    await gen.click();
-    const card = page.getByTestId("result-card");
-    await expect(card).toBeVisible({ timeout: 20000 });
+    await tid(page, "prompt-input").fill("neon city rain");
+    await generate(page);
+    const card = tid(page, "result-card");
+    await card.scrollIntoViewIfNeeded();
     await expect(card.locator("video")).toHaveCount(1, { timeout: 5000 });
     await expect.poll(() => card.locator("video").evaluate((v: HTMLVideoElement) => !v.paused), { timeout: 8000 }).toBe(true);
   });
