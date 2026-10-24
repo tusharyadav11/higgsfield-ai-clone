@@ -1,6 +1,5 @@
 "use client";
 import type { ReactNode } from "react";
-import type { Accent } from "@/lib/theme";
 import { Header } from "./Header";
 import { Nav } from "./Nav";
 import { GuideRoot } from "@/components/guide";
@@ -9,7 +8,7 @@ import { EngageRoot } from "@/components/engage";
 import { ThemeSync } from "@/components/color/useTheme";
 import { SpotlightRoot } from "@/components/ui/Spotlight";
 
-export function Shell({ children, initialAccent }: { children: ReactNode; initialAccent: Accent }) {
+export function Shell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-dvh sm:pl-[72px] lg:pl-56">
       <Nav />

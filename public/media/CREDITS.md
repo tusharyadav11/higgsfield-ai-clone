@@ -15,3 +15,11 @@ this project. Posters are single frames extracted from the same videos.
 
 ## Blur placeholders
 Tiny 10 px JPEG base64 strings in src/lib/media-library.ts derived from the assets above.
+
+## Motion loops (public/media/motion/ph-01 ... ph-41.mp4)
+One 3.5 s, 24 fps seamless loop per photo (540x540, 640x360, 360x640 or 640x480 by aspect; H.264 main, yuv420p, faststart,
+no audio, each <= 120 KB, ~4 MB total). They are DERIVED WORKS of the photos above (same Unsplash License terms), produced
+by `scripts/media/make-motion.sh` with ffmpeg: periodic Ken-Burns zoompan (zoom starts at 1.0 so frame 0 equals the poster
+photo), a per-image pan direction, light colour grade, vignette and a slow brightness "breathing" pulse. Re-run the script to
+regenerate (`scripts/media/make-motion.sh [ph-01 ...]`). The poster for every loop is the original photo in public/media/img.
+No WebM variants are shipped (H.264 is universally playable and the budget is already small).

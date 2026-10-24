@@ -9,6 +9,7 @@ import { useServerInfo } from "@/lib/server-info";
 import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button, Card } from "@/components/ui";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { PopupSettings } from "@/components/engage";
 import { useMounted } from "./hooks";
 
 const NOTIFS: [keyof Notifs, string][] = [
@@ -84,6 +85,7 @@ export function SettingsView() {
             </li>
           ))}
         </ul>
+        <PopupSettings />
       </Card>
       <Card>
         <h2 className="font-semibold">Your data</h2>

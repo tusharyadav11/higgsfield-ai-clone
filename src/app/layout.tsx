@@ -38,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SNIPPET }} />
       </head>
       <body className="min-h-full">
-        <Shell initialAccent={DEFAULT_ACCENT}>{children}</Shell>
+        <Shell>{children}</Shell>
       </body>
     </html>
   );
