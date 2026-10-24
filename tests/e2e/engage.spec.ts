@@ -19,7 +19,10 @@ async function boot(page: Page, timing: Timing = FAST, opts: { tourOffer?: boole
 const engineReady = (page: Page) => page.waitForFunction(() => typeof (window as unknown as { __kineticEngageReset?: unknown }).__kineticEngageReset === "function");
 const card = (page: Page, id?: string) => page.locator(id ? `[data-testid="popup-card"][data-popup="${id}"]` : '[data-testid="popup-card"]');
 const engageState = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem("kinetic.engage.v1") ?? "{}"));
-const emit = (page: Page, id: string) => page.evaluate((id) => window.dispatchEvent(new CustomEvent("kinetic:engage", { detail: { id } })), id);
+const emit = async (page: Page, id: string) => {
+  await engineReady(page); // events sent before the engine hydrates are lost by design
+  await page.evaluate((id) => window.dispatchEvent(new CustomEvent("kinetic:engage", { detail: { id } })), id);
+};
 const patchStore = (page: Page, patch: Record<string, unknown>) =>
   page.evaluate((p) => {
     const raw = localStorage.getItem("kinetic-store");
