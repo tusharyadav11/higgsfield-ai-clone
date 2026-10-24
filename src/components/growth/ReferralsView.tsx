@@ -3,13 +3,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Check, Copy, Share2, Trophy } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { useServerInfo } from "@/lib/server-info";
 import { codeFor, fetchRedemptions, REFERRER_BONUS, REFEREE_BONUS, REWARD_TIERS } from "@/lib/referral";
 import { Button, Card } from "@/components/ui";
+import { api, hydrate } from "@/lib/server-sync";
 import { useMounted } from "./hooks";
 
 export function ReferralsView() {
   const mounted = useMounted();
   const userId = useStore((s) => s.userId);
+  const user = useStore((s) => s.user);
+  const serverDb = useServerInfo((s) => s.db);
+  const serverCode = useStore((s) => s.referralCode);
+  const server = !!user?.server;
   const ensureId = useStore((s) => s.ensureId);
   const invited = useStore((s) => s.invited);
   const claimed = useStore((s) => s.rewardsClaimed);
@@ -22,9 +28,9 @@ export function ReferralsView() {
     ensureId();
   }, [ensureId]);
 
-  const code = userId ? codeFor(userId) : "";
+  const code = server ? (serverCode ?? "") : userId ? codeFor(userId) : "";
   useEffect(() => {
-    if (!code) return;
+    if (!code || server) return; // server users: the DB is the ledger, hydrate() delivers invitees and credits
     let live = true;
     fetchRedemptions(code).then((rs) => {
       if (!live || !rs.length) return;
@@ -34,9 +40,28 @@ export function ReferralsView() {
     return () => {
       live = false;
     };
-  }, [code, addInvited]);
+  }, [code, server, addInvited]);
 
-  if (!mounted || !code) return <div className="h-64 animate-pulse rounded-2xl bg-surface" aria-busy />;
+  // refresh stats when the page opens (a friend may have joined since the last load)
+  useEffect(() => {
+    if (server) void hydrate();
+  }, [server]);
+
+  if (!mounted || (!code && serverDb !== true)) return <div className="h-64 animate-pulse rounded-2xl bg-surface" aria-busy />;
+  if (serverDb === true && !server)
+    return (
+      <Card>
+        <h2 className="text-lg font-semibold">Create an account to get your referral code</h2>
+        <p data-testid="ref-signup-cta" className="mt-1 text-sm text-muted">
+          Friends get +{REFEREE_BONUS} credits at signup and you get +{REFERRER_BONUS} credits the moment they join, saved straight to your account.
+        </p>
+        <div className="mt-4 flex gap-2">
+          <Link href="/signup" className="inline-flex min-h-11 items-center rounded-full bg-accent px-6 text-sm font-semibold text-accent-fg">Sign up</Link>
+          <Link href="/login" className="inline-flex min-h-11 items-center rounded-full border border-line px-6 text-sm font-semibold">Log in</Link>
+        </div>
+      </Card>
+    );
+  if (!code) return <div className="h-64 animate-pulse rounded-2xl bg-surface" aria-busy />;
   const link = `${location.origin}/signup?ref=${code}`;
   const canShare = typeof navigator !== "undefined" && typeof navigator.share === "function";
   const n = invited.length;
@@ -73,7 +98,9 @@ export function ReferralsView() {
         </div>
         <p role="status" className="mt-2 min-h-5 text-sm text-accent">{msg}</p>
         <p className="text-xs text-muted">
-          Demo ledger: without a backend, redemptions are recorded in this browser and in a short-lived in-memory list on the server. Credits only sync when you open this page.
+          {server
+            ? "Credits land in your account the moment a friend signs up with your link."
+            : "Demo ledger: no database is configured, so redemptions are recorded in this browser only."}
         </p>
       </Card>
 
@@ -99,7 +126,10 @@ export function ReferralsView() {
                   variant={ready ? "primary" : "secondary"}
                   disabled={!ready}
                   className="mt-3 w-full"
-                  onClick={() => claimReward(t.invites)}
+                  onClick={() => {
+                    if (!server) return void claimReward(t.invites);
+                    void api("/api/me/rewards", "POST", { invites: t.invites }).then(() => hydrate());
+                  }}
                 >
                   {done ? "Claimed" : ready ? "Claim" : "Locked"}
                 </Button>

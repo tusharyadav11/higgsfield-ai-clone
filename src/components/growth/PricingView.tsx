@@ -7,6 +7,7 @@ import { MODELS } from "@/lib/models";
 import { PLANS } from "@/lib/plans";
 import { bestPct, discounted, money, validatePromo, WELCOME_HOURS, type PromoOk } from "@/lib/promo";
 import { useStore } from "@/lib/store";
+import { api } from "@/lib/server-sync";
 import { useMounted } from "./hooks";
 
 export function PricingView() {
@@ -21,8 +22,11 @@ export function PricingView() {
   const referredBy = useStore((s) => s.referredBy);
   const referral = mounted && !!referredBy;
 
-  function apply() {
-    const r = validatePromo(input, {
+  async function apply() {
+    // signed-in (server) users: the server validates against the account's real signup time and records the redemption
+    const r: ReturnType<typeof validatePromo> = user?.server
+      ? await api<PromoOk>("/api/me/promo", "POST", { code: input, yearly }).then((x) => (x.ok ? x.data : { ok: false as const, error: x.data.error ?? "Could not apply code." }))
+      : validatePromo(input, {
       yearly,
       signedIn: !!user,
       welcomeExpiresAt: welcomeAt ? welcomeAt + WELCOME_HOURS * 3600_000 : null,
@@ -63,7 +67,7 @@ export function PricingView() {
           className="flex gap-2"
           onSubmit={(e) => {
             e.preventDefault();
-            apply();
+            void apply();
           }}
         >
           <input

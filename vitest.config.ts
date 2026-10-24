@@ -6,6 +6,9 @@ export default defineConfig({
   test: {
     include: ["tests/unit/**/*.test.ts"],
     environment: "node",
-    testTimeout: 20000,
+    testTimeout: 30000,
+    // DB tests share one Postgres database (kinetic_test) and truncate between tests
+    fileParallelism: false,
+    globalSetup: ["tests/unit/db/global-setup.ts"],
   },
 });

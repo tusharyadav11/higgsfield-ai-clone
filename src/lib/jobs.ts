@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getModel, type Aspect, type Kind } from "./models";
 import type { Generation } from "./generate";
 import { useStore } from "./store";
+import { hydrate } from "./server-sync";
 
 export type JobInput = { kind: Kind; model: string; prompt: string; aspect: Aspect };
 export type JobStatus = "running" | "done" | "error" | "cancelled";
@@ -51,7 +52,9 @@ export const useJobs = create<JobsState>()((set, get) => {
     set((s) => ({ jobs: s.jobs.map((j) => (j.id === id ? { ...j, ...p } : j)) }));
   const toast = (t: Omit<Toast, "id">) =>
     set((s) => ({ toasts: [...s.toasts, { ...t, id: uid() }].slice(-3) }));
+  const serverUser = () => !!useStore.getState().user?.server;
   const refund = (cost: number) => useStore.setState((s) => ({ credits: s.credits + cost }));
+  const setBalance = (b: unknown) => typeof b === "number" && useStore.setState({ credits: b });
 
   async function run(job: Job) {
     const ctl = new AbortController();
@@ -69,9 +72,14 @@ export const useJobs = create<JobsState>()((set, get) => {
       } catch {
         /* non-JSON body */
       }
-      if (!res.ok) throw new Error((data as { error?: string } | null)?.error ?? "Generation failed");
-      const gen = data as Generation;
+      const body = data as { error?: string; balance?: number } | null;
+      if (!res.ok) throw Object.assign(new Error(body?.error ?? "Generation failed"), { balance: body?.balance, status: res.status });
+      const gen = data as Generation & { balance?: number };
       if (get().jobs.find((j) => j.id === job.id)?.status !== "running") return;
+      if (serverUser()) {
+        if (typeof gen.balance === "number") setBalance(gen.balance);
+        else void hydrate(); // no balance in the response: the session is gone or the server is older, resync
+      }
       useStore.getState().addToLibrary({
         id: gen.id, url: gen.url, kind: gen.kind, prompt: gen.prompt, model: gen.model, aspect: gen.aspect, poster: gen.poster, createdAt: gen.createdAt,
       });
@@ -79,9 +87,14 @@ export const useJobs = create<JobsState>()((set, get) => {
       toast({ jobId: job.id, type: "done", text: `Your ${job.kind} is ready` });
     } catch (e) {
       if (get().jobs.find((j) => j.id === job.id)?.status !== "running") return; // cancelled
-      refund(job.cost);
+      const info = e as { balance?: number; status?: number };
+      if (serverUser()) {
+        // the server already charged/refunded atomically: just show its balance
+        if (typeof info.balance === "number") setBalance(info.balance);
+        else void hydrate();
+      } else refund(job.cost);
       const msg = e instanceof Error && e.message ? e.message : "Something went wrong";
-      patch(job.id, { status: "error", error: `${msg}. Credits refunded.`, finishedAt: Date.now() });
+      patch(job.id, { status: "error", error: info.status === 402 ? msg : `${msg}. Credits refunded.`, finishedAt: Date.now() });
       toast({ jobId: job.id, type: "error", text: `${job.kind} failed, credits refunded` });
     } finally {
       controllers.delete(job.id);
@@ -100,7 +113,11 @@ export const useJobs = create<JobsState>()((set, get) => {
       const ex = get().jobs.find((j) => j.status === "running" && keyOf(j) === k);
       if (ex) return { id: ex.id };
     }
-    if (!useStore.getState().spend(m.credits)) return "insufficient";
+    if (serverUser()) {
+      // server users are charged by /api/generate; locally we only show the expected balance meanwhile
+      if (useStore.getState().credits < m.credits) return "insufficient";
+      useStore.setState((st) => ({ credits: st.credits - m.credits }));
+    } else if (!useStore.getState().spend(m.credits)) return "insufficient";
     inflightKeys.add(k);
     const job: Job = {
       ...clean,
@@ -124,7 +141,8 @@ export const useJobs = create<JobsState>()((set, get) => {
       const j = get().jobs.find((x) => x.id === id);
       if (!j || j.status !== "running") return;
       patch(id, { status: "cancelled", finishedAt: Date.now(), error: "Cancelled. Credits refunded." });
-      refund(j.cost);
+      if (serverUser()) setTimeout(() => void hydrate(), 4000); // the server refunds an abandoned request; resync
+      else refund(j.cost);
       controllers.get(id)?.abort();
     },
     retry: (id) => {

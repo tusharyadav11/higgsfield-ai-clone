@@ -8,6 +8,7 @@ import { SearchTrigger, HelpMenu } from "@/components/guide";
 import { JobPill } from "@/components/jobs";
 import { UserMenu } from "@/components/growth/UserMenu";
 import { WelcomeBanner } from "@/components/growth/WelcomeBanner";
+import { ServerSync } from "@/components/growth/ServerSync";
 import { RefCapture } from "@/components/growth/RefCapture";
 import { useNarrow } from "@/components/growth/hooks";
 
@@ -17,6 +18,7 @@ export function Header({ initialAccent }: { initialAccent: Accent }) {
   return (
     <>
       <RefCapture />
+      <ServerSync />
       <header className="sticky top-0 z-30 flex min-h-14 items-center justify-between gap-1 border-b border-line bg-bg/85 px-2 pt-safe backdrop-blur sm:gap-2 sm:px-5">
         <Link href="/" aria-label="Kinetic home" className="flex min-h-11 shrink-0 items-center gap-1.5 font-bold tracking-tight max-[479px]:hidden lg:hidden">
           <Zap className="size-5 text-accent" aria-hidden />

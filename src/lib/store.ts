@@ -1,11 +1,13 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Aspect, Kind } from "./models";
+import { claimBonus, SIGNUP_BONUS } from "./rules";
 import { codeFor, normalizeRef, REFEREE_BONUS, REFERRER_BONUS, REWARD_TIERS } from "./referral";
 
-export type SessionUser = { id: string; email: string; name: string };
+/** `server: true` = a real account whose state lives in Postgres (the server is the source of truth). */
+export type SessionUser = { id: string; email: string; name: string; server?: boolean };
 export type Invitee = { id: string; at: string };
-export const SIGNUP_BONUS = 25;
+export { SIGNUP_BONUS, claimBonus };
 export type Notifs = { product: boolean; tips: boolean; referrals: boolean };
 
 export type LibraryItem = {
@@ -18,6 +20,20 @@ export type LibraryItem = {
   poster?: string;
   createdAt: string;
 };
+
+export type ServerMe = {
+  user: { id: string; email: string; name: string; referralCode: string; createdAt: string; referred?: boolean };
+  balance: number;
+  streak: number;
+  lastClaim: string | null;
+  library: LibraryItem[];
+  likes: string[];
+  referrals: { invited: Invitee[]; rewardsClaimed: number[] };
+};
+
+const isServerUser = (u: SessionUser | null) => !!u?.server;
+const post = (url: string, body?: unknown, method = "POST") =>
+  fetch(url, { method, headers: { "content-type": "application/json" }, body: body === undefined ? undefined : JSON.stringify(body) });
 
 type State = {
   credits: number;
@@ -37,6 +53,10 @@ type State = {
   invited: Invitee[];
   rewardsClaimed: number[];
   notifs: Notifs;
+  referralCode: string | null;
+  /** Replace local state with the server's (signed-in users). */
+  applyServer: (me: ServerMe) => void;
+  setBalance: (n: number) => void;
   ensureId: () => string;
   addCredits: (n: number) => void;
   setPendingRef: (code: string) => void;
@@ -58,7 +78,6 @@ type State = {
 };
 
 const day = (d = new Date()) => d.toISOString().slice(0, 10);
-export const claimBonus = (streak: number) => 10 + 5 * Math.min(Math.max(streak - 1, 0), 6);
 
 const initial = {
   credits: 50,
@@ -77,6 +96,7 @@ const initial = {
   invited: [] as Invitee[],
   rewardsClaimed: [] as number[],
   notifs: { product: true, tips: true, referrals: true },
+  referralCode: null as string | null,
 };
 
 export const useStore = create<State>()(
@@ -90,6 +110,25 @@ export const useStore = create<State>()(
         set({ userId: id });
         return id;
       },
+      setBalance: (n) => set({ credits: n }),
+      applyServer: (me) =>
+        set((s) => ({
+          user: { id: me.user.id, email: me.user.email, name: me.user.name, server: true },
+          name: me.user.name,
+          credits: me.balance,
+          streak: me.streak,
+          lastClaim: me.lastClaim,
+          library: me.library,
+          likes: Object.fromEntries(me.likes.map((id) => [id, true as const])),
+          invited: me.referrals.invited,
+          rewardsClaimed: me.referrals.rewardsClaimed,
+          referralCode: me.user.referralCode,
+          welcomeAt: new Date(me.user.createdAt).getTime(),
+          bonusGiven: true,
+          referredBy: me.user.referred ? (s.referredBy ?? "server") : null,
+          pendingRef: null,
+          userId: s.userId,
+        })),
       addCredits: (n) => set((s) => ({ credits: s.credits + n })),
       setPendingRef: (code) => {
         const c = normalizeRef(code);
@@ -114,7 +153,9 @@ export const useStore = create<State>()(
         return { gained, referred: referred && gained > 0 };
       },
       signIn: (u) => set({ user: u, userId: u.id, name: get().name || u.name }),
-      signOut: () => set({ user: null }),
+      // A server session ends with a clean guest slate: account data must not linger as "guest" data.
+      signOut: () =>
+        set((s) => (isServerUser(s.user) ? { ...initial, notifs: { ...s.notifs }, userId: s.userId } : { user: null })),
       dismissWelcome: () => set({ welcomeDismissed: true }),
       addInvited: (list) => {
         const have = new Set(get().invited.map((i) => i.id));
@@ -148,16 +189,51 @@ export const useStore = create<State>()(
         set({ credits: get().credits - n });
         return true;
       },
-      like: (id) =>
+      like: (id) => {
         set((s) => {
           const likes = { ...s.likes };
           if (likes[id]) delete likes[id];
           else likes[id] = true;
           return { likes };
-        }),
+        });
+        // optimistic UI; the server decides, and a failed call rolls back
+        if (isServerUser(get().user))
+          post("/api/me/like", { postId: id }).then(
+            (r) => {
+              if (!r.ok) throw new Error("like failed");
+              return r.json() as Promise<{ liked: boolean }>;
+            },
+            () => {
+              throw new Error("like failed");
+            },
+          ).then(
+            (j) => set((s) => {
+              const likes = { ...s.likes };
+              if (j.liked) likes[id] = true;
+              else delete likes[id];
+              return { likes };
+            }),
+            () => set((s) => {
+              const likes = { ...s.likes };
+              if (likes[id]) delete likes[id];
+              else likes[id] = true;
+              return { likes };
+            }),
+          );
+      },
       addToLibrary: (item) =>
         set((s) => ({ library: [item, ...s.library.filter((i) => i.id !== item.id)].slice(0, 60) })),
-      removeFromLibrary: (id) => set((s) => ({ library: s.library.filter((i) => i.id !== id) })),
+      removeFromLibrary: (id) => {
+        const prev = get().library;
+        set((s) => ({ library: s.library.filter((i) => i.id !== id) }));
+        if (isServerUser(get().user))
+          post(`/api/me/library/${encodeURIComponent(id)}`, undefined, "DELETE").then(
+            (r) => {
+              if (!r.ok && r.status !== 404) set({ library: prev });
+            },
+            () => set({ library: prev }),
+          );
+      },
     }),
     {
       name: "kinetic-store",
@@ -179,6 +255,7 @@ export const useStore = create<State>()(
         invited: s.invited,
         rewardsClaimed: s.rewardsClaimed,
         notifs: s.notifs,
+        referralCode: s.referralCode,
       }),
     },
   ),

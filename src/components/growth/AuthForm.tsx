@@ -6,6 +6,7 @@ import { Eye, EyeOff, Gift } from "lucide-react";
 import { logIn, passwordStrength, signUp, EMAIL_RE } from "@/lib/auth";
 import { useStore } from "@/lib/store";
 import { redeemReferral, normalizeRef, REFEREE_BONUS } from "@/lib/referral";
+import { afterAuth, api } from "@/lib/server-sync";
 import { Button } from "@/components/ui";
 import { DemoNote } from "./DemoNote";
 
@@ -41,11 +42,24 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
     setBusy(true);
     try {
       const st = store.getState();
+      // Real account first (Postgres). 503 {demo:true} means this deployment has no database:
+      // fall through to the local, browser-only demo accounts below.
+      const ref = normalizeRef(refCode ?? st.pendingRef);
+      const sr = await api<{ user?: { id: string }; referred?: boolean }>(
+        signup ? "/api/auth/signup" : "/api/auth/login",
+        "POST",
+        signup ? { email, password: pw, name, ...(ref ? { ref } : {}) } : { email, password: pw },
+      );
+      if (sr.status !== 503 || !sr.data.demo) {
+        if (!sr.ok) return setErr({ msg: sr.data.error ?? "Something went wrong. Try again.", field: sr.data.field });
+        await afterAuth({ importGuest: signup });
+        router.push("/");
+        return;
+      }
       if (signup) {
         const id = st.ensureId();
         const r = await signUp({ id, email, password: pw, name });
         if (!r.ok) return setErr({ msg: r.error, field: r.field });
-        const ref = normalizeRef(refCode ?? st.pendingRef);
         const out = store.getState().completeSignup(r.user, ref);
         if (out.referred && ref) await redeemReferral(ref, r.user.id);
       } else {

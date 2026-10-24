@@ -1,3 +1,5 @@
+import { hasDb } from "@/db";
+import { lookupKey } from "@/server/keys";
 import { bearerKey, handleMessage, E, TOOLS, type RpcResponse } from "@/lib/mcp/server";
 
 const CORS = {
@@ -18,7 +20,17 @@ export async function POST(req: Request) {
     return json(perr(E.PARSE, "Parse error: body is not valid JSON"), 400);
   }
   const key = bearerKey(req);
-  const ctx = { origin: new URL(req.url).origin };
+  const ctx: { origin: string; userId?: string | null; revoked?: boolean } = { origin: new URL(req.url).origin };
+  if (key && hasDb()) {
+    try {
+      const k = await lookupKey(key);
+      if (k === "revoked") ctx.revoked = true;
+      else if (k) ctx.userId = k.userId;
+      else if (process.env.MCP_REQUIRE_REAL_KEYS === "1") ctx.revoked = true;
+    } catch (e) {
+      console.error("[mcp] key lookup failed, falling back to demo mode", e);
+    }
+  }
 
   if (Array.isArray(body)) {
     if (!body.length) return json(perr(E.INVALID, "Invalid Request: empty batch"), 400);

@@ -131,7 +131,7 @@ export function Palette({ onClose }: { onClose: () => void }) {
         onKeyDown={onKey}
         className="flex h-dvh w-full flex-col bg-surface text-fg sm:h-auto sm:max-h-[70vh] sm:max-w-xl sm:rounded-2xl sm:border sm:border-line sm:shadow-2xl"
       >
-        <div className="flex items-center gap-2 border-b border-line px-3 pt-safe">
+        <div className="flex items-center gap-2 border-b border-line px-3 pt-safe transition-colors focus-within:border-accent">
           <Search className="size-5 shrink-0 text-muted" aria-hidden />
           <input
             ref={inputRef}
@@ -150,7 +150,7 @@ export function Palette({ onClose }: { onClose: () => void }) {
             placeholder="Search pages, models, prompts, help..."
             autoComplete="off"
             spellCheck={false}
-            className="min-h-14 flex-1 bg-transparent text-base outline-none placeholder:text-muted"
+            className="min-h-14 w-full min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted focus-visible:outline-none"
           />
           <button ref={closeRef} type="button" onClick={onClose} aria-label="Close search" className="grid size-11 place-items-center rounded-lg text-muted hover:text-fg">
             <X className="size-5" aria-hidden />

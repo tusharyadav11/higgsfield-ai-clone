@@ -3,11 +3,13 @@
 import { Flame, Gift } from "lucide-react";
 import { useEffect, useState } from "react";
 import { claimBonus, useStore } from "@/lib/store";
+import { claimServer } from "@/lib/server-sync";
 
 export function StreakCard() {
   const streak = useStore((s) => s.streak);
   const lastClaim = useStore((s) => s.lastClaim);
   const claimDaily = useStore((s) => s.claimDaily);
+  const serverUser = useStore((s) => !!s.user?.server);
   const [flash, setFlash] = useState<number | null>(null);
   // "today" is read after mount so the prerender never bakes in a date
   const [today, setToday] = useState<string | null>(null);
@@ -40,8 +42,8 @@ export function StreakCard() {
           data-testid="streak-claim"
           disabled={claimed}
           suppressHydrationWarning
-          onClick={() => {
-            const r = claimDaily();
+          onClick={async () => {
+            const r = serverUser ? await claimServer() : claimDaily();
             if (r.ok) setFlash(r.gained);
           }}
           className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full bg-accent px-6 text-sm font-semibold text-accent-fg transition-transform active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"

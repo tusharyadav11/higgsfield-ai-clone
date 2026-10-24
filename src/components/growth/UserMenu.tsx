@@ -3,13 +3,13 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { Coins, Gift, LogOut, Settings } from "lucide-react";
 import { useStore } from "@/lib/store";
+import { logout } from "@/lib/server-sync";
 import { useMounted } from "./hooks";
 
 export function UserMenu() {
   const mounted = useMounted();
   const user = useStore((s) => s.user);
   const credits = useStore((s) => s.credits);
-  const signOut = useStore((s) => s.signOut);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -55,7 +55,7 @@ export function UserMenu() {
           <Link role="menuitem" href="/pricing" onClick={() => setOpen(false)} className={item}><Coins className="size-4 text-accent" />{credits} credits</Link>
           <Link role="menuitem" href="/referrals" onClick={() => setOpen(false)} className={item}><Gift className="size-4" />Referrals</Link>
           <Link role="menuitem" href="/settings" onClick={() => setOpen(false)} className={item}><Settings className="size-4" />Settings</Link>
-          <button role="menuitem" type="button" data-testid="logout-btn" onClick={() => { signOut(); setOpen(false); }} className={`${item} w-full`}><LogOut className="size-4" />Log out</button>
+          <button role="menuitem" type="button" data-testid="logout-btn" onClick={() => { setOpen(false); void logout(); }} className={`${item} w-full`}><LogOut className="size-4" />Log out</button>
         </div>
       )}
     </div>

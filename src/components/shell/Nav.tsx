@@ -1,4 +1,5 @@
 "use client";
+import { logout } from "@/lib/server-sync";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -40,7 +41,6 @@ export function Nav() {
   const mounted = useMounted();
   const narrow = useNarrow();
   const user = useStore((s) => s.user);
-  const signOut = useStore((s) => s.signOut);
   const isActive = (href: string) => (href === "/" ? path === "/" : path.startsWith(href));
   const extraActive = extras.some((e) => isActive(e.href));
   return (
@@ -132,7 +132,7 @@ export function Nav() {
             <li className="sm:hidden"><div className="flex min-h-12 items-center px-3"><HelpMenu /></div></li>
             <li className="sm:hidden">
               {user ? (
-                <button type="button" data-testid="logout-btn-mobile" onClick={() => { signOut(); setMore(false); }} className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-sm text-muted hover:text-fg">
+                <button type="button" data-testid="logout-btn-mobile" onClick={() => { void logout(); setMore(false); }} className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-sm text-muted hover:text-fg">
                   <LogOut className="size-5" aria-hidden /> Log out ({user.name})
                 </button>
               ) : (

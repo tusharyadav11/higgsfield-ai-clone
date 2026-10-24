@@ -4,7 +4,8 @@ import { getPosts } from "@/lib/seed";
 
 /**
  * Minimal MCP server over Streamable HTTP (JSON responses only, no SSE, stateless).
- * Auth is DEMO-GRADE: any well-formed key matching KEY_RE is accepted; there is no server-side key registry.
+ * Auth: with a database, a key issued from /connect is resolved against api_keys (revoked keys are refused and
+ * generate_* calls are charged to the owner's ledger). Any other well-formed key is a DEMO key: it works, charges nobody.
  */
 export const KEY_RE = /^kn_[a-z0-9]{24,}$/;
 const SUPPORTED = ["2025-06-18", "2025-03-26", "2024-11-05"];
@@ -61,7 +62,8 @@ export const TOOLS = [
   { name: "explain_pricing", description: "Explain plans and per-model credit costs.", inputSchema: { type: "object", properties: {}, additionalProperties: false } },
 ];
 
-type Ctx = { origin: string };
+/** userId: key resolved to a real account (credits are charged to it). revoked: key was revoked. */
+type Ctx = { origin: string; userId?: string | null; revoked?: boolean };
 type Args = Record<string, unknown>;
 
 async function callTool(name: string, a: Args, ctx: Ctx) {
@@ -91,6 +93,17 @@ async function callTool(name: string, a: Args, ctx: Ctx) {
       if (m.kind !== kind) return text(`Model ${m.id} is a ${m.kind} model; use generate_${m.kind}.`, true);
       const aspect = a.aspect === undefined ? "1:1" : a.aspect;
       if (typeof aspect !== "string" || !ASPECTS.includes(aspect as Aspect)) return text(`aspect must be one of ${ASPECTS.join(", ")}`, true);
+      if (ctx.userId) {
+        const { chargedGenerate } = await import("@/server/credits");
+        const r = await chargedGenerate(ctx.userId, { kind, model: m.id, prompt, aspect: aspect as Aspect });
+        if (!r.ok) return text(r.status === 402 ? `Insufficient credits (balance ${r.balance}, needs ${m.credits}). Top up at ${ctx.origin}/pricing.` : r.error, true);
+        const g = r.generation;
+        return text({
+          id: g.id, kind: g.kind, model: g.model, aspect: g.aspect, prompt: g.prompt, createdAt: g.createdAt, credits: m.credits, balance: r.balance,
+          url: g.url.startsWith("/") ? `${ctx.origin}${g.url}` : g.url,
+          openInStudio: `${ctx.origin}/library`,
+        });
+      }
       const g = await generate({ kind, model: m.id, prompt, aspect: aspect as Aspect });
       const remote = g.url.startsWith("http");
       return text({
@@ -148,6 +161,7 @@ export async function handleMessage(raw: unknown, key: string | null, ctx: Ctx):
       case "tools/list":
         return { res: ok(id, { tools: TOOLS }) };
       case "tools/call": {
+        if (ctx.revoked) return { res: err(id, E.UNAUTH, "Unauthorized: this API key was revoked. Create a new one at /connect.") };
         if (!key) return { res: err(id, E.UNAUTH, "Unauthorized: send 'Authorization: Bearer kn_<key>' (create one at /connect).") };
         if (limited(key)) return { res: err(id, E.RATE, `Rate limit exceeded (${RATE_LIMIT} calls/minute per key).`), status: 429 };
         if (typeof params.name !== "string") return { res: err(id, E.PARAMS, "params.name is required") };

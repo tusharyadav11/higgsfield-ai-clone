@@ -5,6 +5,7 @@ import { Check } from "lucide-react";
 import { ACCENTS, ACCENT_SWATCH, applyAccent, type Accent } from "@/lib/theme";
 import { useStore, type Notifs } from "@/lib/store";
 import { clearAuthData } from "@/lib/auth";
+import { useServerInfo } from "@/lib/server-info";
 import { Button, Card } from "@/components/ui";
 import { useMounted } from "./hooks";
 
@@ -18,6 +19,7 @@ export function SettingsView() {
   const router = useRouter();
   const mounted = useMounted();
   const s = useStore();
+  const serverDb = useServerInfo((x) => x.db);
   const [accent, setAccent] = useState<Accent | null>(null);
   const [confirm, setConfirm] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -46,7 +48,7 @@ export function SettingsView() {
           <input data-testid="settings-name" value={s.name} maxLength={40} onChange={(e) => { s.setName(e.target.value); setSaved(true); }} placeholder="Guest" className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 text-fg outline-none focus:border-accent" />
         </label>
         <p className="mt-2 text-sm text-muted">{s.user ? `Signed in as ${s.user.email}` : "You are using Kinetic as a guest."} {saved && <span className="text-accent">Saved.</span>}</p>
-        <p className="mt-1 text-xs text-muted">Demo accounts are stored in your browser.</p>
+        <p className="mt-1 text-xs text-muted">{s.user?.server ? "Your account, credits and library are stored on our server." : serverDb ? "Guest data lives in this browser. Sign up to save it to your account." : "Demo mode: accounts are stored in your browser."}</p>
       </Card>
       <Card>
         <h2 className="font-semibold">Accent</h2>
@@ -76,10 +78,10 @@ export function SettingsView() {
       </Card>
       <Card>
         <h2 className="font-semibold">Your data</h2>
-        <p className="mt-1 text-sm text-muted">Everything lives in this browser: {s.library.length} saved generation(s), {s.credits} credits.</p>
+        <p className="mt-1 text-sm text-muted">{s.user?.server ? "Saved to your account" : "Everything lives in this browser"}: {s.library.length} saved generation(s), {s.credits} credits.</p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button variant="secondary" data-testid="export-data" onClick={exportData}>Export library (JSON)</Button>
-          {!confirm ? (
+          {s.user?.server ? null : !confirm ? (
             <Button variant="ghost" data-testid="delete-data" onClick={() => setConfirm(true)}>Delete my local data</Button>
           ) : (
             <>
