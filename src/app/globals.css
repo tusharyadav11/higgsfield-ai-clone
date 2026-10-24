@@ -97,6 +97,9 @@
 }
 
 /* overflow-x: clip (not hidden) so position:sticky headers keep working: hidden turns body into a scroll container */
+/* ultrawide: scale the rem root so type, spacing and the max-w-* containers grow with the screen instead of floating in empty space */
+@media (min-width: 1920px) { html { font-size: 112.5%; } }
+@media (min-width: 2400px) { html { font-size: 125%; } }
 html { background: var(--bg); color: var(--fg); overflow-x: clip; scrollbar-color: var(--line) transparent; scrollbar-width: thin; }
 body { font-family: var(--font-sans); -webkit-tap-highlight-color: transparent; overflow-x: clip; letter-spacing: -0.011em; font-feature-settings: "cv11", "ss03"; position: relative; }
 h1, h2, h3 { text-wrap: balance; letter-spacing: -0.03em; }

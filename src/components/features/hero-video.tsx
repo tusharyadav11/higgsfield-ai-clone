@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MediaView, useMotionAllowed } from "./media-view";
-import styles from "./motion.module.css";
+import "./motion.css";
 import { Sparkles, Wand2 } from "lucide-react";
 import { HERO_VIDEO } from "@/lib/media-library";
 import { remixHref } from "./post-card";
@@ -49,9 +49,9 @@ export function HeroVideo() {
     <section
       ref={box}
       onPointerMove={onMove}
-      className={`${styles.hero} relative isolate flex h-full min-h-[30rem] items-end overflow-hidden rounded-[1.75rem] border border-line bg-surface sm:min-h-[34rem]`}
+      className={`mv-hero relative isolate flex h-full min-h-[30rem] items-end overflow-hidden rounded-[1.75rem] border border-line bg-surface sm:min-h-[34rem]`}
     >
-      <div className={styles.heroLayer} aria-hidden>
+      <div className={"mv-heroLayer"} aria-hidden>
       <Image
         src={HERO_VIDEO.poster}
         alt=""
@@ -78,7 +78,7 @@ export function HeroVideo() {
         />
       )}
       </div>
-      <div className={styles.heroSweep} aria-hidden />
+      <div className={"mv-heroSweep"} aria-hidden />
       <div className="aurora" aria-hidden>
         <i />
         <i />

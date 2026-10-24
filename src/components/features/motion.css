@@ -1,15 +1,16 @@
-/* Motion-only styles. Everything animated is gated on prefers-reduced-motion: no-preference. */
-.blurPending {
+/* Plain global CSS (next.config routes *.css through the Tailwind loader, so CSS modules are not hashed): every name is mv- prefixed.
+   Motion-only styles. Everything animated is gated on prefers-reduced-motion: no-preference. */
+.mv-blurPending {
   filter: blur(14px) saturate(1.1);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .blurDone {
+  .mv-blurDone {
     transition: filter 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 }
 
 /* one-shot light sweep when a late-loading image reveals ("live preview" shimmer) */
-.reveal::after {
+.mv-reveal::after {
   content: "";
   position: absolute;
   inset: 0;
@@ -19,13 +20,13 @@
   transform: translateX(-120%);
 }
 @media (prefers-reduced-motion: no-preference) {
-  .reveal::after {
-    animation: sweep 0.9s ease-out 1;
+  .mv-reveal::after {
+    animation: mv-sweep 0.9s ease-out 1;
   }
 }
 
 /* hover sheen on cards */
-.sheen::before {
+.mv-sheen::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -36,21 +37,21 @@
   transform: translateX(-120%);
 }
 @media (prefers-reduced-motion: no-preference) and (hover: hover) {
-  .sheen:hover::before {
+  .mv-sheen:hover::before {
     opacity: 1;
-    animation: sweep 1.1s ease-out 1;
+    animation: mv-sweep 1.1s ease-out 1;
   }
 }
 
 /* CSS-only Ken-Burns for the poster when video is skipped (Save-Data / slow network). Never for reduced motion. */
 @media (prefers-reduced-motion: no-preference) {
-  .kb0 { animation: kb0 16s ease-in-out infinite alternate; }
-  .kb1 { animation: kb1 18s ease-in-out infinite alternate; }
-  .kb2 { animation: kb2 15s ease-in-out infinite alternate; }
-  .kb3 { animation: kb3 17s ease-in-out infinite alternate; }
+  .mv-kb0 { animation: mv-kb0 16s ease-in-out infinite alternate; }
+  .mv-kb1 { animation: mv-kb1 18s ease-in-out infinite alternate; }
+  .mv-kb2 { animation: mv-kb2 15s ease-in-out infinite alternate; }
+  .mv-kb3 { animation: mv-kb3 17s ease-in-out infinite alternate; }
 }
 
-.live {
+.mv-live {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
@@ -63,48 +64,48 @@
   pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .live::after {
+  .mv-live::after {
     content: "";
     position: absolute;
     inset: 0;
     border-radius: inherit;
     background: inherit;
-    animation: ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+    animation: mv-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
   }
 }
 
 /* hero: layered parallax driven by --px/--py (-1..1) set by pointer; plus a slow light sweep */
-.hero {
+.mv-hero {
   --px: 0;
   --py: 0;
 }
-.heroLayer {
+.mv-heroLayer {
   position: absolute;
   inset: -4%;
   will-change: transform;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .heroLayer {
+  .mv-heroLayer {
     transform: translate3d(calc(var(--px) * -14px), calc(var(--py) * -10px), 0) scale(1.04);
     transition: transform 0.5s ease-out;
   }
-  .heroSweep {
+  .mv-heroSweep {
     position: absolute;
     inset: 0;
     pointer-events: none;
     background: linear-gradient(110deg, transparent 38%, rgb(255 255 255 / 0.1) 50%, transparent 62%);
     transform: translateX(-120%);
-    animation: sweep 7s ease-in-out 1.2s infinite;
+    animation: mv-sweep 7s ease-in-out 1.2s infinite;
   }
 }
 
-@keyframes sweep {
+@keyframes mv-sweep {
   to { transform: translateX(120%); }
 }
-@keyframes ping {
+@keyframes mv-ping {
   75%, 100% { transform: scale(2.6); opacity: 0; }
 }
-@keyframes kb0 { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.14) translate(-2.5%, -1.5%); } }
-@keyframes kb1 { from { transform: scale(1.12) translate(2%, 1%); } to { transform: scale(1) translate(0, 0); } }
-@keyframes kb2 { from { transform: scale(1) translate(1.5%, -2%); } to { transform: scale(1.13) translate(-1.5%, 1.5%); } }
-@keyframes kb3 { from { transform: scale(1.1) translate(-2%, 0); } to { transform: scale(1.02) translate(2%, -1%); } }
+@keyframes mv-kb0 { from { transform: scale(1) translate(0, 0); } to { transform: scale(1.14) translate(-2.5%, -1.5%); } }
+@keyframes mv-kb1 { from { transform: scale(1.12) translate(2%, 1%); } to { transform: scale(1) translate(0, 0); } }
+@keyframes mv-kb2 { from { transform: scale(1) translate(1.5%, -2%); } to { transform: scale(1.13) translate(-1.5%, 1.5%); } }
+@keyframes mv-kb3 { from { transform: scale(1.1) translate(-2%, 0); } to { transform: scale(1.02) translate(2%, -1%); } }

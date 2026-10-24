@@ -7,7 +7,7 @@ import { BLUR_DATA_URL, hash } from "@/lib/generate";
 import { motionFor } from "@/lib/media-library";
 import { ASPECT_SIZE, type Aspect, type Kind } from "@/lib/models";
 import { createSlotManager } from "@/lib/playback-slots";
-import styles from "./motion.module.css";
+import "./motion.css";
 
 type Conn = { saveData?: boolean; effectiveType?: string };
 const conn = () => (typeof navigator === "undefined" ? undefined : (navigator as Navigator & { connection?: Conn }).connection);
@@ -32,7 +32,8 @@ export type MotionMode = "full" | "kb" | "none";
  * none: prefers-reduced-motion, no motion at all.
  */
 export function useMotionMode(): MotionMode {
-  const reduce = useMedia("(prefers-reduced-motion: reduce)", false);
+  // server snapshot is "reduce" so SSR never ships/starts motion; it switches on after hydration when allowed
+  const reduce = useMedia("(prefers-reduced-motion: reduce)", true);
   const lite = useSyncExternalStore(
     (cb) => {
       const c = conn() as (Conn & EventTarget) | undefined;
@@ -90,12 +91,12 @@ export function MediaView({ kind, src, poster, motion, aspect, alt, blur, priori
     const wrap = box.current;
     const img = wrap?.querySelector("img");
     if (!wrap || !img || img.complete) return;
-    img.classList.add(styles.blurPending);
+    img.classList.add("mv-blurPending");
     const done = () => {
-      img.classList.add(styles.blurDone);
-      img.classList.remove(styles.blurPending);
-      wrap.classList.add(styles.reveal);
-      window.setTimeout(() => wrap.classList.remove(styles.reveal), 1000);
+      img.classList.add("mv-blurDone");
+      img.classList.remove("mv-blurPending");
+      wrap.classList.add("mv-reveal");
+      window.setTimeout(() => wrap.classList.remove("mv-reveal"), 1000);
     };
     img.addEventListener("load", done, { once: true });
     img.addEventListener("error", done, { once: true });
@@ -105,11 +106,11 @@ export function MediaView({ kind, src, poster, motion, aspect, alt, blur, priori
     };
   }, [still]);
 
-  const kb = mode === "kb" && loop ? styles[`kb${hash(src) % 4}`] : "";
+  const kb = mode === "kb" && loop ? `mv-kb${hash(src) % 4}` : "";
   return (
     <div
       ref={box}
-      className={`${styles.sheen} ${fillParent ? "absolute inset-0" : "relative"} overflow-hidden bg-surface-2 ${className}`}
+      className={`mv-sheen ${fillParent ? "absolute inset-0" : "relative"} overflow-hidden bg-surface-2 ${className}`}
       style={fillParent ? undefined : { aspectRatio: `${w} / ${h}` }}
     >
       <Image
@@ -239,7 +240,7 @@ export function VideoLayer({ src, poster, badge = false, auto = true }: { src: s
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${ready ? "opacity-100" : "opacity-0"}`}
         />
       )}
-      {mounted && ready && <span aria-hidden className={styles.live} />}
+      {mounted && ready && <span aria-hidden className={"mv-live"} />}
       {badge && !ready && (
         <span className="pointer-events-none absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">
           <Play size={10} fill="currentColor" /> Video

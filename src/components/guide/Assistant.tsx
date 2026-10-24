@@ -136,7 +136,7 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
         onClick={onToggle}
         aria-label={open ? "Close assistant" : "Open assistant"}
         aria-expanded={open}
-        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-50 grid size-12 place-items-center rounded-full bg-accent text-accent-fg shadow-lg ring-1 ring-black/20 transition hover:scale-105 sm:bottom-5 sm:right-5"
+        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-50 grid size-11 place-items-center rounded-full bg-accent sm:size-12 text-accent-fg shadow-lg ring-1 ring-black/20 transition hover:scale-105 sm:bottom-5 sm:right-5"
       >
         {open ? <X className="size-5" aria-hidden /> : <Bot className="size-6" aria-hidden />}
       </button>
