@@ -151,7 +151,6 @@ test("keyboard: Enter in prompt submits", async ({ page }) => {
 
 test("keyboard: Tab order reaches generate-btn", async ({ page }) => {
   await page.goto("/create");
-  await page.locator("body").click({ position: { x: 1, y: 1 } });
   let reached = false;
   for (let i = 0; i < 80 && !reached; i++) {
     await page.keyboard.press("Tab");

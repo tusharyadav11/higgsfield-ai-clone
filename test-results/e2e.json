@@ -3,8 +3,7 @@
     "argv": [
       "/opt/homebrew/Cellar/node/25.2.1/bin/node",
       "/Users/tusharyadav/Desktop/higgsfield ai /node_modules/.bin/playwright",
-      "test",
-      "--list"
+      "test"
     ],
     "configFile": "/Users/tusharyadav/Desktop/higgsfield ai /playwright.config.ts",
     "rootDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -17,14 +16,18 @@
     "grep": {},
     "grepInvert": null,
     "maxFailures": 0,
-    "metadata": {},
+    "metadata": {
+      "actualWorkers": 4
+    },
     "preserveOutput": "always",
     "projects": [
       {
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "desktop",
         "name": "desktop",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -38,7 +41,9 @@
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "tablet",
         "name": "tablet",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -52,7 +57,9 @@
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "id": "phone",
         "name": "phone",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -70,7 +77,9 @@
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "name": "desktop",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
         "snapshotDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -105,7 +114,9 @@
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "name": "tablet",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
         "snapshotDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -140,7 +151,9 @@
         "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
         "repeatEach": 1,
         "retries": 0,
-        "metadata": {},
+        "metadata": {
+          "actualWorkers": 4
+        },
         "name": "phone",
         "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
         "snapshotDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -218,8 +231,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2033,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:40.370Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-39548fcec082d6566ecd",
@@ -238,8 +265,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5306,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:40.382Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-f36b971d9dc50a6a9bc0",
@@ -258,8 +299,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 4073,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:40.377Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-e6672fde9963a542014c",
@@ -278,8 +333,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2396,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:40.361Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-bdd97717830fe0167b75",
@@ -298,8 +367,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:42.984Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-13a00be7efd32deff90c",
@@ -318,8 +401,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1736,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:43.299Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-1f2c08efaae9ede867ea",
@@ -338,8 +435,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1322,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:44.985Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-201f37c2204f4ba5f477",
@@ -358,8 +469,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:45.060Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-b40f5e06b2a116082ebf",
@@ -378,8 +503,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1336,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:45.073Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-651b2a4fe2683c51bb57",
@@ -398,8 +537,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1539,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:46.214Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-47b2c7ce5a8cbc8fddc9",
@@ -418,8 +571,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 4543,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:46.275Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-ad3f4cd7c1d1df775107",
@@ -438,8 +605,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 7082,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:46.332Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-f29c1418aac80fe07dcd",
@@ -458,8 +639,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3501,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:46.444Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-9c8c633f343edd2c7a4a",
@@ -478,8 +673,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2775,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:47.842Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-566ae0693ef7e01321da",
@@ -498,8 +707,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:49.979Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-014aad01536677682f68",
@@ -518,13 +741,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1089,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:50.634Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-b4c213bec0e0e09f22e2",
           "file": "create.spec.ts",
-          "line": 165,
+          "line": 164,
           "column": 5
         },
         {
@@ -538,13 +775,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 797,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:50.847Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-93945ebaff9d8e0e2e63",
           "file": "create.spec.ts",
-          "line": 178,
+          "line": 177,
           "column": 5
         },
         {
@@ -558,8 +809,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 813,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:34.376Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-c1f404b39c077f4dfa90",
@@ -578,8 +843,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3769,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:34.579Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-f4d6e58b61bcfa4ffc48",
@@ -598,8 +877,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3521,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:34.829Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-86f07dfc2ed2148311cb",
@@ -618,8 +911,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2655,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:38.892Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-0d0d507b6f5db429eabe",
@@ -638,8 +945,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1544,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:35.678Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-6a53f567236f53a7803c",
@@ -658,8 +979,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1828,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:37.252Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-a319bc0973cda84fe8c0",
@@ -678,8 +1013,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1818,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:38.953Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-115813162c37aa246ba9",
@@ -698,8 +1047,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1740,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:38.978Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-c23b18e5e99f1a2085e8",
@@ -718,8 +1081,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:39.109Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-17dc9d03256f7d98841c",
@@ -738,8 +1115,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:40.742Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-7de7b392ccce36cc0d24",
@@ -758,8 +1149,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5496,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:40.804Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-0ad65ee187b468714641",
@@ -778,8 +1183,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 8095,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:40.859Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-ecc1836856a2b76d3b77",
@@ -798,8 +1217,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2906,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:42.899Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-26e15dd4a49c2b4a535f",
@@ -818,8 +1251,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3457,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:43.168Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-3eaabaae1622164b773b",
@@ -838,8 +1285,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3187,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:45.827Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-a3b6001dd2c7a4ba1f43",
@@ -858,13 +1319,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 988,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:46.322Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-8acac6098cb5af026b55",
           "file": "create.spec.ts",
-          "line": 165,
+          "line": 164,
           "column": 5
         },
         {
@@ -878,13 +1353,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 751,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:46.645Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-0371e2e9dad9146e5920",
           "file": "create.spec.ts",
-          "line": 178,
+          "line": 177,
           "column": 5
         },
         {
@@ -898,8 +1387,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 620,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:24.011Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-2ba2532f12e37c61e563",
@@ -918,8 +1421,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3805,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:24.278Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-1eb2204ac7b58743342d",
@@ -938,8 +1455,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2927,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:24.491Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-9432a627929069fac5a7",
@@ -958,8 +1489,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 685,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:25.751Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-9481f4f1993b774327af",
@@ -978,8 +1523,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 989,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:25.022Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-0b7cd904a854b95a832f",
@@ -998,8 +1557,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 686,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:26.034Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-b25d87122f6b62e012c0",
@@ -1018,8 +1591,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 600,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:26.738Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-a9930d05d4ed7ede5e26",
@@ -1038,8 +1625,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 640,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:26.961Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-eba9aa194b32579fce0c",
@@ -1058,8 +1659,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 527,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:27.361Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-bdbcdba7de0a7f4ffa80",
@@ -1078,8 +1693,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 950,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:27.619Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-5ecd56f062048621f7f8",
@@ -1098,8 +1727,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4037,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:27.932Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-08fd807494b19f6fb083",
@@ -1118,8 +1761,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 6709,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:28.057Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-47cc83ed347cd39ba8b1",
@@ -1138,8 +1795,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2763,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:28.590Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-d003affd86042e3b626a",
@@ -1158,8 +1829,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1799,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:28.660Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-9208e3c82d4119414d77",
@@ -1178,8 +1863,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1854,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:30.471Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-e4c6b42b6377a6343b78",
@@ -1198,13 +1897,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 441,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:31.366Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-86275af528547b7b06ed",
           "file": "create.spec.ts",
-          "line": 165,
+          "line": 164,
           "column": 5
         },
         {
@@ -1218,13 +1931,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 340,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:31.815Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b3ad99a2734fbb82f670-6cc0a728a18e28ec9c0c",
           "file": "create.spec.ts",
-          "line": 178,
+          "line": 177,
           "column": 5
         }
       ]
@@ -1246,8 +1973,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:51.671Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-33663570899858354307",
@@ -1266,8 +2007,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1678,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:51.754Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-5ee0253d4ec3f646191f",
@@ -1286,8 +2041,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 19448,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:53.291Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-1c46e2eba84287fbc8de",
@@ -1306,13 +2075,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 19631,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:53.451Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-1233ac9eb7bf833888c6",
           "file": "explore.spec.ts",
-          "line": 46,
+          "line": 47,
           "column": 5
         },
         {
@@ -1326,13 +2109,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 20837,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:53.452Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-1e0d4617de598ad27304",
           "file": "explore.spec.ts",
-          "line": 73,
+          "line": 74,
           "column": 5
         },
         {
@@ -1346,13 +2143,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 13908,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:42:53.521Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-9c5a6ffe9dbddf712dd8",
           "file": "explore.spec.ts",
-          "line": 90,
+          "line": 91,
           "column": 5
         },
         {
@@ -1366,8 +2177,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1609,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:47.350Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-5e4f3a643f7dc4213f7b",
@@ -1386,8 +2211,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1557,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:47.421Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-03155b7c7f13a1a6522e",
@@ -1406,8 +2245,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 14126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:48.983Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-8f6c3cc1e7c81cb79f0d",
@@ -1426,13 +2279,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 14055,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:48.997Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-ddac55535d9590620755",
           "file": "explore.spec.ts",
-          "line": 46,
+          "line": 47,
           "column": 5
         },
         {
@@ -1446,13 +2313,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18384,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:48.995Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-1fd69c8a789f50df9357",
           "file": "explore.spec.ts",
-          "line": 73,
+          "line": 74,
           "column": 5
         },
         {
@@ -1466,13 +2347,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 8617,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:49.041Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-38d4687b8f75bd546cb1",
           "file": "explore.spec.ts",
-          "line": 90,
+          "line": 91,
           "column": 5
         },
         {
@@ -1486,8 +2381,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 929,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:31.987Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-b5176f577be8f7b4f4aa",
@@ -1506,8 +2415,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1051,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:32.172Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-599136f142c34563a314",
@@ -1526,8 +2449,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1471,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:32.352Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-0883b313562819ff1afb",
@@ -1546,13 +2483,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1811,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:32.931Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-bb31dc19664dc8de30b7",
           "file": "explore.spec.ts",
-          "line": 46,
+          "line": 47,
           "column": 5
         },
         {
@@ -1566,13 +2517,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 7200,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:33.240Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-d43c716406a9066b43ba",
           "file": "explore.spec.ts",
-          "line": 73,
+          "line": 74,
           "column": 5
         },
         {
@@ -1586,13 +2551,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2528,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:33.852Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "068fad9605609506583e-37297826638db26ca135",
           "file": "explore.spec.ts",
-          "line": 90,
+          "line": 91,
           "column": 5
         }
       ]
@@ -1614,8 +2593,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 4877,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:07.612Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-8be11440b4ea28a644ad",
@@ -1634,8 +2627,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 4480,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:12.594Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-481a31945bae55955637",
@@ -1654,8 +2661,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4638,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:12.816Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-a5e725bfacce2f459dba",
@@ -1674,8 +2695,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1191,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:13.179Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-f3f09bea051da3204c6a",
@@ -1694,8 +2729,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1260,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:14.316Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-315b759b6fcd5654eee9",
@@ -1714,8 +2763,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1915,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:57.706Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-c97c94ed6468638a0bd9",
@@ -1734,8 +2797,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:59.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-ed24dcda8173833ba0d9",
@@ -1754,8 +2831,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3472,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:03.081Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-5b1f590d924c68c6132f",
@@ -1774,8 +2865,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1158,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:03.182Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-647e30be054bafb89da8",
@@ -1794,8 +2899,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 717,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:03.185Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-663f7e6666a54f8a461a",
@@ -1814,8 +2933,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 494,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:34.779Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-8ed13c33258af5e56b38",
@@ -1834,8 +2967,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3129,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:34.790Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-db2ccc7a8aa3df7cf6f3",
@@ -1854,8 +3001,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3043,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:35.291Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-e5d35f3e6d6798789363",
@@ -1874,8 +3035,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 422,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:36.399Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-9c2e3d42d3f1710ac423",
@@ -1894,8 +3069,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 243,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:36.829Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "b026111065b03cb86f1c-412dd7f04bb032124ade",
@@ -1922,8 +3111,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 6806,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:14.416Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-3462371d74445af9c15f",
@@ -1942,8 +3145,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4098,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:15.628Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-aae27e42752135dd2712",
@@ -1962,8 +3179,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2494,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:17.153Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-2eb18d6c6c9fd045ee1c",
@@ -1982,8 +3213,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2954,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:17.504Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-67bf517f2d8751b9c2d1",
@@ -2002,8 +3247,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5208,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:03.931Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-b77c6e95f0966ff12017",
@@ -2022,8 +3281,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3046,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:04.533Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-44dd2626334b531aeaed",
@@ -2042,8 +3315,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1147,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:06.628Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-1c0d481479e319929ab2",
@@ -2062,8 +3349,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 912,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:07.440Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-fa4c2f78faa23a03cb9b",
@@ -2082,8 +3383,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4296,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:37.083Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-92c99461dd10a78bb1d2",
@@ -2102,8 +3417,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:37.938Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-347f37048abf30457f60",
@@ -2122,8 +3451,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1324,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:38.347Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-74ae47e4cb3d6b3dc480",
@@ -2142,8 +3485,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 987,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:39.705Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "5d2868f7d23420c27cca-e5f41071395b9eb18106",
@@ -2170,8 +3527,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 6251,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:19.699Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-f653b5a2cd412c76646c",
@@ -2190,8 +3561,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2479,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:19.789Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-55864a9ea2f13e640646",
@@ -2210,8 +3595,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3126,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:20.539Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-d3c545bbea9120963dfc",
@@ -2230,8 +3629,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 4636,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:21.313Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-5cab5bcc96daa9a80d34",
@@ -2250,8 +3663,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2351,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:22.314Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-ae58f1c1716a498d3935",
@@ -2270,13 +3697,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1865,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:23.698Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-795e70c60437f9e22d86",
           "file": "quality.spec.ts",
-          "line": 45,
+          "line": 49,
           "column": 5
         },
         {
@@ -2290,13 +3731,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4693,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:24.694Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-639b0254614a421d745e",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2310,13 +3765,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4359,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:25.588Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-a5bb25db550dcf27a5e8",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2330,13 +3799,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3837,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:26.002Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-6bc822c84e49dae76efd",
           "file": "quality.spec.ts",
-          "line": 75,
+          "line": 79,
           "column": 5
         },
         {
@@ -2350,13 +3833,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3305,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:26.004Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-717b347c58b53b349854",
           "file": "quality.spec.ts",
-          "line": 86,
+          "line": 90,
           "column": 5
         },
         {
@@ -2370,13 +3867,27 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1251,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:29.361Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-bd759a437c2f6c8db685",
           "file": "quality.spec.ts",
-          "line": 92,
+          "line": 96,
           "column": 5
         },
         {
@@ -2390,8 +3901,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 6772,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:07.610Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-344b1f9b6906c88009a9",
@@ -2410,8 +3935,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1824,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:07.849Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-7ded7efcf2e4df07d178",
@@ -2430,8 +3969,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3192,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:08.378Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-88fc3d1e0d27ed2b4b51",
@@ -2450,8 +4003,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 4360,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:09.225Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-b4a921ec83fe0d433f44",
@@ -2470,8 +4037,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2892,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:09.719Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-90e217835329c87a884d",
@@ -2490,13 +4071,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1957,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:11.587Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-c86ee52b0d1e4c01e916",
           "file": "quality.spec.ts",
-          "line": 45,
+          "line": 49,
           "column": 5
         },
         {
@@ -2510,13 +4105,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 7247,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:12.650Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-536e8572040474163fc4",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2530,13 +4139,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6268,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:13.566Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-0e531abda641f99aac83",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2550,13 +4173,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5464,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:13.644Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-2d529c7d684ca9fdc281",
           "file": "quality.spec.ts",
-          "line": 75,
+          "line": 79,
           "column": 5
         },
         {
@@ -2570,13 +4207,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4443,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:14.608Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-1832b82ba0d8e4158553",
           "file": "quality.spec.ts",
-          "line": 86,
+          "line": 90,
           "column": 5
         },
         {
@@ -2590,13 +4241,27 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1032,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:19.137Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-bdb85b481b6907389ef7",
           "file": "quality.spec.ts",
-          "line": 92,
+          "line": 96,
           "column": 5
         },
         {
@@ -2610,8 +4275,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 5932,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:39.792Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-a4c64b1fc9855b4570ae",
@@ -2630,8 +4309,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1774,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:40.490Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-6598562ea7d23f69e96d",
@@ -2650,8 +4343,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 4525,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:40.729Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-7ebe0fa9d02441755990",
@@ -2670,8 +4377,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4083,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:41.559Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-7262e73d10acc7da81c4",
@@ -2690,8 +4411,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1627,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:42.369Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-80385fbbbc889a8e6e29",
@@ -2710,13 +4445,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 1250,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:44.056Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-feecc701435c7baebdc4",
           "file": "quality.spec.ts",
-          "line": 45,
+          "line": 49,
           "column": 5
         },
         {
@@ -2730,13 +4479,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3100,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:45.274Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-3a331e70934ca930796e",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2750,13 +4513,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3470,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:45.320Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-91aa8427c1f540f83c6f",
           "file": "quality.spec.ts",
-          "line": 62,
+          "line": 66,
           "column": 7
         },
         {
@@ -2770,13 +4547,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2524,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:45.708Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-7ea0156c32038cd60ea4",
           "file": "quality.spec.ts",
-          "line": 75,
+          "line": 79,
           "column": 5
         },
         {
@@ -2790,13 +4581,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1306,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:45.752Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-78f0b3e4e62d370a5101",
           "file": "quality.spec.ts",
-          "line": 86,
+          "line": 90,
           "column": 5
         },
         {
@@ -2810,13 +4615,27 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 1387,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:47.096Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "f46baca133b10bf87db1-0fd6a9fab2e0d3034d7b",
           "file": "quality.spec.ts",
-          "line": 92,
+          "line": 96,
           "column": 5
         }
       ]
@@ -2838,8 +4657,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3138,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:29.442Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-7b2ef4c1148d422f5a36",
@@ -2858,8 +4691,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2465,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:29.926Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-0d05567601eaecb7e03f",
@@ -2878,8 +4725,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2768,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:19.184Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-b884b9dcee6540a227c2",
@@ -2898,8 +4759,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2218,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:19.873Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-6e6eb7e2a2e0faa42b2c",
@@ -2918,8 +4793,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:48.285Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-d4fedbc352e07e9b570b",
@@ -2938,8 +4827,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3878,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:48.408Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "6e02b10b8c48e14325ce-eecfed5bc9c66d8e329a",
@@ -2966,8 +4869,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4569,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:30.013Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-2be484353ab0b22544fa",
@@ -2986,8 +4903,22 @@
               "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2674,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:43:30.677Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-e54bd11d42d1122a3663",
@@ -3006,8 +4937,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3928,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:19.949Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-fed8312bed191a210743",
@@ -3026,8 +4971,22 @@
               "expectedStatus": "passed",
               "projectId": "tablet",
               "projectName": "tablet",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 2288,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:20.273Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-903e28a1265da31f1487",
@@ -3046,8 +5005,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 4767,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:48.549Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-228d3123ba8abcd862d6",
@@ -3066,8 +5039,22 @@
               "expectedStatus": "passed",
               "projectId": "phone",
               "projectName": "phone",
-              "results": [],
-              "status": "skipped"
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 3583,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T06:44:48.853Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "8168eb6e17e693d86faf-7c62a513e82434314eb7",
@@ -3080,10 +5067,10 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T06:18:17.233Z",
-    "duration": 158.69400000000007,
-    "expected": 0,
-    "skipped": 141,
+    "startTime": "2026-10-24T06:42:29.498Z",
+    "duration": 143992.889,
+    "expected": 141,
+    "skipped": 0,
     "unexpected": 0,
     "flaky": 0
   }

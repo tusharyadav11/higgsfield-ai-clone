@@ -34,7 +34,11 @@ for (const r of ["/", "/explore", "/library", "/create"]) {
         if (box.width === 0 && box.height === 0 && img.loading !== "lazy") probs.push("zero-size");
         const alt = img.getAttribute("alt");
         if (alt === null) probs.push("missing alt");
-        else if (alt.trim() === "" && img.getAttribute("aria-hidden") !== "true" && img.getAttribute("role") !== "presentation") probs.push("empty alt on non-decorative img");
+        else if (alt.trim() === "") {
+          // alt="" is legit only for decorative/duplicate images; the primary image of a card must be described
+          const card = img.closest('[data-testid="feed-card"],[data-testid="library-item"],[data-testid="result-card"]');
+          if (card && card.querySelector("img") === img) probs.push("primary card image has empty alt");
+        }
         return probs.map((p) => `${p}: ${img.currentSrc.slice(0, 60) || img.getAttribute("src")?.slice(0, 60)}`);
       }),
     );

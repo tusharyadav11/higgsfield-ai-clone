@@ -27,7 +27,8 @@ test("remix works from Home trending rail too", async ({ page }) => {
 test("like toggles with optimistic count and persists", async ({ page }) => {
   await page.goto("/explore");
   const card = tid(page, "feed-card");
-  const like = card.locator('[data-testid="like-btn"]').first();
+  // counts >=1000 render as "3.1k" so +1 is invisible; pick a card showing an exact count
+  const like = page.locator('[data-testid="feed-card"]:visible [data-testid="like-btn"]').filter({ hasNotText: /k/i }).first();
   const num = async () => Number(((await like.innerText()).replace(/,/g, "").match(/[\d.]+/) ?? ["NaN"])[0]);
   const state = async () => (await like.getAttribute("aria-pressed")) ?? "none";
   const n0 = await num();
@@ -37,7 +38,7 @@ test("like toggles with optimistic count and persists", async ({ page }) => {
   expect(await num(), "count +1 immediately").toBe(n0 + 1);
   expect(await state(), "aria-pressed should flip").not.toBe(s0);
   await page.reload();
-  const like2 = tid(page, "feed-card").locator('[data-testid="like-btn"]').first();
+  const like2 = page.locator('[data-testid="feed-card"]:visible [data-testid="like-btn"]').filter({ hasNotText: /k/i }).first();
   expect(Number(((await like2.innerText()).replace(/,/g, "").match(/[\d.]+/) ?? ["NaN"])[0]), "like persists after reload").toBe(n0 + 1);
   await like2.click();
   expect(Number(((await like2.innerText()).replace(/,/g, "").match(/[\d.]+/) ?? ["NaN"])[0]), "unlike returns to original").toBe(n0);

@@ -147,6 +147,12 @@ export function CreateStudio() {
             maxLength={500}
             rows={5}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              // Enter (or Cmd/Ctrl+Enter) generates, Shift+Enter adds a newline
+              if (e.key !== "Enter" || e.shiftKey || e.nativeEvent.isComposing) return;
+              e.preventDefault();
+              if (!busy && prompt.trim()) run();
+            }}
             placeholder="Describe what you want to see..."
             className="w-full resize-none rounded-2xl border border-line bg-surface p-3 text-sm text-fg outline-none placeholder:text-muted focus:ring-2 focus:ring-accent"
           />

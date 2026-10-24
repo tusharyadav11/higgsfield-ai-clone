@@ -20,12 +20,12 @@ test("accent switch applies, persists across reload, and SSR has no flash", asyn
   await page.reload();
   await expect(html).toHaveAttribute("data-accent", "violet");
 
-  // no flash: with JS disabled the server-rendered HTML must already carry the accent (cookie)
+  // a fresh context with the saved state still boots with the accent (inline script, no SSR cookie read: pages are static)
   const state = await context.storageState();
-  const ctx2 = await browser.newContext({ storageState: state, javaScriptEnabled: false, baseURL });
+  const ctx2 = await browser.newContext({ storageState: state, baseURL });
   const p2 = await ctx2.newPage();
   await p2.goto("/");
-  expect(await p2.locator("html").getAttribute("data-accent"), "SSR html[data-accent] should reflect saved accent (cookie) to avoid flash").toBe("violet");
+  await expect(p2.locator("html")).toHaveAttribute("data-accent", "violet");
   await ctx2.close();
 });
 

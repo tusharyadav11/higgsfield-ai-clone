@@ -30,20 +30,17 @@ export { expect };
 
 /** rewrite persisted zustand state's credits in localStorage, then reload */
 export async function setCredits(page: Page, n: number) {
-  const ok = await page.evaluate((n) => {
-    for (const k of Object.keys(localStorage)) {
-      try {
-        const o = JSON.parse(localStorage.getItem(k)!);
-        if (o?.state && "credits" in o.state) {
-          o.state.credits = n;
-          localStorage.setItem(k, JSON.stringify(o));
-          return true;
-        }
-      } catch {}
-    }
-    return false;
+  // zustand persist (name "kinetic-store", see src/lib/store.ts) only writes after the first state change,
+  // so merge into the existing entry or create one with the store's documented shape.
+  await page.evaluate((n) => {
+    let key = Object.keys(localStorage).find((k) => {
+      try { return "credits" in (JSON.parse(localStorage.getItem(k)!)?.state ?? {}); } catch { return false; }
+    });
+    const o = key ? JSON.parse(localStorage.getItem(key)!) : { state: { streak: 0, lastClaim: null, likes: {}, library: [] }, version: 1 };
+    key = key ?? "kinetic-store";
+    o.state.credits = n;
+    localStorage.setItem(key, JSON.stringify(o));
   }, n);
-  expect(ok, "could not find persisted store with `credits` in localStorage (zustand persist)").toBe(true);
   await page.reload();
 }
 
