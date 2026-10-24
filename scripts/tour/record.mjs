@@ -140,7 +140,7 @@ async function moveTo(x, y, ms = 750) {
   const bend = Math.min(140, dist * 0.22) * (Math.sign(dx * dy) || 1);
   const cx = pos.x + dx / 2 + (-dy / dist) * bend;
   const cy = pos.y + dy / 2 + (dx / dist) * bend;
-  const dur = Math.max(600, Math.min(900, ms));
+  const dur = Math.max(ms < 600 ? 420 : 600, Math.min(900, ms));
   const start = Date.now();
   for (;;) {
     const t = Math.min(1, (Date.now() - start) / dur);
@@ -166,11 +166,12 @@ async function hover(loc, ms = 750, dx = 0, dy = 0) {
 }
 async function click(loc, ms = 750) {
   await hover(loc, ms);
-  await sleep(220);
+  const q = ms < 600 ? 0.6 : 1;
+  await sleep(220 * q);
   await page.mouse.down();
   await sleep(90);
   await page.mouse.up();
-  await sleep(250);
+  await sleep(250 * q);
 }
 async function smoothScroll(y, wait = 1000) {
   await page.evaluate((y) => window.scrollTo({ top: y, behavior: "smooth" }), y);
@@ -232,13 +233,12 @@ async function main() {
   await scene(1, "Welcome");
   await caption("Kinetic: remix any idea in one click", "See it. Remix it. Make it yours.");
   await moveTo(560, 330, 800);
-  await dwell(1800);
+  await dwell(1000);
   await moveTo(430, 470, 700);
-  await dwell(900);
-  await smoothScroll(520, 1300);
-  await moveTo(820, 380, 700);
-  await dwell(1500);
-  await smoothScroll(0, 1200);
+  await dwell(800);
+  await smoothScroll(480, 1100);
+  await dwell(700);
+  await smoothScroll(0, 700);
 
   // 2 Search
   await scene(2, "Search");
@@ -248,8 +248,8 @@ async function main() {
   await page.keyboard.press("Control+k");
   await page.waitForSelector('[data-testid="search-input"]');
   await dwell(700);
-  await page.keyboard.type("kling", { delay: 190 });
-  await dwell(2600);
+  await page.keyboard.type("kling", { delay: 160 });
+  await dwell(1400);
   await page.keyboard.press("Escape");
   await dwell(500);
 
@@ -258,10 +258,10 @@ async function main() {
   await caption("Explore what the community makes", "Hover any card to see its motion. Remix reuses the prompt.");
   await click(vis('[data-testid="nav-explore"]'));
   await page.waitForSelector('[data-testid="feed-card"]');
-  await dwell(1600);
+  await dwell(1200);
   const card = page.locator('[data-testid="feed-card"]:visible').nth(1);
   await hover(card, 800);
-  await dwell(2800);
+  await dwell(2400);
   await click(card.locator('[data-testid="remix-btn"]'), 700);
   await page.waitForURL(/\/create/);
   await page.waitForSelector('[data-testid="prompt-input"]');
@@ -269,16 +269,17 @@ async function main() {
   // 4 Create
   await scene(4, "Create");
   await caption("Your prompt is already filled in", "Pick a model, polish the prompt, then generate.", true);
-  await dwell(2200);
+  await dwell(1800);
   const models = page.locator('[data-testid="model-select"] option');
   const nOpt = await models.count();
   await click(page.locator('[data-testid="model-select"]'), 800);
   await page.selectOption('[data-testid="model-select"]', { index: Math.min(1, nOpt - 1) });
-  await dwell(1500);
+  await dwell(1000);
   await caption("Enhance adds cinematic detail", "One click turns a short idea into a richer prompt.", true);
   await click(page.locator('[data-testid="enhance-btn"]'), 800);
-  await dwell(2300);
+  await dwell(1800);
   await caption("Press Generate", "Credits are shown before you spend them.", true);
+  await dwell(900);
   await click(page.locator('[data-testid="generate-btn"]'), 800);
   await page.waitForSelector('[data-testid="job-progress"]', { timeout: 20000 }).catch(() => {});
   await caption("Live progress, no black box", "Queued, understanding, rendering, finishing.", true);
@@ -291,80 +292,73 @@ async function main() {
   await caption("Done. Download, share or animate it", "Every result is saved to your Library automatically.", true);
   await smoothScroll(140, 900);
   await hover(page.locator('a[download]').first(), 800);
-  await dwell(1300);
-  await hover(page.locator('[data-testid="share-btn"]'), 700);
-  await dwell(1100);
+  await dwell(900);
+  await hover(page.locator('[data-testid="share-btn"]'), 600);
   if (await page.locator('[data-testid="to-video-btn"]').count()) {
     await hover(page.locator('[data-testid="to-video-btn"]'), 700);
     await caption("Make a video from this image", "Turn any still into motion with one more click.", true);
-    await dwell(2600);
-  } else await dwell(1500);
+    await dwell(1700);
+  } else await dwell(1200);
 
   // 6 Library + usage
   await scene(6, "Library & usage");
   await caption("Everything you make lives in your Library", "Re-run, download or delete. Nothing leaves your device.");
   await click(vis('[data-testid="nav-library"]'));
   await page.waitForSelector('[data-testid="library-item"]', { timeout: 15000 }).catch(() => {});
-  await dwell(2800);
+  await dwell(1100);
   await caption("Track credits in the usage dashboard", "See spend by day and by model, and set a budget.");
   await page.goto(BASE + "/usage", { waitUntil: "networkidle" });
-  await dwell(1200);
-  await moveTo(700, 360, 800);
-  await smoothScroll(300, 1200);
-  await dwell(1800);
-  await smoothScroll(0, 900);
+  await dwell(800);
+  await moveTo(700, 360, 700);
+  await smoothScroll(110, 800);
+  await dwell(900);
+  await smoothScroll(0, 600);
 
   // 7 Theme + colour
   await scene(7, "Make it yours");
   await caption("Light or dark, your call", "Switch the theme instantly. It is remembered.");
   await click(vis('[data-testid="theme-toggle"]'));
   await page.waitForSelector('[data-testid="theme-menu"]');
-  await dwell(900);
-  await click(page.locator('[data-testid="theme-option-light"]'), 700);
-  await dwell(1800);
+  await dwell(500);
+  await click(page.locator('[data-testid="theme-option-light"]'), 500);
+  await dwell(1200);
   await caption("Pick any accent colour", "Drag the picker. Contrast is checked for you.");
   await page.keyboard.press("Escape");
   await click(vis('[data-testid="accent-switcher"]'));
   const sv = page.locator('[data-testid="accent-sv-area"]');
   await sv.waitFor();
+  await sleep(700); // let the popover finish placing/animating before measuring
   const b = await sv.boundingBox();
   await moveTo(b.x + b.width * 0.82, b.y + b.height * 0.25, 700);
   await page.mouse.down();
-  for (const [fx, fy] of [[0.7, 0.35], [0.5, 0.3], [0.3, 0.45], [0.35, 0.6], [0.6, 0.5], [0.8, 0.3]]) {
-    await moveTo(b.x + b.width * fx, b.y + b.height * fy, 600);
+  for (const [fx, fy] of [[0.55, 0.3], [0.3, 0.5], [0.6, 0.6], [0.8, 0.3]]) {
+    await moveTo(b.x + b.width * fx, b.y + b.height * fy, 450);
   }
   await page.mouse.up();
-  await dwell(1200);
-  const hue = page.locator('[data-testid="accent-hue"]');
-  const hb = await hue.boundingBox();
-  await moveTo(hb.x + hb.width * 0.2, hb.y + hb.height / 2, 700);
-  await page.mouse.down();
-  await moveTo(hb.x + hb.width * 0.7, hb.y + hb.height / 2, 900);
-  await page.mouse.up();
-  await dwell(1600);
-  // restore the brand look: lime + dark
-  await click(page.locator('[data-testid="accent-reset"]'), 700);
+  await dwell(700);
   await dwell(500);
+  // restore the brand look: lime + dark
+  await click(page.locator('[data-testid="accent-reset"]'), 500);
   await page.keyboard.press("Escape");
-  await click(vis('[data-testid="theme-toggle"]'));
-  await click(page.locator('[data-testid="theme-option-dark"]'), 700);
-  await dwell(1200);
+  await click(vis('[data-testid="theme-toggle"]'), 500);
+  await click(page.locator('[data-testid="theme-option-dark"]'), 500);
+  await dwell(800);
 
   // 8 Connect + end card
   await scene(8, "Connect to Claude");
   await caption("Connect Kinetic to Claude", "Copy one command and your agent can search and generate.");
   await page.goto(BASE + "/connect", { waitUntil: "networkidle" });
-  await dwell(1500);
-  await smoothScroll(360, 1000);
+  await dwell(500);
+  await smoothScroll(340, 700);
   await click(page.locator('[data-testid="mcp-copy-claude-code"]'), 800);
-  await dwell(2800);
+  await dwell(1200);
   await caption("Ready when you are", "Start creating in seconds. No signup needed.");
-  await dwell(2400);
+  await dwell(2200);
   await clearCaption();
   await page.evaluate((u) => { window.__kt.hideChip(); window.__kt.end(u); }, BASE.replace(/^https?:\/\//, ""));
   const endAt = now();
-  cues.push({ start: endAt + 0.9, end: endAt + 4.4, title: "Kinetic: see it, remix it, make it yours.", sub: "" });
-  await dwell(4600);
+  cues.push({ start: endAt + 0.9, end: endAt + 2.8, title: "Kinetic: see it, remix it, make it yours.", sub: "" });
+  await dwell(3000);
   const dur = now();
 
   const vpath = await page.video().path();
@@ -396,8 +390,8 @@ function encode({ vpath, trim, dur }) {
   const run = (args) => execFileSync(FFMPEG, ["-y", "-loglevel", "error", ...args], { stdio: "inherit" });
   run(["-ss", Math.max(0, trim).toFixed(2), "-i", vpath, "-t", dur.toFixed(2), "-an", "-vf", "scale=1280:720:flags=lanczos,fps=25,format=yuv420p",
     "-c:v", "libx264", "-preset", "slow", "-crf", process.env.TOUR_CRF || "26", "-movflags", "+faststart", mp4]);
-  // poster = the Create/result moment (scene 5 start + 2s) so the poster shows the product, with caption
-  const posterAt = (chapters[4]?.start ?? 30) + 2.5;
+  // poster = the opening hero frame with its caption
+  const posterAt = 3.2; // home hero with the opening caption
   run(["-ss", posterAt.toFixed(2), "-i", mp4, "-frames:v", "1", "-q:v", "3", path.join(OUT, "kinetic-tour.jpg")]);
   console.log("mp4 bytes:", fs.statSync(mp4).size, "duration:", dur.toFixed(1) + "s");
 }

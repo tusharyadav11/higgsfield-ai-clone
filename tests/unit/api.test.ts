@@ -1,11 +1,16 @@
 import { describe, it, expect } from "vitest";
 import { NextRequest } from "next/server";
 
-async function load(name: string): Promise<any> {
+type Handler = (req: NextRequest) => Response | Promise<Response>;
+type RouteModule = { GET: Handler; POST: Handler };
+type Model = { id: string; name: string; kind: "image" | "video"; credits: number; speed: unknown };
+type FeedPost = { id: string; tags: string[] };
+
+async function load(name: string): Promise<RouteModule> {
   try {
-    if (name === "models") return await import("../../src/app/api/models/route");
-    if (name === "feed") return await import("../../src/app/api/feed/route");
-    return await import("../../src/app/api/generate/route");
+    if (name === "models") return (await import("../../src/app/api/models/route")) as unknown as RouteModule;
+    if (name === "feed") return (await import("../../src/app/api/feed/route")) as unknown as RouteModule;
+    return (await import("../../src/app/api/generate/route")) as unknown as RouteModule;
   } catch (e) {
     throw new Error(`Cannot import src/app/api/${name}/route.ts (not implemented yet?): ${(e as Error).message}`);
   }
@@ -26,7 +31,7 @@ describe("GET /api/models", () => {
     const cc = res.headers.get("cache-control") ?? "";
     expect(cc, "Cache-Control must include s-maxage=3600").toContain("s-maxage=3600");
     expect(cc).toContain("stale-while-revalidate");
-    const data = await res.json();
+    const data = (await res.json()) as Model[];
     expect(Array.isArray(data)).toBe(true);
     expect(data.length).toBeGreaterThan(0);
     for (const m of data) {
@@ -35,12 +40,13 @@ describe("GET /api/models", () => {
       expect(["image", "video"]).toContain(m.kind);
       expect(typeof m.credits).toBe("number");
       expect(m.speed).toBeDefined();
-      if (m.kind === "image") expect(m.credits).toBeGreaterThanOrEqual(2), expect(m.credits).toBeLessThanOrEqual(4);
-      else expect(m.credits).toBeGreaterThanOrEqual(10), expect(m.credits).toBeLessThanOrEqual(20);
+      const [lo, hi] = m.kind === "image" ? [2, 4] : [10, 20];
+      expect(m.credits).toBeGreaterThanOrEqual(lo);
+      expect(m.credits).toBeLessThanOrEqual(hi);
     }
-    expect(data.some((m: any) => m.kind === "image")).toBe(true);
-    expect(data.some((m: any) => m.kind === "video")).toBe(true);
-    expect(new Set(data.map((m: any) => m.id)).size).toBe(data.length);
+    expect(data.some((m) => m.kind === "image")).toBe(true);
+    expect(data.some((m) => m.kind === "video")).toBe(true);
+    expect(new Set(data.map((m) => m.id)).size).toBe(data.length);
   });
 });
 
@@ -67,7 +73,7 @@ describe("GET /api/feed", () => {
 
   it("tag filter returns only that tag; unknown tag -> empty 200", async () => {
     const all = await (await feed("?limit=48")).json();
-    const tag = all.items.find((i: any) => i.tags.length)?.tags[0];
+    const tag = (all.items as FeedPost[]).find((i) => i.tags.length)?.tags[0] ?? "";
     expect(tag).toBeTruthy();
     const res = await feed(`?tag=${encodeURIComponent(tag)}&limit=48`);
     expect(res.status).toBe(200);
@@ -105,7 +111,7 @@ describe("GET /api/feed", () => {
       const res = await feed(`?limit=10${cursor ? `&cursor=${encodeURIComponent(cursor)}` : ""}`);
       expect(res.status).toBe(200);
       const d = await res.json();
-      seen.push(...d.items.map((x: any) => x.id));
+      seen.push(...(d.items as FeedPost[]).map((x) => x.id));
       cursor = d.nextCursor;
       if (!cursor) break;
     }
@@ -122,13 +128,13 @@ describe("GET /api/feed", () => {
 });
 
 describe("POST /api/generate", () => {
-  const gen = async (req: Request) => (await load("generate")).POST(req);
-  let imageModel: any, videoModel: any;
+  const gen = async (req: NextRequest) => (await load("generate")).POST(req);
+  let imageModel: Model, videoModel: Model;
   const models = async () => {
     if (!imageModel) {
       const list = await (await (await load("models")).GET(url("/api/models"))).json();
-      imageModel = list.find((m: any) => m.kind === "image");
-      videoModel = list.find((m: any) => m.kind === "video");
+      imageModel = (list as Model[]).find((m) => m.kind === "image")!;
+      videoModel = (list as Model[]).find((m) => m.kind === "video")!;
     }
   };
 
@@ -203,7 +209,7 @@ describe("POST /api/generate", () => {
 
   it("missing fields / wrong types -> 400", async () => {
     await models();
-    const full: any = { kind: "image", model: imageModel.id, prompt: "p", aspect: "1:1" };
+    const full: Record<string, unknown> = { kind: "image", model: imageModel.id, prompt: "p", aspect: "1:1" };
     for (const k of Object.keys(full)) {
       const b = { ...full }; delete b[k];
       expect((await gen(post(b))).status, `missing ${k}`).toBe(400);

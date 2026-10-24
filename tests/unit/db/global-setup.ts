@@ -11,6 +11,8 @@ export default async function setup() {
     await migrate(drizzle(sql), { migrationsFolder: "drizzle" });
     process.env.KINETIC_TEST_DB = "1";
   } catch (e) {
+    // CI / REQUIRE_TEST_DB=1: an unreachable database is a failure, never a silent skip
+    if (process.env.CI || process.env.REQUIRE_TEST_DB === "1") throw new Error(`Postgres required but unreachable at ${url}: ${(e as Error).message}`);
     console.warn(`\n[db tests] SKIPPED: cannot reach/migrate Postgres at ${url} (${(e as Error).message}).\n  Create it with: createdb kinetic_test\n`);
     process.env.KINETIC_TEST_DB = "0";
   } finally {

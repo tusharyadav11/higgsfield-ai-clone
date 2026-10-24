@@ -13,7 +13,7 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="min-h-dvh sm:pl-[72px] lg:pl-56">
       <Nav />
       <Header />
-      <main className="min-w-0 px-3 pb-28 pt-4 sm:px-5 sm:pb-8 lg:px-8">{children}</main>
+      <main className="min-w-0 px-3 pb-40 pt-4 sm:px-5 sm:pb-8 lg:px-8">{children}</main>
       <ThemeSync />
       <SpotlightRoot />
       <GuideRoot />

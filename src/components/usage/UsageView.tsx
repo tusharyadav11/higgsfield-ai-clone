@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { ArrowDownRight, ArrowUpRight, Download, Film, Flame, ImageIcon, Info, Plug, Sparkles, Wand2 } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, Download, Film, Flame, ImageIcon, Info, Sparkles } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { useServerInfo } from "@/lib/server-info";
 import { Button, Card, Skeleton } from "@/components/ui";
@@ -11,8 +11,7 @@ import { guestEntries, insights, isEmpty, RANGES, RANGE_DAYS, smoothPath, summar
 import { AreaChart } from "./AreaChart";
 import { useBudget, useCountUp, useEntered } from "./hooks";
 
-const ICON: Record<string, typeof ImageIcon> = { image: ImageIcon, video: Film, enhance: Wand2, mcp: Plug };
-const NOTE: Record<string, string> = { enhance: "Always free", mcp: "Billed as Image/Video runs" };
+const ICON: Record<string, typeof ImageIcon> = { image: ImageIcon, video: Film };
 const nf = (n: number) => n.toLocaleString("en");
 
 export function UsageView() {
@@ -157,9 +156,12 @@ function Dashboard({ s, credits }: { s: UsageSummary; credits: number }) {
 
           <section aria-label="By tool">
             <h2 className="mb-2 text-sm font-semibold">By tool</h2>
-            <div className="grid grid-cols-1 gap-3 min-[460px]:grid-cols-2 xl:grid-cols-4">
-              {s.tools.filter((t) => t.tool !== "other").map((t) => (<ToolCard key={t.tool} t={t} s={s} />))}
+            <div className="grid grid-cols-1 gap-3 min-[460px]:grid-cols-2">
+              {s.tools.filter((t) => t.tool === "image" || t.tool === "video").map((t) => (<ToolCard key={t.tool} t={t} s={s} />))}
             </div>
+            <p data-testid="usage-tool-note" className="mt-2 text-xs leading-snug text-muted">
+              Runs started by agents over MCP are charged as Image or Video runs, so they are counted in the cards above. Prompt Enhance is free and never spends credits.
+            </p>
           </section>
 
           <div className="grid gap-4 lg:grid-cols-2">
@@ -251,7 +253,7 @@ function ToolCard({ t, s }: { t: ToolStat; s: UsageSummary }) {
       <div className="flex items-baseline gap-1"><span className="text-2xl font-bold tabular-nums">{nf(t.spent)}</span><span className="text-xs text-muted">credits</span></div>
       <Spark data={t.spark} />
       <div className="flex justify-between text-xs text-muted">
-        <span>{used ? `${t.count} run${t.count === 1 ? "" : "s"}` : (NOTE[t.tool] ?? "No runs yet")}</span>
+        <span>{used ? `${t.count} run${t.count === 1 ? "" : "s"}` : "No runs yet"}</span>
         <span>{Math.round(t.share * 100)}% of spend</span>
       </div>
     </Card>

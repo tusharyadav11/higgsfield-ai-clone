@@ -6,6 +6,11 @@ import { FALLBACK_CHAPTERS, TOUR_VIDEO, activeChapter, clampSeek, fmtClock, pars
 
 const FOCUSABLE = 'button:not([disabled]), a[href], video[controls], [tabindex]:not([tabindex="-1"])';
 
+function trackMode(v: HTMLVideoElement | null, on: boolean) {
+  const tr = v?.textTracks[0];
+  if (tr) tr.mode = on ? "showing" : "hidden";
+}
+
 /**
  * Product-tour video modal. Mounted only while open, so the poster, the video and the chapters file
  * are not requested until the user asks for them.
@@ -56,8 +61,7 @@ export function TourVideo({ onClose, onTry }: { onClose: () => void; onTry: () =
     else v.pause();
   }, []);
   const setCaptions = useCallback((on: boolean) => {
-    const tr = video.current?.textTracks[0];
-    if (tr) tr.mode = on ? "showing" : "hidden";
+    trackMode(video.current, on);
     setCaptionsOn(on);
   }, []);
   const fullscreen = useCallback(() => {
@@ -122,7 +126,7 @@ export function TourVideo({ onClose, onTry }: { onClose: () => void; onTry: () =
       >
         <div className="mb-2 flex items-center justify-between gap-2">
           <div className="min-w-0">
-            <h2 className="truncate text-base font-semibold sm:text-lg">Kinetic in 60 seconds</h2>
+            <h2 className="truncate text-base font-semibold sm:text-lg">Kinetic product tour</h2>
             <p className="hidden text-xs text-muted sm:block">
               Space play/pause · ← → skip 5s · C captions · F fullscreen · Esc close{watched ? " · Watched" : ""}
             </p>

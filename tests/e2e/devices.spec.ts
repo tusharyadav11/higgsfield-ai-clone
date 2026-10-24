@@ -13,7 +13,7 @@ const SHOTS = process.env.DEVQA_SHOTS;
 const IGNORED = [/Download the React DevTools/i, /\[Fast Refresh\]/i];
 
 const test = base.extend<{ errors: string[] }>({
-  errors: async ({ page }, use) => {
+  errors: async ({ page }, provide) => {
     const errors: string[] = [];
     page.on("console", (m) => {
       const t = m.text();
@@ -21,7 +21,7 @@ const test = base.extend<{ errors: string[] }>({
       if (m.type() === "error" || (m.type() === "warning" && /hydrat|did not match/i.test(t))) errors.push(`[${m.type()}] ${t.slice(0, 300)}`);
     });
     page.on("pageerror", (e) => errors.push(`[pageerror] ${e.message}`));
-    await use(errors);
+    await provide(errors);
   },
 });
 
@@ -59,7 +59,7 @@ async function shot(page: Page, name: string, projectName: string) {
 type Offender = string;
 function auditPage(opts: { touch: boolean; scope?: string; skipEdge?: boolean }) {
   const out: Record<string, Offender[]> = { overflow: [], edge: [], target: [], clipped: [], media: [] };
-  const vw = window.innerWidth, vh = window.innerHeight;
+  const vw = window.innerWidth;
   const root = (opts.scope ? document.querySelector(opts.scope) : document.body) as HTMLElement | null;
   if (!root) return { ...out, missing: [`scope ${opts.scope} not found`] };
   const desc = (el: Element) => {

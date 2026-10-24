@@ -51,6 +51,28 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
   }, [open, onClose]);
   useEffect(() => () => abort.current?.abort(), []);
 
+  // Phones: tuck the FAB away while scrolling down (so it never sits over full-width content) and bring it back on scroll-up,
+  // near the top or bottom of the page (the shell reserves padding there), when focused, or while the panel is open.
+  const [tucked, setTucked] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    let lastY = window.scrollY;
+    let acc = 0;
+    const onScroll = () => {
+      const y = window.scrollY;
+      const dy = y - lastY;
+      lastY = y;
+      if (!mq.matches) return setTucked(false);
+      acc = Math.sign(dy) === Math.sign(acc) ? acc + dy : dy;
+      const nearEnd = document.documentElement.scrollHeight - (y + window.innerHeight) < 160;
+      if (y < 80 || nearEnd || acc < -8) setTucked(false);
+      else if (acc > 24) setTucked(true);
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  const hideFab = tucked && !open;
+
   const patch = (id: string, p: Partial<Msg>) => setMsgs((m) => m.map((x) => (x.id === id ? { ...x, ...p } : x)));
 
   const ask = async (question: string, history: Msg[]) => {
@@ -136,7 +158,9 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
         onClick={onToggle}
         aria-label={open ? "Close assistant" : "Open assistant"}
         aria-expanded={open}
-        className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-50 grid size-11 place-items-center rounded-full bg-accent sm:size-12 text-accent-fg shadow-lg ring-1 ring-black/20 transition hover:scale-105 sm:bottom-5 sm:right-5"
+        data-tucked={hideFab || undefined}
+        onFocus={() => setTucked(false)}
+        className={`fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] right-3 z-50 grid size-11 place-items-center rounded-full bg-accent sm:size-12 text-accent-fg shadow-lg ring-1 ring-black/20 transition motion-reduce:transition-none hover:scale-105 sm:bottom-5 sm:right-5 ${hideFab ? "pointer-events-none translate-x-16 opacity-0" : ""}`}
       >
         {open ? <X className="size-5" aria-hidden /> : <Bot className="size-6" aria-hidden />}
       </button>

@@ -4,13 +4,19 @@ import type { Page } from "@playwright/test";
 type Timing = Partial<{ quietMs: number; gapMs: number; idleMs: number; maxPerSession: number; tickMs: number; hour: number }>;
 const FAST: Timing = { quietMs: 300, gapMs: 400, idleMs: 1200, tickMs: 150 };
 
-/** debug flag + shortened timers, applied before every page load */
-async function boot(page: Page, timing: Timing = FAST) {
-  await page.addInitScript((t) => {
+/**
+ * debug flag + shortened timers, applied before every page load.
+ * The first-visit tour offer is marked seen (it has its own coordination test below) so it never holds popups back here.
+ */
+async function boot(page: Page, timing: Timing = FAST, opts: { tourOffer?: boolean } = {}) {
+  await page.addInitScript(([t, offer]) => {
     sessionStorage.setItem("kinetic.engage.debug", "1");
+    if (!offer) localStorage.setItem("kinetic.tour.seen", '"1"');
     (window as unknown as { __kineticEngageTiming: unknown }).__kineticEngageTiming = t;
-  }, timing);
+  }, [timing, !!opts.tourOffer] as const);
 }
+/** the engage engine registers its listeners (and the debug reset hook) after hydration: events emitted earlier are lost by design */
+const engineReady = (page: Page) => page.waitForFunction(() => typeof (window as unknown as { __kineticEngageReset?: unknown }).__kineticEngageReset === "function");
 const card = (page: Page, id?: string) => page.locator(id ? `[data-testid="popup-card"][data-popup="${id}"]` : '[data-testid="popup-card"]');
 const engageState = (page: Page) => page.evaluate(() => JSON.parse(localStorage.getItem("kinetic.engage.v1") ?? "{}"));
 const emit = (page: Page, id: string) => page.evaluate((id) => window.dispatchEvent(new CustomEvent("kinetic:engage", { detail: { id } })), id);
@@ -219,6 +225,7 @@ test.describe("engage popups", () => {
   test("reset helper clears state in debug mode", async ({ page }) => {
     await boot(page);
     await page.goto("/");
+    await engineReady(page);
     await emit(page, "share-nudge");
     await expect(card(page)).toBeVisible();
     await page.evaluate(() => (window as unknown as { __kineticEngageReset: () => void }).__kineticEngageReset());
@@ -228,5 +235,35 @@ test.describe("engage popups", () => {
     expect(st.pending).toEqual({});
     expect(st.lastShown).toEqual({});
     expect(st.lastVisit).toBeNull();
+  });
+
+  test("the first-visit tour offer and an engage popup never share the screen", async ({ page }) => {
+    await boot(page, FAST, { tourOffer: true });
+    await page.goto("/");
+    await engineReady(page);
+    const offer = page.getByTestId("tour-offer");
+    await expect(offer).toBeVisible({ timeout: 10_000 });
+    // a popup requested while the offer is up is held back, not stacked on it
+    await emit(page, "share-nudge");
+    await page.waitForTimeout(1500);
+    await expect(card(page)).toHaveCount(0);
+    await expect(offer).toBeVisible();
+    // once the offer is dismissed the popup takes the slot
+    await offer.getByRole("button", { name: "Skip" }).click();
+    await expect(offer).toHaveCount(0);
+    await expect(card(page, "share-nudge")).toBeVisible();
+  });
+
+  test("a popup that is already showing defers the tour offer", async ({ page }) => {
+    await boot(page, { ...FAST, quietMs: 0 }, { tourOffer: true });
+    await page.goto("/");
+    await engineReady(page);
+    await emit(page, "share-nudge");
+    await expect(card(page, "share-nudge")).toBeVisible();
+    await page.waitForTimeout(3500); // past the 2.5s offer delay
+    await expect(page.getByTestId("tour-offer")).toHaveCount(0);
+    await page.getByTestId("popup-close").click();
+    await expect(page.getByTestId("tour-offer")).toBeVisible({ timeout: 5000 });
+    await expect(card(page)).toHaveCount(0);
   });
 });

@@ -15,7 +15,7 @@ export const credits = async (page: Page) => {
 export const IGNORED_CONSOLE = [/Download the React DevTools/i, /\[Fast Refresh\]/i];
 
 export const test = base.extend<{ errors: string[] }>({
-  errors: async ({ page }, use) => {
+  errors: async ({ page }, provide) => {
     const errors: string[] = [];
     page.on("console", (m) => {
       const t = m.text();
@@ -23,7 +23,7 @@ export const test = base.extend<{ errors: string[] }>({
         if (m.type() === "error" || /hydrat|did not match|key.*prop|act\(/i.test(t)) errors.push(`[${m.type()}] ${t}`);
     });
     page.on("pageerror", (e) => errors.push(`[pageerror] ${e.message}`));
-    await use(errors);
+    await provide(errors);
   },
 });
 export { expect };

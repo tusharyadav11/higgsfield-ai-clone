@@ -1,3 +1,4 @@
+import type { Locator } from "@playwright/test";
 import { test, expect, tid } from "./helpers";
 
 test("remix from /explore prefills /create and focuses prompt", async ({ page }) => {
@@ -26,7 +27,6 @@ test("remix works from Home trending rail too", async ({ page }) => {
 
 test("like toggles with optimistic count and persists", async ({ page }) => {
   await page.goto("/explore");
-  const card = tid(page, "feed-card");
   // counts >=1000 render as "3.1k" so +1 is invisible; pick a card showing an exact count
   const like = page.locator('[data-testid="feed-card"]:visible [data-testid="like-btn"]').filter({ hasNotText: /k/i }).first();
   const num = async () => Number(((await like.innerText()).replace(/,/g, "").match(/[\d.]+/) ?? ["NaN"])[0]);
@@ -50,7 +50,7 @@ test("tag filter requests filtered feed and shows cards", async ({ page }) => {
   const chips = page.locator('[data-testid^="tag-chip-"]:visible');
   expect(await chips.count(), "tag chips").toBeGreaterThan(1);
   const n0 = await page.locator('[data-testid="feed-card"]').count();
-  let tagChip = null as any, tag = "";
+  let tagChip: Locator | null = null, tag = "";
   const cnt = await chips.count();
   for (let i = 0; i < cnt; i++) {
     const id = (await chips.nth(i).getAttribute("data-testid"))!.replace("tag-chip-", "");
@@ -58,7 +58,7 @@ test("tag filter requests filtered feed and shows cards", async ({ page }) => {
   }
   expect(tagChip, "non-'all' tag chip").toBeTruthy();
   const resp = page.waitForResponse((r) => r.url().includes("/api/feed") && r.url().includes("tag="), { timeout: 10_000 }).catch(() => null);
-  await tagChip.click();
+  await tagChip!.click();
   const r = await resp;
   expect(r, `clicking tag-chip-${tag} should call /api/feed?tag=`).not.toBeNull();
   expect(decodeURIComponent(new URL(r!.url()).searchParams.get("tag")!)).toBe(tag);

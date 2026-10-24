@@ -58,6 +58,9 @@ test("a guest's library follows them into the new account", async ({ page }) => 
 });
 
 test("referral link flow: both sides are credited immediately, and the code survives navigation", async ({ page, browser }) => {
+  // Two scrypt signups, two browser contexts and seven page loads against a real database: ~6s on an idle machine, but the
+  // work is CPU-bound (hashing + next start), so on a loaded CI box it legitimately needs more than the 60s default.
+  test.setTimeout(150_000);
   const a = uniq();
   await signup(page, a);
   const code = (await me(page)).user!.referralCode;

@@ -24,8 +24,10 @@ test("guest: empty state, then usage after a creation, ranges, budget, export", 
   await expect(tid(page, "usage-chart")).toBeVisible();
   await expect(tid(page, "usage-tool-image")).toBeVisible();
   await expect(tid(page, "usage-tool-video")).toBeVisible();
-  await expect(tid(page, "usage-tool-enhance")).toBeVisible();
-  await expect(tid(page, "usage-tool-mcp")).toBeVisible();
+  // Enhance is free and MCP runs are billed as Image/Video, so neither gets an always-zero card; a note explains both
+  await expect(tid(page, "usage-tool-enhance")).toHaveCount(0);
+  await expect(tid(page, "usage-tool-mcp")).toHaveCount(0);
+  await expect(tid(page, "usage-tool-note")).toContainText(/MCP.*Image or Video/);
   await expect(page.getByTestId("usage-model-row")).toHaveCount(1);
   await expect(tid(page, "usage-insight")).toBeVisible();
 

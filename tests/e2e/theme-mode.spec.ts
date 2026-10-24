@@ -2,7 +2,6 @@ import { test, expect, tid } from "./helpers";
 import type { Page } from "@playwright/test";
 
 const SHOTS = "/private/tmp/claude-502/-Users-tusharyadav-Desktop-higgsfield-ai-/43fc4e18-1c97-4e20-a043-5698e55ab4f7/scratchpad/theme-shots";
-const dt = (page: Page) => page.locator("html").getAttribute("data-theme");
 
 async function setMode(page: Page, mode: "light" | "dark" | "system") {
   if (!(await tid(page, `theme-option-${mode}`).isVisible().catch(() => false))) await tid(page, "theme-toggle").click();
@@ -32,8 +31,9 @@ test("toggle light / dark / system, persists across reload with no flash", async
   // the parser creates <html data-theme="dark"> (SSR default) and the blocking head script flips it before anything can paint,
   // so sample the attribute at every frame / paint entry instead of at element creation
   await page.addInitScript(() => {
-    (window as any).__themes = [];
-    const rec = () => (window as any).__themes.push(document.documentElement?.getAttribute("data-theme") ?? null);
+    const w = window as unknown as { __themes: (string | null)[] };
+    w.__themes = [];
+    const rec = () => w.__themes.push(document.documentElement?.getAttribute("data-theme") ?? null);
     try {
       new PerformanceObserver(rec).observe({ type: "paint", buffered: true });
     } catch {}
@@ -43,7 +43,7 @@ test("toggle light / dark / system, persists across reload with no flash", async
   });
   await page.reload();
   await page.waitForTimeout(700);
-  const seen: (string | null)[] = await page.evaluate(() => (window as any).__themes);
+  const seen: (string | null)[] = await page.evaluate(() => (window as unknown as { __themes: (string | null)[] }).__themes);
   expect(seen.length).toBeGreaterThan(0);
   expect(seen.filter((x) => x !== "light"), `theme flashed: ${JSON.stringify(seen)}`).toEqual([]);
   expect(await page.evaluate(() => localStorage.getItem("theme"))).toBe("light");

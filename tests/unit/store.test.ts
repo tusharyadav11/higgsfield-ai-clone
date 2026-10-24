@@ -13,30 +13,35 @@ function memoryStorage(): Storage {
   } as Storage;
 }
 
-async function freshStore() {
+type Action = (...a: unknown[]) => unknown;
+type StoreHook = { getState: () => Record<string, unknown>; setState: (p: Record<string, unknown>) => void };
+const isStoreHook = (v: unknown): v is StoreHook => typeof v === "function" && typeof (v as Partial<StoreHook>).getState === "function";
+
+async function freshStore(): Promise<StoreHook> {
   vi.stubGlobal("localStorage", memoryStorage());
-  if (typeof window !== "undefined") Object.defineProperty(window, "localStorage", { value: (globalThis as any).localStorage, configurable: true });
+  if (typeof window !== "undefined") Object.defineProperty(window, "localStorage", { value: (globalThis as { localStorage: Storage }).localStorage, configurable: true });
   vi.resetModules();
-  let mod: any;
+  let mod: Record<string, unknown>;
   try {
     mod = await import("../../src/lib/store");
   } catch (e) {
     throw new Error(`Cannot import src/lib/store.ts (not implemented yet?): ${(e as Error).message}`);
   }
-  const hook = Object.values(mod).find((v: any) => typeof v === "function" && typeof (v as any).getState === "function") as any;
+  const hook = Object.values(mod).find(isStoreHook);
   if (!hook) throw new Error("store.ts must export a zustand hook (with .getState)");
   return hook;
 }
-function act(s: any, names: string[]): (...a: any[]) => any {
-  for (const n of names) if (typeof s.getState()[n] === "function") return s.getState()[n];
-  throw new Error(
-    `store action not found; tried [${names.join(", ")}]. Actions present: ${Object.keys(s.getState()).filter((k) => typeof s.getState()[k] === "function").join(", ")}`,
-  );
+function act(s: StoreHook, names: string[]): Action {
+  const st = s.getState();
+  for (const n of names) {
+    const f = st[n];
+    if (typeof f === "function") return f as Action;
+  }
+  throw new Error(`store action not found; tried [${names.join(", ")}]. Actions present: ${Object.keys(st).filter((k) => typeof st[k] === "function").join(", ")}`);
 }
 const CLAIM = ["claimDaily", "claim", "claimDailyCredits", "claimStreak", "claimDailyReward"];
 const SPEND = ["spend", "spendCredits", "deduct", "charge"];
 const LIKE = ["toggleLike", "like", "toggleLikes"];
-const DAY = 86400000;
 const at = (iso: string) => vi.setSystemTime(new Date(iso));
 
 beforeEach(() => vi.useFakeTimers({ toFake: ["Date"] }));
@@ -59,9 +64,9 @@ describe("store: daily claim", () => {
     const s = await freshStore();
     at("2026-03-10T00:00:30Z");
     const claim = act(s, CLAIM);
-    const before = s.getState().credits;
+    const before = s.getState().credits as number;
     claim();
-    const after1 = s.getState().credits;
+    const after1 = s.getState().credits as number;
     expect(after1, "first claim must add credits").toBeGreaterThan(before);
     expect(s.getState().streak).toBe(1);
     at("2026-03-10T23:59:59Z");
@@ -113,7 +118,7 @@ describe("store: likes", () => {
     const s = await freshStore();
     const like = act(s, LIKE);
     const has = () => {
-      const l = s.getState().likes;
+      const l = s.getState().likes as string[] | Record<string, boolean>;
       return Array.isArray(l) ? l.includes("p1") : !!l["p1"];
     };
     expect(has()).toBe(false);

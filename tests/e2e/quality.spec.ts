@@ -68,13 +68,15 @@ test("videos use preload=none, muted, playsInline, poster", async ({ page }) => 
 for (const r of ["/", "/explore"]) {
   test(`cumulative layout shift is low on ${r}`, async ({ page }) => {
     await page.addInitScript(() => {
-      (window as any).__cls = 0;
-      new PerformanceObserver((l) => { for (const e of l.getEntries() as any[]) if (!e.hadRecentInput) (window as any).__cls += e.value; }).observe({ type: "layout-shift", buffered: true });
+      type Shift = PerformanceEntry & { hadRecentInput: boolean; value: number };
+      const w = window as unknown as { __cls: number };
+      w.__cls = 0;
+      new PerformanceObserver((l) => { for (const e of l.getEntries() as Shift[]) if (!e.hadRecentInput) w.__cls += e.value; }).observe({ type: "layout-shift", buffered: true });
     });
     await page.goto(r);
     await page.waitForLoadState("networkidle");
     for (let i = 0; i < 5; i++) { await page.mouse.wheel(0, 1500); await page.waitForTimeout(300); }
-    const cls = await page.evaluate(() => (window as any).__cls);
+    const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
     expect(cls, `CLS ${cls}`).toBeLessThan(0.1);
   });
 }

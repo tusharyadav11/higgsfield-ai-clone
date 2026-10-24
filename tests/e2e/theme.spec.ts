@@ -34,12 +34,13 @@ test("accent value observed before first paint is already the saved one", async 
   if (!(await tid(page, "accent-option-ember").isVisible().catch(() => false))) await tid(page, "accent-switcher").click();
   await tid(page, "accent-option-ember").click();
   await page.addInitScript(() => {
-    (window as any).__accents = [];
-    const rec = () => (window as any).__accents.push(document.documentElement.getAttribute("data-accent"));
+    const w = window as unknown as { __accents: (string | null)[] };
+    w.__accents = [];
+    const rec = () => w.__accents.push(document.documentElement.getAttribute("data-accent"));
     rec();
     new MutationObserver(rec).observe(document.documentElement, { attributes: true, attributeFilter: ["data-accent"] });
   });
   await page.reload();
-  const seen: (string | null)[] = await page.evaluate(() => (window as any).__accents);
+  const seen: (string | null)[] = await page.evaluate(() => (window as unknown as { __accents: (string | null)[] }).__accents);
   expect(seen.filter((x) => x !== "ember"), `accent flashed through: ${JSON.stringify(seen)}`).toEqual([]);
 });

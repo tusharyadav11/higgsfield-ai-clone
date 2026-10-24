@@ -27,7 +27,7 @@ import { Popup } from "./Popups";
 export { PopupSettings } from "./PopupSettings";
 
 const OVERLAY =
-  '[role="dialog"]:not([data-engage]),[role="alertdialog"],[aria-modal="true"]:not([data-engage]),dialog[open],[data-testid="tour-overlay"],[data-testid="search-input"]';
+  '[role="dialog"]:not([data-engage]),[role="alertdialog"],[aria-modal="true"]:not([data-engage]),dialog[open],[data-testid="tour-overlay"],[data-testid="tour-offer"],[data-testid="search-input"]';
 const promptEmpty = () => {
   const el = document.querySelector<HTMLTextAreaElement | HTMLInputElement>('[data-testid="prompt-input"]');
   return !!el && el.value.trim() === "";

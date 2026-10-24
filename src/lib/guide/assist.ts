@@ -10,7 +10,7 @@ const STOP = new Set(["the", "a", "an", "to", "do", "i", "how", "where", "is", "
 export function localAnswer(question: string): AssistReply {
   const q = question.toLowerCase().trim();
   const links: AssistLink[] = [];
-  if (/(how (it|this|kinetic) works|show me how|demo|overview|watch)/.test(q) && !/(make|create|generate|first)/.test(q)) {
+  if (/(how (it|this|kinetic|the app) works|\bdemo\b|\boverview\b|watch (the |a |me )?(tour|video|demo|intro))/.test(q) && !/(make|create|generate|first)/.test(q)) {
     return { text: "Here is a 60-second video that shows how Kinetic works. You can jump to any chapter.", links: [{ label: "Watch tour", run: "tour-video" }, { label: "Take the interactive tour", run: "tour" }] };
   }
   if (/\b(tour|tutorial|walk ?through|show me around|onboard)/.test(q) && !/video/.test(q)) {

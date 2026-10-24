@@ -92,7 +92,7 @@ export function ExploreFeed() {
             maskImage: `linear-gradient(90deg, transparent, #000 calc(${edge.l} * 28px), #000 calc(100% - ${edge.r} * 28px), transparent)`,
           }}
         >
-          <div className="relative flex w-max gap-1 sm:w-auto sm:flex-wrap">
+          <div className="relative flex w-max gap-1">
             {pill && (
               <span
                 aria-hidden

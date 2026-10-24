@@ -12,6 +12,7 @@ import { Assistant } from "./Assistant";
 import { TourVideo } from "./TourVideo";
 
 const SEEN_KEY = "kinetic.tour.seen";
+const OFFER_MS = 20_000;
 
 function InfoDialog({ title, onClose, children }: { title: string; onClose: () => void; children: React.ReactNode }) {
   useEffect(() => {
@@ -104,17 +105,34 @@ export function GuideRoot() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // One-time, non-blocking tour offer on first visit.
+  // One-time, non-blocking tour offer on first visit. It never shares the screen with an engage popup (src/components/engage):
+  // the offer waits while a popup card is up, and while the offer is visible the engage engine counts it as an overlay and
+  // holds its own popups back. The offer expires after OFFER_MS (and is then marked seen) so it cannot starve popups forever.
   useEffect(() => {
+    let poll: ReturnType<typeof setInterval> | undefined;
     const t = setTimeout(() => {
-      if (lsGet<string | null>(SEEN_KEY, null) || tourRef.current) return;
-      setToast({ text: "New here? Watch the 60-second tour.", offer: true });
+      const tryShow = () => {
+        if (lsGet<string | null>(SEEN_KEY, null)) return true;
+        if (tourRef.current || document.querySelector('[data-testid="popup-card"]')) return false;
+        setToast({ text: "New here? Watch the 60-second tour.", offer: true });
+        return true;
+      };
+      if (!tryShow()) poll = setInterval(() => tryShow() && clearInterval(poll), 500);
     }, 2500);
-    return () => clearTimeout(t);
+    return () => {
+      clearTimeout(t);
+      clearInterval(poll);
+    };
   }, []);
   useEffect(() => {
-    if (!toast || toast.offer) return;
-    const t = setTimeout(() => setToast(null), 4000);
+    if (!toast) return;
+    const t = setTimeout(
+      () => {
+        if (toast.offer) lsSet(SEEN_KEY, "1");
+        setToast(null);
+      },
+      toast.offer ? OFFER_MS : 4000,
+    );
     return () => clearTimeout(t);
   }, [toast]);
 
@@ -143,7 +161,7 @@ export function GuideRoot() {
       <ToastHost />
       <Assistant open={assistant} onToggle={() => setAssistant((a) => !a)} onClose={closeAssistant} />
       {toast && (
-        <div role="status" className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-3 z-50 flex max-w-[calc(100vw-6rem)] items-center gap-2 rounded-2xl border border-line bg-surface p-2 pl-4 text-sm text-fg shadow-xl sm:bottom-5 sm:left-auto sm:right-24 sm:max-w-sm">
+        <div role="status" data-testid={toast.offer ? "tour-offer" : undefined} className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-3 z-50 flex max-w-[calc(100vw-6rem)] items-center gap-2 rounded-2xl border border-line bg-surface p-2 pl-4 text-sm text-fg shadow-xl sm:bottom-5 sm:left-auto sm:right-24 sm:max-w-sm">
           <span>{toast.text}</span>
           {toast.offer && (
             <>
