@@ -3,7 +3,7 @@ import { useState, type FormEvent } from "react";
 import { EMAIL_RE } from "@/lib/auth";
 import { Button } from "@/components/ui";
 
-const inputCls = "min-h-11 w-full rounded-xl border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent aria-[invalid=true]:border-red-500";
+const inputCls = "min-h-11 w-full rounded-xl border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent aria-[invalid=true]:border-danger";
 
 export function QuoteForm({ seats }: { seats: number }) {
   const [v, setV] = useState({ name: "", email: "", company: "", useCase: "" });
@@ -56,7 +56,7 @@ export function QuoteForm({ seats }: { seats: number }) {
     <label className="flex flex-col gap-1 text-sm">
       {label}
       <input data-testid={`quote-${k}`} type={type} className={inputCls} value={v[k]} aria-invalid={!!errs[k]} onChange={set(k)} />
-      {errs[k] && <span role="alert" className="text-xs text-red-400">{errs[k]}</span>}
+      {errs[k] && <span role="alert" className="text-xs text-danger">{errs[k]}</span>}
     </label>
   );
   return (
@@ -71,17 +71,17 @@ export function QuoteForm({ seats }: { seats: number }) {
       <label className="flex flex-col gap-1 text-sm sm:col-span-2">
         Use case
         <textarea data-testid="quote-useCase" rows={3} className={`${inputCls} py-2`} value={v.useCase} aria-invalid={!!errs.useCase} onChange={set("useCase")} />
-        {errs.useCase && <span role="alert" className="text-xs text-red-400">{errs.useCase}</span>}
+        {errs.useCase && <span role="alert" className="text-xs text-danger">{errs.useCase}</span>}
       </label>
       {fail && (
-        <p role="alert" className="text-sm text-red-400 sm:col-span-2">
+        <p role="alert" className="text-sm text-danger sm:col-span-2">
           Could not send. Email{" "}
           <a className="underline" href={`mailto:enterprise@kinetic.example?subject=${encodeURIComponent("Enterprise quote")}&body=${body}`}>enterprise@kinetic.example</a> instead.
         </p>
       )}
       <div className="flex flex-wrap items-center gap-3 sm:col-span-2">
         <Button type="submit" size="lg" data-testid="quote-submit" disabled={busy}>{busy ? "Sending..." : "Request a quote"}</Button>
-        <a className="text-sm text-muted underline" href={`mailto:enterprise@kinetic.example?subject=${encodeURIComponent("Enterprise quote")}&body=${body}`}>or email us</a>
+        <a className="inline-flex min-h-11 items-center text-sm text-muted underline" href={`mailto:enterprise@kinetic.example?subject=${encodeURIComponent("Enterprise quote")}&body=${body}`}>or email us</a>
       </div>
     </form>
   );

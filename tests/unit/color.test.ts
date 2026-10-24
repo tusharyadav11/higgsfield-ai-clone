@@ -1,8 +1,10 @@
 import { describe, it, expect } from "vitest";
 import {
   normalizeHex, hexToRgb, rgbToHex, rgbToHsv, hsvToRgb, rgbToHsl, hslToRgb, hexToHsv, hsvToHex, hexToHsl, hslToHex,
-  contrast, readableOn, ensureUsableAccent, ACCENT_BOOT_SNIPPET, APP_BG,
+  contrast, readableOn, ensureUsableAccent, accentTextColour, ACCENT_BOOT_SNIPPET, APP_BG, LIGHT_BG, LIGHT_SURFACE_2,
 } from "@/lib/color";
+import { THEME_BOOT_SNIPPET } from "@/lib/theme";
+import { readFileSync } from "node:fs";
 
 describe("hex parsing", () => {
   it("normalises 3/6 digit with or without #", () => {
@@ -113,6 +115,15 @@ describe("boot snippet", () => {
     expect(el.dataset.accent).toBe("custom");
     expect(style["--accent"]).toBe("#ff00aa");
     expect(style["--accent-fg"]).toBe(readableOn("#ff00aa"));
+    expect(style["--accent-text-d"]).toBe(accentTextColour("#ff00aa", "dark"));
+    expect(style["--accent-text-l"]).toBe(accentTextColour("#ff00aa", "light"));
+  });
+  it("derives the same dark and light inks as accentTextColour for a spread of colours", () => {
+    for (const hex of ["#c6ff3d", "#ffffff", "#000000", "#ffd400", "#1a0033", "#3ab8ff", "#ff4fa3", "#808080", "#7c3aed"]) {
+      const { style } = run({ "accent-custom": JSON.stringify({ hex }) });
+      expect(style["--accent-text-d"]).toBe(accentTextColour(hex, "dark"));
+      expect(style["--accent-text-l"]).toBe(accentTextColour(hex, "light"));
+    }
   });
   it("falls back to cookie when storage throws", () => {
     const { style } = run("throw", "a=1; accent-custom=3ab8ff");
@@ -128,5 +139,100 @@ describe("boot snippet", () => {
       const hex = rgbToHex({ r: g, g, b: g });
       expect(run({ "accent-custom": JSON.stringify({ hex }) }).style["--accent-fg"]).toBe(readableOn(hex));
     }
+  });
+});
+
+describe("theme-aware accent", () => {
+  const samples = ["#c6ff3d", "#ffff00", "#ffffff", "#a78bfa", "#ff7a2f", "#3ab8ff", "#000000", "#111111", "#7c3aed", "#34e5a0", "#ffc83d", "#1a0033", "#ff4fa3"];
+  it("light mode darkens pale accents to >= 3:1 on the light background, keeping hue", () => {
+    for (const h of samples) {
+      const out = ensureUsableAccent(h, 3, "light");
+      expect(contrast(out, LIGHT_BG), h).toBeGreaterThanOrEqual(3);
+    }
+    const a = hexToHsl("#c6ff3d")!, b = hexToHsl(ensureUsableAccent("#c6ff3d", 3, "light"))!;
+    expect(Math.abs(a.h - b.h)).toBeLessThan(8);
+    expect(ensureUsableAccent("#c6ff3d", 3, "light")).not.toBe("#c6ff3d");
+  });
+  it("dark mode is unchanged by the mode parameter default", () => {
+    for (const h of samples) expect(ensureUsableAccent(h)).toBe(ensureUsableAccent(h, 3, "dark"));
+  });
+  it("accent ink reads on its theme: >= 5.5 dark, >= 4.5 on bg and surface-2 in light", () => {
+    for (const h of samples) {
+      expect(contrast(accentTextColour(h, "dark"), APP_BG), h).toBeGreaterThanOrEqual(5.5);
+      const l = accentTextColour(h, "light");
+      expect(contrast(l, LIGHT_BG), h).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(l, LIGHT_SURFACE_2), h).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(l, "#ffffff"), h).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+  it("text-on-accent is AA for any accent", () => {
+    for (const h of samples) expect(contrast(h, readableOn(h)), h).toBeGreaterThanOrEqual(4.5);
+  });
+});
+
+describe("globals.css palette", () => {
+  const css = readFileSync("src/app/globals.css", "utf8");
+  const block = (sel: string) => css.match(new RegExp(sel.replace(/[[\]()".]/g, "\\$&") + "\\s*\\{([^}]*)\\}"))?.[1] ?? "";
+  const tok = (b: string, n: string) => b.match(new RegExp("--" + n + ":\\s*(#[0-9a-fA-F]{6})"))?.[1];
+  const light = block(':root[data-theme="light"]');
+  it("light tokens meet AA", () => {
+    const bg = tok(light, "bg")!, surface = tok(light, "surface")!, s2 = tok(light, "surface-2")!, fg = tok(light, "fg")!, muted = tok(light, "muted")!, line = tok(light, "line")!;
+    expect(bg).toBe(LIGHT_BG);
+    expect(s2).toBe(LIGHT_SURFACE_2);
+    for (const base of [bg, surface, s2]) {
+      expect(contrast(fg, base)).toBeGreaterThanOrEqual(7);
+      expect(contrast(muted, base)).toBeGreaterThanOrEqual(4.5);
+    }
+    expect(contrast(line, bg)).toBeGreaterThanOrEqual(1.4);
+    for (const n of ["danger", "success", "warn", "earn"]) for (const base of [bg, surface, s2]) expect(contrast(tok(light, n)!, base), n).toBeGreaterThanOrEqual(4.5);
+  });
+  it("named palettes: fills carry AA text and the light ink reads on light surfaces", () => {
+    for (const n of ["lime", "violet", "ember", "ocean"]) {
+      const dark = block(`:root[data-accent="${n}"]`);
+      const lt = block(`:root[data-theme="light"][data-accent="${n}"]`);
+      for (const b of [dark, lt]) {
+        const acc = tok(b, "accent") ?? tok(dark, "accent")!, fg = tok(b, "accent-fg") ?? tok(dark, "accent-fg")!;
+        expect(contrast(acc, fg), n).toBeGreaterThanOrEqual(4.5);
+      }
+      const ink = tok(lt, "accent-text")!;
+      for (const base of [LIGHT_BG, "#ffffff", LIGHT_SURFACE_2]) expect(contrast(ink, base), n).toBeGreaterThanOrEqual(4.5);
+      expect(contrast(tok(dark, "accent")!, APP_BG)).toBeGreaterThanOrEqual(5.5);
+    }
+  });
+});
+
+describe("theme boot snippet", () => {
+  const run = (stored: string | null | "throw", lightPref: boolean) => {
+    const attrs: Record<string, string> = {};
+    const els: Record<string, { name: string; content: string }> = {};
+    const doc = {
+      documentElement: { dataset: attrs },
+      head: {
+        querySelector: (q: string) => els[q.match(/name="([^"]+)"/)![1]] ?? null,
+        appendChild: (e: { name: string; content: string }) => { els[e.name] = e; },
+      },
+      createElement: () => ({ name: "", content: "" }),
+    };
+    const ls = { getItem: () => { if (stored === "throw") throw new Error("x"); return stored; } };
+    const win = { matchMedia: (q: string) => ({ matches: lightPref && q.includes("light") }) };
+    new Function("localStorage", "document", "window", "matchMedia", THEME_BOOT_SNIPPET)(ls, doc, win, win.matchMedia);
+    const metas = Object.fromEntries(Object.entries(els).map(([k, v]) => [k, v.content]));
+    return { attrs, metas };
+  };
+  it("defaults to dark", () => {
+    expect(run(null, true).attrs).toMatchObject({ theme: "dark", themeMode: "dark" });
+    expect(run("throw", true).attrs.theme).toBe("dark");
+    expect(run("junk", true).attrs.theme).toBe("dark");
+  });
+  it("restores light/dark and resolves system", () => {
+    expect(run("light", false).attrs).toMatchObject({ theme: "light", themeMode: "light" });
+    expect(run("dark", true).attrs.theme).toBe("dark");
+    expect(run("system", true).attrs).toMatchObject({ theme: "light", themeMode: "system" });
+    expect(run("system", false).attrs.theme).toBe("dark");
+  });
+  it("sets theme-color and color-scheme", () => {
+    const { metas } = run("light", false);
+    expect(metas["theme-color"]).toBe(LIGHT_BG);
+    expect(metas["color-scheme"]).toBe("light");
   });
 });

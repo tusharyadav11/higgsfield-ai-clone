@@ -66,7 +66,7 @@ export function UsageView() {
                 aria-selected={range === r}
                 data-testid={`usage-range-${r}`}
                 onClick={() => setRange(r)}
-                className={cn("min-h-9 rounded-full px-3.5 text-sm font-medium transition", range === r ? "bg-accent text-accent-fg" : "text-muted hover:text-fg")}
+                className={cn("min-h-11 rounded-full px-3.5 text-sm font-medium transition", range === r ? "bg-accent text-accent-fg" : "text-muted hover:text-fg")}
               >
                 {r}
               </button>
@@ -94,7 +94,7 @@ export function UsageView() {
           <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden />
           <span>
             Showing what this browser knows about.{" "}
-            {dbKnown === false ? "Accounts are off in this demo deployment." : <><Link href="/signup" className="text-accent underline-offset-2 hover:underline">Sign in</Link> to keep history on every device.</>}
+            {dbKnown === false ? "Accounts are off in this demo deployment." : <><Link href="/signup" className="text-accent-text underline-offset-2 hover:underline">Sign in</Link> to keep history on every device.</>}
           </span>
         </p>
       )}
@@ -135,7 +135,7 @@ function Dashboard({ s, credits }: { s: UsageSummary; credits: number }) {
           <h2 className="text-sm font-semibold">Spent vs earned</h2>
           {empty ? (
             <div data-testid="usage-empty" className="flex flex-1 flex-col items-center justify-center gap-3 py-10 text-center">
-              <Sparkles className="size-8 text-accent" aria-hidden />
+              <Sparkles className="size-8 text-accent-text" aria-hidden />
               <p className="font-semibold">No activity in the last {RANGE_DAYS[s.range]} days</p>
               <p className="max-w-sm text-sm text-muted">Once you create something, your spend, favourite models and streaks show up here.</p>
               <Link href="/create" className="inline-flex min-h-11 items-center rounded-full bg-accent px-6 text-sm font-semibold text-accent-fg">Make your first creation</Link>
@@ -149,7 +149,7 @@ function Dashboard({ s, credits }: { s: UsageSummary; credits: number }) {
       {!empty && (
         <>
           <section aria-label="Insights" className="flex flex-col gap-2 rounded-2xl border border-line bg-surface-2/50 p-4">
-            <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="size-4 text-accent" aria-hidden />Insights</h2>
+            <h2 className="flex items-center gap-2 text-sm font-semibold"><Sparkles className="size-4 text-accent-text" aria-hidden />Insights</h2>
             <ul className="grid gap-2 md:grid-cols-3">
               {tips.map((t) => (<li key={t} data-testid="usage-insight" className="rounded-xl bg-surface p-3 text-sm leading-snug">{t}</li>))}
             </ul>
@@ -201,13 +201,13 @@ function Hero({ s, credits }: { s: UsageSummary; credits: number }) {
         <Stat label="Creations" value={nf(s.generations)} />
         <Stat label="Avg cost" value={s.generations ? String(s.avgCost) : "-"} />
       </dl>
-      {s.streak > 0 && <p className="flex items-center gap-1.5 text-sm"><Flame className="size-4 text-accent" aria-hidden />{s.streak}-day streak</p>}
+      {s.streak > 0 && <p className="flex items-center gap-1.5 text-sm"><Flame className="size-4 text-accent-text" aria-hidden />{s.streak}-day streak</p>}
       {low && (
         <div data-testid="usage-low-balance" className="w-full rounded-xl border border-line bg-surface-2 p-3 text-left text-sm">
           <p className="text-muted">Running a little low. No pressure, here are two free ways to top up.</p>
           <div className="mt-2 flex flex-wrap gap-2">
-            <Link href="/" className="inline-flex min-h-10 items-center rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg">Claim daily credits</Link>
-            <Link href="/referrals" className="inline-flex min-h-10 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-accent">Invite a friend</Link>
+            <Link href="/" className="inline-flex min-h-11 items-center rounded-full bg-accent px-4 text-sm font-semibold text-accent-fg">Claim daily credits</Link>
+            <Link href="/referrals" className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm font-semibold hover:border-accent">Invite a friend</Link>
           </div>
         </div>
       )}
@@ -240,7 +240,7 @@ function ToolCard({ t, s }: { t: ToolStat; s: UsageSummary }) {
   return (
     <Card data-testid={`usage-tool-${t.tool}`} className={cn("flex flex-col gap-2 transition hover:border-accent/60", !used && "opacity-80")}>
       <div className="flex items-center justify-between">
-        <span className="flex items-center gap-2 text-sm font-semibold"><span className="flex size-8 items-center justify-center rounded-lg bg-surface-2 text-accent"><Icon className="size-4" aria-hidden /></span>{label}</span>
+        <span className="flex items-center gap-2 text-sm font-semibold"><span className="flex size-8 items-center justify-center rounded-lg bg-surface-2 text-accent-text"><Icon className="size-4" aria-hidden /></span>{label}</span>
         {t.deltaPct !== null ? (
           <span className="flex items-center gap-0.5 text-xs text-muted" title={`vs previous ${RANGE_DAYS[s.range]} days`}>
             {up ? <ArrowUpRight className="size-3.5" aria-hidden /> : <ArrowDownRight className="size-3.5" aria-hidden />}{Math.abs(t.deltaPct)}%
@@ -318,14 +318,14 @@ function Budget({ s }: { s: UsageSummary }) {
               setBudget(Number(e.target.value) || 0);
             }}
             onBlur={() => setDraft(null)}
-            className="min-h-10 w-28 rounded-lg border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent"
+            className="min-h-11 w-28 rounded-lg border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent"
           />
         </label>
       </div>
       {budget > 0 ? (
         <>
           <div role="meter" aria-label="Month-to-date spend against budget" aria-valuemin={0} aria-valuemax={budget} aria-valuenow={Math.min(budget, s.monthSpent)} className="mt-3 h-3 overflow-hidden rounded-full bg-surface-2">
-            <div data-testid="usage-budget-bar" className={cn("h-full rounded-full transition-[width] duration-700 motion-reduce:transition-none", warn ? "bg-amber-400" : "bg-accent")} style={{ width: `${Math.min(100, f * 100)}%` }} />
+            <div data-testid="usage-budget-bar" className={cn("h-full rounded-full transition-[width] duration-700 motion-reduce:transition-none", warn ? "bg-warn" : "bg-accent")} style={{ width: `${Math.min(100, f * 100)}%` }} />
           </div>
           <p data-testid="usage-budget-text" className="mt-2 text-xs text-muted">
             {nf(s.monthSpent)} of {nf(budget)} credits used this month (UTC).{" "}

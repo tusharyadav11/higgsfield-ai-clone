@@ -141,7 +141,7 @@ export function CreateStudio() {
   const { w, h } = ASPECT_SIZE[result?.aspect ?? job?.aspect ?? aspect];
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[400px_1fr]">
       <div className="space-y-5 lg:sticky lg:top-6 lg:self-start">
         <div className="inline-flex rounded-full border border-line bg-surface p-1">
           {(["image", "video"] as Kind[]).map((k) => (
@@ -186,7 +186,7 @@ export function CreateStudio() {
             onClick={surprise}
             className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent"
           >
-            <Dices size={16} className="text-accent" /> Surprise me
+            <Dices size={16} className="text-accent-text" /> Surprise me
           </button>
           <button
             type="button"
@@ -195,7 +195,7 @@ export function CreateStudio() {
             onClick={() => setPrompt(enhancePrompt(prompt, kind))}
             className="ml-2 mt-2 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent disabled:opacity-50"
           >
-            <Wand2 size={16} className="text-accent" /> Enhance
+            <Wand2 size={16} className="text-accent-text" /> Enhance
           </button>
         </div>
 
@@ -226,7 +226,7 @@ export function CreateStudio() {
                 data-testid={`aspect-${a}`}
                 aria-pressed={aspect === a}
                 onClick={() => setAspect(a)}
-                className={`min-h-11 min-w-14 rounded-xl border px-3 text-sm ${aspect === a ? "border-accent bg-accent/15 text-accent" : "border-line text-muted"}`}
+                className={`min-h-11 min-w-14 rounded-xl border px-3 text-sm ${aspect === a ? "border-accent bg-accent/15 text-accent-text" : "border-line text-muted"}`}
               >
                 {a}
               </button>
@@ -278,7 +278,7 @@ export function CreateStudio() {
         {upsell && (
           <div data-testid="credits-upsell" className="rounded-2xl border border-accent bg-accent/10 p-4">
             <p className="flex items-center gap-2 text-sm font-medium text-fg">
-              <Zap size={16} className="text-accent" /> Not enough credits
+              <Zap size={16} className="text-accent-text" /> Not enough credits
             </p>
             <p className="mt-1 text-sm text-muted">This needs {cost} credits and you have {credits}. Claim your daily bonus or upgrade.</p>
             <div className="mt-3 flex flex-wrap gap-2">
@@ -288,7 +288,7 @@ export function CreateStudio() {
           </div>
         )}
         {error && (
-          <div data-testid="gen-error" role="alert" className="rounded-2xl border border-red-500/50 bg-red-500/10 p-4 text-sm text-fg">
+          <div data-testid="gen-error" role="alert" className="rounded-2xl border border-danger-line bg-danger-bg p-4 text-sm text-fg">
             <p>{error}</p>
             <button type="button" data-testid="retry-btn" onClick={retry} className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent">
               <RefreshCw size={14} /> Retry

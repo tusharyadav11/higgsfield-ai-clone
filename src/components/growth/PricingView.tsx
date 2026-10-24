@@ -53,11 +53,13 @@ export function PricingView() {
           aria-label="Billing period"
           data-testid="billing-toggle"
           onClick={() => setYearly((v) => !v)}
-          className={`relative h-9 w-16 rounded-full border transition-colors duration-300 ${yearly ? "border-accent bg-accent/25" : "border-line bg-surface-2"}`}
+          className="grid h-11 w-16 place-items-center"
         >
-          <span
-            className={`absolute left-1 top-1 size-7 rounded-full bg-accent shadow-[0_2px_14px_var(--glow)] transition-transform duration-300 ease-[cubic-bezier(.3,1.5,.5,1)] ${yearly ? "translate-x-7" : "translate-x-0"}`}
-          />
+          <span aria-hidden className={`relative block h-9 w-16 rounded-full border transition-colors duration-300 ${yearly ? "border-accent bg-accent/25" : "border-line bg-surface-2"}`}>
+            <span
+              className={`absolute left-1 top-1 size-7 rounded-full bg-accent shadow-[0_2px_14px_var(--glow)] transition-transform duration-300 ease-[cubic-bezier(.3,1.5,.5,1)] ${yearly ? "translate-x-7" : "translate-x-0"}`}
+            />
+          </span>
         </button>
         <span className={`transition-colors ${yearly ? "font-semibold text-fg" : "text-muted"}`}>Yearly</span>
         <span
@@ -88,14 +90,14 @@ export function PricingView() {
             Apply
           </button>
         </form>
-        <p role="alert" className="mt-2 min-h-5 text-center text-sm text-red-400">{error}</p>
+        <p role="alert" className="mt-2 min-h-5 text-center text-sm text-danger">{error}</p>
         {promo && (
-          <p data-testid="promo-badge" className="mt-1 text-center text-sm text-accent">
+          <p data-testid="promo-badge" className="mt-1 text-center text-sm text-accent-text">
             {promo.code} applied: {promo.label}
           </p>
         )}
         {referral && !promo && (
-          <p data-testid="promo-badge" className="mt-1 text-center text-sm text-accent">Referral discount: 10% off your first paid month (auto-applied)</p>
+          <p data-testid="promo-badge" className="mt-1 text-center text-sm text-accent-text">Referral discount: 10% off your first paid month (auto-applied)</p>
         )}
         {notice && <p className="mt-1 text-center text-sm text-muted">{notice}</p>}
         <p className="mt-1 text-center text-xs text-muted">Codes: WELCOME20, YEARLY, TEAM10. One discount per plan, best one wins.</p>
@@ -129,16 +131,16 @@ export function PricingView() {
                 <span className="text-sm font-normal tracking-normal text-muted"> /mo{yearly && p.monthly ? ", billed yearly" : ""}</span>
               </p>
               {final !== base && (
-                <p className="mt-1 text-xs text-accent">{source}: {pct}% off the first month</p>
+                <p className="mt-1 text-xs text-accent-text">{source}: {pct}% off the first month</p>
               )}
               {yearly && p.monthly > 0 && (
-                <p className="price-in mt-1 text-xs font-medium text-accent">You save ${(p.monthly - p.yearly) * 12} a year</p>
+                <p className="price-in mt-1 text-xs font-medium text-accent-text">You save ${(p.monthly - p.yearly) * 12} a year</p>
               )}
-              <p className="mt-2 text-sm text-accent">{p.credits}</p>
+              <p className="mt-2 text-sm text-accent-text">{p.credits}</p>
               <ul className="my-5 flex-1 space-y-2 text-sm text-muted">
                 {p.perks.map((x) => (
                   <li key={x} className="flex gap-2">
-                    <Check size={16} className="mt-0.5 shrink-0 text-accent" /> {x}
+                    <Check size={16} className="mt-0.5 shrink-0 text-accent-text" /> {x}
                   </li>
                 ))}
               </ul>
@@ -160,7 +162,7 @@ export function PricingView() {
         })}
       </div>
       <p className="mt-4 text-center text-sm text-muted">
-        Need seats for a team? <Link href="/enterprise" className="text-accent hover:underline">See Enterprise</Link>. Demo accounts are stored in your browser.
+        Need seats for a team? <Link href="/enterprise" className="text-accent-text hover:underline">See Enterprise</Link>. Demo accounts are stored in your browser.
       </p>
       <h2 className="mb-3 mt-12 text-lg font-semibold text-fg">Credit costs</h2>
       <div className="overflow-x-auto rounded-2xl border border-line">

@@ -28,7 +28,7 @@ const linkCls = (active: boolean) =>
   cn(
     "flex min-h-14 flex-col items-center justify-center gap-0.5 text-[11px] transition",
     "sm:min-h-12 sm:rounded-xl sm:text-[10px] lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:text-sm",
-    active ? "text-accent" : "text-muted hover:text-fg",
+    active ? "text-accent-text" : "text-muted hover:text-fg",
   );
 
 /**
@@ -55,7 +55,7 @@ export function Nav() {
       )}
     >
       <Link href="/" className="hidden min-h-14 items-center gap-2 px-5 text-lg font-bold tracking-tight lg:flex">
-        <Zap className="size-5 text-accent" aria-hidden /> Kinetic
+        <Zap className="size-5 text-accent-text" aria-hidden /> Kinetic
       </Link>
       <ul className="flex items-stretch justify-around sm:flex-col sm:justify-start sm:gap-1 sm:px-2 sm:pt-2 lg:px-3">
         {main.map(({ id, href, label, icon: Icon }) => {
@@ -130,7 +130,7 @@ export function Nav() {
         })}
         {mounted && narrow && (
           <>
-            <li className="sm:hidden"><div className="flex min-h-12 items-center px-3"><HelpMenu /></div></li>
+            <li className="sm:hidden"><div className="flex min-h-12 items-center px-3"><HelpMenu placement="up-start" /></div></li>
             <li className="sm:hidden">
               {user ? (
                 <button type="button" data-testid="logout-btn-mobile" onClick={() => { void logout(); setMore(false); }} className="flex min-h-12 w-full items-center gap-3 rounded-xl px-3 text-sm text-muted hover:text-fg">

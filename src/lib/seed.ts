@@ -1,5 +1,5 @@
 import { rng } from "./generate";
-import { PHOTOS, VIDEOS } from "./media-library";
+import { PHOTOS, VIDEOS, motionFor } from "./media-library";
 import { MODELS, type Aspect, type Kind } from "./models";
 
 export type Post = {
@@ -18,6 +18,8 @@ export type Post = {
   createdAt: string;
   /** Tiny base64 placeholder for next/image blurDataURL (additive field). */
   blur?: string;
+  /** Short cinematic loop (mp4) for image posts; poster is the original photo (additive field). */
+  motion?: string;
 };
 
 export const TAGS = [
@@ -110,6 +112,7 @@ function build(): Post[] {
       src: asset.src,
       poster: "poster" in asset ? (asset as { poster: string }).poster : asset.src,
       blur: asset.blur,
+      ...(k === "i" && motionFor(asset.src) ? { motion: motionFor(asset.src) } : {}),
       createdAt: new Date(base - i * 3600_000 * 5).toISOString(),
     };
   });

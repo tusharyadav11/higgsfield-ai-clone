@@ -26,12 +26,12 @@ function Toasts() {
     <div className="pointer-events-none fixed inset-x-3 bottom-24 z-50 flex flex-col items-center gap-2 sm:bottom-6 sm:items-end sm:pr-3">
       {shown.map((t) => (
         <div key={t.id} data-testid="job-toast" role="status" className="pointer-events-auto flex w-full max-w-sm items-center gap-3 rounded-2xl border border-line bg-surface p-3 shadow-xl">
-          {t.type === "done" ? <CheckCircle2 size={18} className="shrink-0 text-accent" /> : <AlertTriangle size={18} className="shrink-0 text-red-400" />}
+          {t.type === "done" ? <CheckCircle2 size={18} className="shrink-0 text-accent-text" /> : <AlertTriangle size={18} className="shrink-0 text-danger" />}
           <span className="min-w-0 flex-1 text-sm text-fg">{t.text}</span>
-          <Link href={`/create?job=${t.jobId}`} onClick={() => dismiss(t.id)} className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent">
+          <Link href={`/create?job=${t.jobId}`} onClick={() => dismiss(t.id)} className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-accent-text">
             {t.type === "done" ? "View result" : "Open"}
           </Link>
-          <button type="button" aria-label="Dismiss" onClick={() => dismiss(t.id)} className="grid size-9 place-items-center text-muted">
+          <button type="button" aria-label="Dismiss" onClick={() => dismiss(t.id)} className="grid size-11 place-items-center text-muted">
             <X size={14} />
           </button>
         </div>
@@ -77,12 +77,12 @@ export function JobPill() {
       >
         {running.length ? (
           <>
-            <Loader2 className="size-4 animate-spin text-accent motion-reduce:animate-none" aria-hidden />
+            <Loader2 className="size-4 animate-spin text-accent-text motion-reduce:animate-none" aria-hidden />
             {lead}%{running.length > 1 && <span className="text-muted">· {running.length}</span>}
           </>
         ) : (
           <>
-            <Sparkles className="size-4 text-accent" aria-hidden />
+            <Sparkles className="size-4 text-accent-text" aria-hidden />
             {jobs.length}
           </>
         )}
@@ -114,7 +114,7 @@ export function JobPill() {
                     {j.status === "running" ? (
                       <JobProgress job={j} compact />
                     ) : j.status === "done" ? (
-                      <Link href={`/create?job=${j.id}`} onClick={() => setOpen(false)} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent">
+                      <Link href={`/create?job=${j.id}`} onClick={() => setOpen(false)} className="inline-flex min-h-11 items-center gap-1.5 text-sm font-semibold text-accent-text">
                         <CheckCircle2 size={14} /> View result
                       </Link>
                     ) : (

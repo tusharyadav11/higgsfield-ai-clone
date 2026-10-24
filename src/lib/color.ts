@@ -5,6 +5,12 @@ export type HSV = { h: number; s: number; v: number }; // h 0..360, s/v 0..1
 export type HSL = { h: number; s: number; l: number }; // h 0..360, s/l 0..1
 
 export const APP_BG = "#08080a";
+/** App background in light mode (keep in sync with --bg in globals.css). */
+export const LIGHT_BG = "#f6f6f9";
+/** Lowest light surface the ink must also read on (--surface-2). */
+export const LIGHT_SURFACE_2 = "#ebebf1";
+export type Mode = "light" | "dark";
+export const bgFor = (mode: Mode) => (mode === "light" ? LIGHT_BG : APP_BG);
 export const DARK_FG = "#0a0a0a";
 export const LIGHT_FG = "#ffffff";
 export const CUSTOM_KEY = "accent-custom";
@@ -107,17 +113,30 @@ export function readableOn(hex: string): "#0a0a0a" | "#ffffff" {
   return contrast(hex, DARK_FG) >= contrast(hex, LIGHT_FG) ? DARK_FG : LIGHT_FG;
 }
 
-/** Lightens the colour (hue/saturation kept) until it reaches `min`:1 against the app background. */
-export function ensureUsableAccent(hex: string, min = 3): string {
+/**
+ * Nudges lightness (hue/saturation kept) until the colour reaches `min`:1 against the app background of `mode`:
+ * lighter on dark, darker on light.
+ */
+export function ensureUsableAccent(hex: string, min = 3, mode: Mode = "dark"): string {
   const n = normalizeHex(hex);
   if (!n) return "#c6ff3d";
-  if (contrast(n, APP_BG) >= min) return n;
+  const bg = bgFor(mode);
+  const ok = (c: string) => contrast(c, bg) >= min && (mode === "dark" || contrast(c, LIGHT_SURFACE_2) >= min * 0.93);
+  if (ok(n)) return n;
   const hsl = rgbToHsl(hexToRgb(n)!);
-  for (let l = hsl.l; l <= 1.0001; l += 0.01) {
-    const out = hslToHex({ ...hsl, l: Math.min(1, l) });
-    if (contrast(out, APP_BG) >= min) return out;
+  const dir = mode === "dark" ? 1 : -1;
+  for (let i = 0; i <= 100; i++) {
+    const l = clamp(hsl.l + dir * (i / 100), 0, 1);
+    const out = hslToHex({ ...hsl, l });
+    if (ok(out)) return out;
   }
-  return "#ffffff";
+  return mode === "dark" ? "#ffffff" : "#000000";
+}
+
+/** Accent used for TEXT/icons ("ink"): >= 5.5:1 on dark, >= 4.6:1 on light surfaces. */
+export function accentTextColour(hex: string, mode: Mode = "dark"): string {
+  const n = normalizeHex(hex) ?? "#c6ff3d";
+  return ensureUsableAccent(n, mode === "dark" ? 5.5 : 4.9, mode);
 }
 
 /* ---------------- custom accent persistence (client only) ---------------- */
@@ -146,6 +165,8 @@ export function previewCustomAccent(hex: string): string | null {
   el.dataset.accent = "custom";
   el.style.setProperty("--accent", n);
   el.style.setProperty("--accent-fg", readableOn(n));
+  el.style.setProperty("--accent-text-d", accentTextColour(n, "dark"));
+  el.style.setProperty("--accent-text-l", accentTextColour(n, "light"));
   return n;
 }
 
@@ -168,6 +189,8 @@ export function clearCustomAccent() {
   const el = document.documentElement;
   el.style.removeProperty("--accent");
   el.style.removeProperty("--accent-fg");
+  el.style.removeProperty("--accent-text-d");
+  el.style.removeProperty("--accent-text-l");
   if (el.dataset.accent === "custom") delete el.dataset.accent;
   try {
     localStorage.removeItem(CUSTOM_KEY);
@@ -181,4 +204,4 @@ export function clearCustomAccent() {
  * Self-contained JS (no imports) for the layout's inline <script>. Run it AFTER the named-accent boot
  * code: if a custom accent is saved it overrides data-accent and sets --accent/--accent-fg. Never throws.
  */
-export const ACCENT_BOOT_SNIPPET = `(function(){try{var h=null;try{var r=localStorage.getItem("accent-custom");if(r){h=JSON.parse(r).hex}}catch(e){}if(!h){var m=document.cookie.match(/(?:^|; )accent-custom=([0-9a-fA-F]{6})/);if(m)h="#"+m[1]}if(!h||!/^#[0-9a-fA-F]{6}$/.test(h))return;var c=[1,3,5].map(function(i){var v=parseInt(h.substr(i,2),16)/255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)});var L=0.2126*c[0]+0.7152*c[1]+0.0722*c[2];var d=(L+0.05)/0.053035,w=1.05/(L+0.05);var e=document.documentElement;e.dataset.accent="custom";e.style.setProperty("--accent",h.toLowerCase());e.style.setProperty("--accent-fg",d>=w?"#0a0a0a":"#ffffff")}catch(x){}})();`;
+export const ACCENT_BOOT_SNIPPET = `(function(){try{var h=null;try{var r=localStorage.getItem("accent-custom");if(r){h=JSON.parse(r).hex}}catch(e){}if(!h){var m=document.cookie.match(/(?:^|; )accent-custom=([0-9a-fA-F]{6})/);if(m)h="#"+m[1]}if(!h||!/^#[0-9a-fA-F]{6}$/.test(h))return;h=h.toLowerCase();function lin(v){v/=255;return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4)}function lum(a){return 0.2126*lin(a[0])+0.7152*lin(a[1])+0.0722*lin(a[2])}function px(x){return[1,3,5].map(function(i){return parseInt(x.substr(i,2),16)})}function hx(a){return"#"+a.map(function(v){return("0"+Math.round(v).toString(16)).slice(-2)}).join("")}function cr(a,b){var p=lum(px(a)),q=lum(px(b));return(Math.max(p,q)+0.05)/(Math.min(p,q)+0.05)}function hsl(a){var R=a[0]/255,G=a[1]/255,B=a[2]/255,x=Math.max(R,G,B),n=Math.min(R,G,B),d=x-n,l=(x+n)/2,s=d===0?0:d/(1-Math.abs(2*l-1)),H=0;if(d!==0){H=x===R?((G-B)/d)%6:x===G?(B-R)/d+2:(R-G)/d+4;H*=60;if(H<0)H+=360}return[H,s,l]}function rgb(H,S,L){var c=(1-Math.abs(2*L-1))*S,v=L+c/2,s=v===0?0:2*(v-L)/v,C=v*s,X=C*(1-Math.abs((H/60)%2-1)),m=v-C,t=H<60?[C,X,0]:H<120?[X,C,0]:H<180?[0,C,X]:H<240?[0,X,C]:H<300?[X,0,C]:[C,0,X];return t.map(function(u){return(u+m)*255})}function ink(min,bg,dir,b2){function ok(c){return cr(c,bg)>=min&&(!b2||cr(c,b2)>=min*0.93)}if(ok(h))return h;var q=hsl(px(h));for(var i=0;i<=100;i++){var o=hx(rgb(q[0],q[1],Math.min(1,Math.max(0,q[2]+dir*i/100))));if(ok(o))return o}return dir>0?"#ffffff":"#000000"}var e=document.documentElement;e.dataset.accent="custom";e.style.setProperty("--accent",h);e.style.setProperty("--accent-fg",(lum(px(h))+0.05)/0.053035>=1.05/(lum(px(h))+0.05)?"#0a0a0a":"#ffffff");e.style.setProperty("--accent-text-d",ink(5.5,"#08080a",1));e.style.setProperty("--accent-text-l",ink(4.9,"#f6f6f9",-1,"#ebebf1"))}catch(x){}})();`;

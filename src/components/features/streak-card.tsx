@@ -54,7 +54,7 @@ export function StreakCard() {
         className="pointer-events-none absolute -right-10 -top-10 size-44 rounded-full bg-[radial-gradient(closest-side,var(--glow),transparent)] opacity-70"
       />
       <div className="relative flex items-center gap-4">
-        <div className="relative grid size-16 shrink-0 place-items-center rounded-2xl bg-accent/15 text-accent">
+        <div className="relative grid size-16 shrink-0 place-items-center rounded-2xl bg-accent/15 text-accent-text">
           <Flame size={34} className={`fill-accent ${filled ? "animate-flame" : "opacity-60"}`} />
           {bits && (
             <div aria-hidden className="pointer-events-none absolute left-1/2 top-1/2 z-10">

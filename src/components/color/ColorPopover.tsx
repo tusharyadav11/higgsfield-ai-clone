@@ -5,6 +5,7 @@ import { Palette, X } from "lucide-react";
 import { cn } from "@/components/ui/cn";
 import { ColorPicker } from "./ColorPicker";
 import { useAccent } from "./useAccent";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 const PHONE_QUERY = "(max-width: 639px)";
 function subscribePhone(cb: () => void) {
@@ -119,13 +120,13 @@ export function ColorPopover({ className }: { className?: string }) {
           className,
         )}
       >
-        <span className="size-5 rounded-full ring-1 ring-white/25" style={{ background: accent.hex }} />
+        <span className="size-5 rounded-full ring-1 ring-fg/25" style={{ background: accent.hex }} />
         <Palette className="size-4 text-muted" aria-hidden />
       </button>
       {open &&
         createPortal(
           <>
-            {isPhone && <div aria-hidden className="fixed inset-0 z-[90] bg-black/60 transition-opacity duration-200 starting:opacity-0 motion-reduce:transition-none" />}
+            {isPhone && <div aria-hidden className="fixed inset-0 z-[90] bg-scrim transition-opacity duration-200 starting:opacity-0 motion-reduce:transition-none" />}
             <div
               ref={panel}
               role="dialog"
@@ -133,7 +134,7 @@ export function ColorPopover({ className }: { className?: string }) {
               aria-modal={isPhone || undefined}
               onKeyDown={trap}
               className={cn(
-                "fixed z-[100] overflow-y-auto overscroll-contain border border-line bg-surface p-4 shadow-2xl shadow-black/60 transition-[opacity,transform] duration-200 starting:opacity-0 motion-reduce:transition-none",
+                "fixed z-[100] overflow-y-auto overscroll-contain border border-line bg-surface p-4 shadow-2xl shadow-[var(--shadow-c)] transition-[opacity,transform] duration-200 starting:opacity-0 motion-reduce:transition-none",
                 isPhone
                   ? "inset-x-0 bottom-0 max-h-[90dvh] rounded-t-2xl pb-[max(1rem,env(safe-area-inset-bottom))] starting:translate-y-6"
                   : "rounded-2xl starting:-translate-y-1",
@@ -154,6 +155,10 @@ export function ColorPopover({ className }: { className?: string }) {
                 </button>
               </div>
               <ColorPicker value={accent.hex} onChange={accent.setHex} onReset={accent.reset} />
+              <div className="mt-4 flex items-center justify-between gap-2 border-t border-line pt-3">
+                <span className="text-sm font-medium">Theme</span>
+                <ThemeToggle id="theme-popover" compact />
+              </div>
             </div>
           </>,
           document.body,

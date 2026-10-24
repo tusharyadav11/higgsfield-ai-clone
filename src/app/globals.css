@@ -13,13 +13,63 @@
   --muted: #9a9aa8; /* 7:1 on --bg */
   --accent: #c6ff3d;
   --accent-fg: #0a0a0a;
-  --glow: color-mix(in oklab, var(--accent) 38%, transparent);
+  --accent-text: var(--accent); /* accent for text/icons (a.k.a. accent ink); derived per theme for custom colours */
+  --scrim: rgb(0 0 0 / 0.6); /* modal / sheet backdrops */
+  --shadow-c: rgb(0 0 0 / 0.6); /* popover / toast shadow colour */
+  --hl: rgb(255 255 255 / 0.04); /* inset top highlight on cards */
+  --glow-a: 38%; /* accent share of --glow */
+  --amb-1: 14%; --amb-2: 7%; /* ambient page glow strength */
+  --grain: 0.05;
+  --grain-invert: 0;
+  --aur: 50;
+  --hero-0: 1; --hero-1: 0.55; --hero-2: 0.1; /* hero veil opacities (bottom, middle, top) */
+  --danger: #f87171;
+  --danger-bg: rgb(239 68 68 / 0.1);
+  --danger-line: rgb(239 68 68 / 0.5);
+  --success: #4ade80;
+  --warn: #fbbf24;
+  --earn: #5eead4;
+  --glow: color-mix(in oklab, var(--accent) var(--glow-a), transparent);
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
 }
+/* light palette: AA text (body ~16:1, muted ~6:1), visible hairlines, softer glows */
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f6f9;
+  --surface: #ffffff;
+  --surface-2: #ebebf1;
+  --line: #c9c9d4;
+  --fg: #131318;
+  --muted: #535363;
+  --scrim: rgb(20 20 30 / 0.45);
+  --shadow-c: rgb(30 30 50 / 0.28);
+  --hl: rgb(255 255 255 / 0.9);
+  --glow-a: 30%;
+  --amb-1: 16%; --amb-2: 9%;
+  --grain: 0.05;
+  --grain-invert: 1;
+  --aur: 30;
+  --hero-0: 1; --hero-1: 0.82; --hero-2: 0.35;
+  --danger: #b91c1c;
+  --danger-bg: rgb(220 38 38 / 0.08);
+  --danger-line: rgb(185 28 28 / 0.5);
+  --success: #166534;
+  --warn: #92400e;
+  --earn: #0f766e;
+}
+:root[data-theme="dark"] { color-scheme: dark; }
+/* named accents: fills are tuned per theme; --accent-text is the readable "ink" version for text/icons/links */
 :root[data-accent="lime"] { --accent: #c6ff3d; --accent-fg: #0a0a0a; }
 :root[data-accent="violet"] { --accent: #a78bfa; --accent-fg: #0a0a0a; }
 :root[data-accent="ember"] { --accent: #ff7a2f; --accent-fg: #0a0a0a; }
 :root[data-accent="ocean"] { --accent: #3ab8ff; --accent-fg: #04121c; }
+:root[data-theme="light"][data-accent="lime"] { --accent: #a3e635; --accent-text: #3f6212; }
+:root[data-theme="light"][data-accent="violet"] { --accent: #8b6cf0; --accent-text: #5b34d1; }
+:root[data-theme="light"][data-accent="ember"] { --accent: #f46a1a; --accent-text: #a8390a; }
+:root[data-theme="light"][data-accent="ocean"] { --accent: #1fa3f0; --accent-fg: #04121c; --accent-text: #0369a1; }
+/* custom accent: boot/JS sets --accent plus a pre-derived ink for each theme, so a theme flip needs no JS */
+:root[data-accent="custom"] { --accent-text: var(--accent-text-d, var(--accent)); }
+:root[data-theme="light"][data-accent="custom"] { --accent-text: var(--accent-text-l, var(--accent)); }
 
 @theme inline {
   --color-bg: var(--bg);
@@ -30,6 +80,15 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-accent-fg: var(--accent-fg);
+  --color-accent-text: var(--accent-text);
+  --color-accent-ink: var(--accent-text);
+  --color-danger: var(--danger);
+  --color-danger-bg: var(--danger-bg);
+  --color-danger-line: var(--danger-line);
+  --color-success: var(--success);
+  --color-warn: var(--warn);
+  --color-earn: var(--earn);
+  --color-scrim: var(--scrim);
   --font-sans: var(--font-geist-sans), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --animate-shimmer: shimmer 1.6s linear infinite;
@@ -45,25 +104,25 @@ p { text-wrap: pretty; }
 * { scrollbar-width: thin; scrollbar-color: color-mix(in oklab, var(--muted) 35%, transparent) transparent; }
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-thumb { background: color-mix(in oklab, var(--muted) 35%, transparent); border-radius: 99px; border: 3px solid var(--bg); }
-::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-text); }
 ::-webkit-scrollbar-track { background: transparent; }
 /* accent-aware ambient glow behind everything (static, one fixed layer) */
 body::before {
   content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background:
-    radial-gradient(60rem 36rem at 85% -10%, color-mix(in oklab, var(--accent) 14%, transparent), transparent 70%),
-    radial-gradient(44rem 30rem at -10% 40%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 70%);
+    radial-gradient(60rem 36rem at 85% -10%, color-mix(in oklab, var(--accent) var(--amb-1), transparent), transparent 70%),
+    radial-gradient(44rem 30rem at -10% 40%, color-mix(in oklab, var(--accent) var(--amb-2), transparent), transparent 70%);
 }
 /* film grain: tiny inline SVG, static */
 body::after {
-  content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.05;
+  content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: var(--grain); filter: invert(var(--grain-invert));
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .9 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 /* in @layer base so utilities like outline-none / focus:ring-* can override it */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--accent); outline-offset: 3px;
-    box-shadow: 0 0 0 7px color-mix(in oklab, var(--accent) 20%, transparent);
+    outline: 2px solid var(--accent-text); outline-offset: 3px;
+    box-shadow: 0 0 0 7px color-mix(in oklab, var(--accent-text) 20%, transparent);
     transition: box-shadow 0.2s ease;
   }
   input:focus-visible, textarea:focus-visible, select:focus-visible { box-shadow: 0 0 0 4px color-mix(in oklab, var(--accent) 22%, transparent); }
@@ -115,8 +174,9 @@ body::after {
 @keyframes shine { to { background-position: 200% center; } }
 @keyframes blink { 50% { opacity: 0.2; } }
 
-/* Accent switch crossfade: AccentSwitcher sets this class on <html> for ~0.5s so colours ease instead of jumping. */
-html.accent-fade *, html.accent-fade *::before, html.accent-fade *::after {
+/* Accent / theme switch crossfade: the switcher sets this class on <html> for ~0.5s so colours ease instead of jumping. */
+html.accent-fade *, html.accent-fade *::before, html.accent-fade *::after,
+html.theme-fade *, html.theme-fade *::before, html.theme-fade *::after {
   transition: color 0.45s ease, background-color 0.45s ease, border-color 0.45s ease, fill 0.45s ease, box-shadow 0.45s ease, outline-color 0.45s ease !important;
 }
 .page-enter { animation: page-in 0.38s var(--ease-out) both; }
@@ -125,8 +185,8 @@ html.accent-fade *, html.accent-fade *::before, html.accent-fade *::after {
 .aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; opacity: 0.85; }
 .aurora i { position: absolute; width: 60%; aspect-ratio: 1; border-radius: 50%; will-change: transform; }
 .aurora i:nth-child(1) { left: -10%; top: -30%; background: radial-gradient(closest-side, color-mix(in oklab, var(--accent) 55%, transparent), transparent); animation: aurora-a 14s ease-in-out infinite; }
-.aurora i:nth-child(2) { right: -15%; top: -10%; background: radial-gradient(closest-side, rgb(124 58 237 / 0.5), transparent); animation: aurora-b 18s ease-in-out infinite; }
-.aurora i:nth-child(3) { left: 25%; bottom: -45%; background: radial-gradient(closest-side, rgb(34 211 238 / 0.38), transparent); animation: aurora-c 22s ease-in-out infinite; }
+.aurora i:nth-child(2) { right: -15%; top: -10%; background: radial-gradient(closest-side, color-mix(in oklab, rgb(124 58 237) calc(var(--aur) * 1%), transparent), transparent); animation: aurora-b 18s ease-in-out infinite; }
+.aurora i:nth-child(3) { left: 25%; bottom: -45%; background: radial-gradient(closest-side, color-mix(in oklab, rgb(34 211 238) calc(var(--aur) * 0.76%), transparent), transparent); animation: aurora-c 22s ease-in-out infinite; }
 
 .kw { display: inline-block; opacity: 0; animation: kw 0.85s var(--ease-out) forwards; animation-delay: calc(var(--i) * 110ms + 120ms); }
 .text-shine {
@@ -200,3 +260,8 @@ html.accent-fade *, html.accent-fade *::before, html.accent-fade *::after {
   .marquee-track { animation: none !important; }
   .aurora i { animation: none !important; }
 }
+
+/* hero veil over the video: token-driven so text stays legible in both themes */
+.hero-veil-y { background: linear-gradient(to top, color-mix(in oklab, var(--bg) calc(var(--hero-0) * 100%), transparent), color-mix(in oklab, var(--bg) calc(var(--hero-1) * 100%), transparent) 45%, color-mix(in oklab, var(--bg) calc(var(--hero-2) * 100%), transparent)); }
+.hero-veil-x { background: linear-gradient(to right, color-mix(in oklab, var(--bg) 70%, transparent), transparent 60%); }
+:root[data-theme="light"] .text-shine { background-image: linear-gradient(100deg, var(--fg) 0%, var(--accent-text) 35%, var(--fg) 50%, var(--accent-text) 65%, var(--fg) 100%); }

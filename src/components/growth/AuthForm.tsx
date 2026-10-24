@@ -10,7 +10,7 @@ import { afterAuth, api } from "@/lib/server-sync";
 import { Button } from "@/components/ui";
 import { DemoNote } from "./DemoNote";
 
-const inputCls = "min-h-11 w-full rounded-xl border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent aria-[invalid=true]:border-red-500";
+const inputCls = "min-h-11 w-full rounded-xl border border-line bg-surface-2 px-3 text-sm text-fg outline-none focus:border-accent aria-[invalid=true]:border-danger";
 
 export function AuthForm({ mode }: { mode: "login" | "signup" }) {
   const router = useRouter();
@@ -81,7 +81,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       </p>
       {signup && refCode && (
         <p data-testid="ref-note" className="mt-3 flex items-center gap-2 rounded-xl border border-line bg-surface p-3 text-sm">
-          <Gift className="size-4 shrink-0 text-accent" aria-hidden />
+          <Gift className="size-4 shrink-0 text-accent-text" aria-hidden />
           Invited with code <b className="font-mono">{refCode}</b>: you get +{REFEREE_BONUS} extra credits.
         </p>
       )}
@@ -132,7 +132,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
             <p className="mt-1 text-xs text-muted">{pw ? strength.label : "Use 8+ characters, mixing letters, numbers and symbols."}</p>
           </div>
         )}
-        <p data-testid="auth-error" role="alert" className="min-h-5 text-sm text-red-400">{err?.msg ?? ""}</p>
+        <p data-testid="auth-error" role="alert" className="min-h-5 text-sm text-danger">{err?.msg ?? ""}</p>
         <Button type="submit" size="lg" data-testid="auth-submit" disabled={busy}>
           {busy ? "Working..." : signup ? "Create account" : "Log in"}
         </Button>
@@ -142,7 +142,7 @@ export function AuthForm({ mode }: { mode: "login" | "signup" }) {
       </Link>
       <p className="mt-4 text-center text-sm text-muted">
         {signup ? "Already have an account? " : "New here? "}
-        <Link className="text-accent hover:underline" href={signup ? "/login" : "/signup"}>{signup ? "Log in" : "Sign up"}</Link>
+        <Link className="text-accent-text hover:underline" href={signup ? "/login" : "/signup"}>{signup ? "Log in" : "Sign up"}</Link>
       </p>
       <div className="mt-4 text-center"><DemoNote /></div>
     </div>

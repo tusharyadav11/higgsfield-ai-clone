@@ -30,7 +30,7 @@ export function AccentSwitcher({ initial }: { initial: Accent }) {
             setAccent(name);
             applyAccent(name);
           }}
-          className="flex size-11 items-center justify-center max-[400px]:size-9"
+          className="flex size-11 items-center justify-center"
         >
           <span
             className={cn(

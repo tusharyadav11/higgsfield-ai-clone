@@ -5,10 +5,27 @@ import Link from "next/link";
 import { ImageIcon, RefreshCw, Trash2 } from "lucide-react";
 import { getModel } from "@/lib/models";
 import { useStore } from "@/lib/store";
+import { useEffect, useState } from "react";
+import { flushToasts, showToast } from "@/components/ui/Toast";
 
 export function LibraryView() {
-  const library = useStore((s) => s.library);
+  const all = useStore((s) => s.library);
   const remove = useStore((s) => s.removeFromLibrary);
+  const [pending, setPending] = useState<string[]>([]);
+  // Leaving the page commits any delete that is still waiting on its Undo window.
+  useEffect(() => () => flushToasts(), []);
+  const library = all.filter((it) => !pending.includes(it.id));
+  const del = (it: (typeof all)[number]) => {
+    const snippet = it.prompt.length > 48 ? `${it.prompt.slice(0, 48)}...` : it.prompt;
+    setPending((p) => [...p, it.id]);
+    showToast(`Deleted "${snippet}" (${getModel(it.model)?.name ?? it.model}) from your library.`, {
+      undo: () => setPending((p) => p.filter((x) => x !== it.id)),
+      onExpire: () => {
+        remove(it.id);
+        setPending((p) => p.filter((x) => x !== it.id));
+      },
+    });
+  };
 
   if (library.length === 0) {
     return (
@@ -16,7 +33,7 @@ export function LibraryView() {
         data-testid="library-empty"
         className="flex flex-col items-center gap-4 rounded-2xl border border-dashed border-line px-6 py-20 text-center"
       >
-        <div className="grid size-14 place-items-center rounded-2xl bg-surface text-accent">
+        <div className="grid size-14 place-items-center rounded-2xl bg-surface text-accent-text">
           <ImageIcon size={26} />
         </div>
         <h2 className="text-lg font-semibold text-fg">Nothing saved yet</h2>
@@ -50,8 +67,9 @@ export function LibraryView() {
                 </Link>
                 <button
                   type="button"
-                  aria-label="Delete"
-                  onClick={() => remove(it.id)}
+                  aria-label={`Delete "${it.prompt.slice(0, 40)}"`}
+                  title="Delete (you can undo)"
+                  onClick={() => del(it)}
                   className="grid size-11 place-items-center rounded-full text-muted hover:text-fg"
                 >
                   <Trash2 size={16} />

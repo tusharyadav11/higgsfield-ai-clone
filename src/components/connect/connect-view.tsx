@@ -6,6 +6,7 @@ import { useStore } from "@/lib/store";
 import { useServerInfo } from "@/lib/server-info";
 import { api } from "@/lib/server-sync";
 import Link from "next/link";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Check, Copy, KeyRound, Loader2, Plug, RefreshCw, Trash2, XCircle } from "lucide-react";
 
 const LS = "kinetic-mcp-key";
@@ -93,6 +94,7 @@ export function ConnectView() {
   const key = server ? fresh : localKey;
   const origin = useSyncExternalStore(noop, () => window.location.origin, () => "");
   const [test, setTest] = useState<TestState>(null);
+  const [ask, setAsk] = useState<null | { kind: "regen" } | { kind: "revoke-local" } | { kind: "revoke-server"; id: string; prefix: string }>(null);
 
   useEffect(() => {
     if (server) {
@@ -156,53 +158,53 @@ export function ConnectView() {
   return (
     <>
       <header>
-        <h1 className="flex items-center gap-2 text-2xl font-semibold text-fg"><Plug className="text-accent" size={22} /> Connect your agent</h1>
+        <h1 className="flex items-center gap-2 text-2xl font-semibold text-fg"><Plug className="text-accent-text" size={22} /> Connect your agent</h1>
         <p className="mt-1 text-sm text-muted">Let Claude, Cursor or any MCP client search the community and generate with Kinetic. Pick your client, copy, paste.</p>
       </header>
 
       {server ? (
         <section data-testid="mcp-server-keys" className="rounded-2xl border border-line bg-surface p-4">
           <div className="flex flex-wrap items-center gap-2">
-            <KeyRound size={16} className="text-accent" aria-hidden />
+            <KeyRound size={16} className="text-accent-text" aria-hidden />
             <h2 className="flex-1 text-sm font-semibold text-fg">Your API keys</h2>
             <button type="button" data-testid="mcp-create" onClick={createServerKey} className={linkCls}>Create key</button>
           </div>
           {fresh && (
             <div className="mt-3 rounded-xl bg-bg p-3">
               <code data-testid="mcp-key" className="block break-all text-sm text-fg select-all">{fresh}</code>
-              <p className="mt-1 text-xs text-accent">Copy it now: this is the only time the full key is shown. We store only a hash.</p>
+              <p className="mt-1 text-xs text-accent-text">Copy it now: this is the only time the full key is shown. We store only a hash.</p>
             </div>
           )}
           <ul className="mt-3 divide-y divide-line">
             {keys.map((x) => (
               <li key={x.id} className="flex items-center gap-3 py-2 text-sm">
                 <code className="flex-1 text-muted">{x.prefix}…</code>
-                <button type="button" data-testid="mcp-revoke" onClick={() => revokeServerKey(x.id)} className={linkCls}>
+                <button type="button" data-testid="mcp-revoke" onClick={() => setAsk({ kind: "revoke-server", id: x.id, prefix: x.prefix })} className={linkCls}>
                   <Trash2 size={14} className="mr-2" /> Revoke
                 </button>
               </li>
             ))}
             {!keys.length && <li className="py-2 text-sm text-muted">No keys yet. Create one to connect your agent.</li>}
           </ul>
-          <p role="alert" className="mt-1 min-h-4 text-xs text-red-400">{keyErr}</p>
+          <p role="alert" className="mt-1 min-h-4 text-xs text-danger">{keyErr}</p>
           <p className="mt-1 text-xs text-muted">Real keys: calls with these keys act on your account and spend your credits. Revoking takes effect immediately. Endpoint: <code>{url}</code></p>
         </section>
       ) : (
       <section className="rounded-2xl border border-line bg-surface p-4">
         <div className="flex flex-wrap items-center gap-2">
-          <KeyRound size={16} className="text-accent" aria-hidden />
+          <KeyRound size={16} className="text-accent-text" aria-hidden />
           <code data-testid="mcp-key" className="min-w-0 flex-1 break-all text-sm text-fg select-all">{key || "…"}</code>
-          <button type="button" data-testid="mcp-regenerate" onClick={() => { writeKey(newKey()); setTest(null); }} className={linkCls}>
+          <button type="button" data-testid="mcp-regenerate" onClick={() => setAsk({ kind: "regen" })} className={linkCls}>
             <RefreshCw size={14} className="mr-2" /> Regenerate
           </button>
-          <button type="button" data-testid="mcp-revoke" onClick={() => { writeKey(""); setTest(null); }} className={linkCls} disabled={!key}>
+          <button type="button" data-testid="mcp-revoke" onClick={() => setAsk({ kind: "revoke-local" })} className={linkCls} disabled={!key}>
             <Trash2 size={14} className="mr-2" /> Revoke
           </button>
           {!key && <button type="button" onClick={() => writeKey(newKey())} className={linkCls}>Create key</button>}
         </div>
         <p className="mt-2 text-xs text-muted">
           {serverDb ? (
-            <>This is a <b>demo key</b> made in your browser: it can list tools and call them against the demo (nothing is charged). <Link href="/login" className="text-accent hover:underline">Sign in</Link> to create a key that works against your real account and credits. </>
+            <>This is a <b>demo key</b> made in your browser: it can list tools and call them against the demo (nothing is charged). <Link href="/login" className="text-accent-text hover:underline">Sign in</Link> to create a key that works against your real account and credits. </>
           ) : (
             <>No database is configured, so this is a demo key: it is generated and stored in this browser, and the server accepts any well-formed <code>kn_…</code> key. Revoking only removes it here. </>
           )}
@@ -230,13 +232,13 @@ export function ConnectView() {
           <div data-testid="mcp-test-result" role="status" className="mt-3 text-sm">
             {test && test !== "running" && (test.ok ? (
               <div>
-                <p className="flex items-center gap-2 font-medium text-fg"><Check size={16} className="text-green-400" /> Connected · {test.tools?.length} tools · {test.ms} ms</p>
+                <p className="flex items-center gap-2 font-medium text-fg"><Check size={16} className="text-success" /> Connected · {test.tools?.length} tools · {test.ms} ms</p>
                 <ul className="mt-2 flex flex-wrap gap-1.5">
                   {test.tools?.map((t) => <li key={t.name} title={t.description} className="rounded-full border border-line px-2.5 py-1 text-xs text-muted">{t.name}</li>)}
                 </ul>
               </div>
             ) : (
-              <p className="flex items-center gap-2 text-red-400"><XCircle size={16} /> Failed: {test.error} ({test.ms} ms)</p>
+              <p className="flex items-center gap-2 text-danger"><XCircle size={16} /> Failed: {test.error} ({test.ms} ms)</p>
             ))}
           </div>
         </section>
@@ -248,6 +250,26 @@ export function ConnectView() {
           {PROMPTS.map((p) => <li key={p} className="rounded-xl bg-bg p-3 text-sm text-muted">&ldquo;{p}&rdquo;</li>)}
         </ul>
       </section>
+      <ConfirmDialog
+        open={!!ask}
+        title={ask?.kind === "regen" ? "Regenerate your key?" : "Revoke this key?"}
+        confirmLabel={ask?.kind === "regen" ? "Regenerate key" : "Revoke key"}
+        cancelLabel="Keep key"
+        onCancel={() => setAsk(null)}
+        onConfirm={() => {
+          const a = ask;
+          setAsk(null);
+          if (a?.kind === "regen") { writeKey(newKey()); setTest(null); }
+          else if (a?.kind === "revoke-local") { writeKey(""); setTest(null); }
+          else if (a?.kind === "revoke-server") void revokeServerKey(a.id);
+        }}
+      >
+        <p>
+          {ask?.kind === "regen" ? "This replaces your current demo key with a new one." : ask?.kind === "revoke-server" ? `This deletes the key ${ask.prefix}... from your account.` : "This deletes your demo key from this browser."}{" "}
+          <b className="text-fg">Any agent or app using the old key (Claude, Cursor, scripts) will stop working immediately</b> until you paste the new key into it.
+        </p>
+        <p>{ask?.kind === "revoke-server" ? "The key is removed on our server, so this can't be undone. You can create a new one at any time." : "The key is only stored on this device. This can't be undone."}</p>
+      </ConfirmDialog>
     </>
   );
 }

@@ -29,7 +29,7 @@ export function PricingView() {
           <span className={`absolute top-1 size-6 rounded-full bg-fg transition-all ${yearly ? "left-7" : "left-1"}`} />
         </button>
         <span className={yearly ? "text-fg" : "text-muted"}>
-          Yearly <span className="text-accent">save 20%</span>
+          Yearly <span className="text-accent-text">save 20%</span>
         </span>
       </div>
       <div className="grid gap-4 md:grid-cols-3">
@@ -44,11 +44,11 @@ export function PricingView() {
               ${yearly ? p.yearly : p.monthly}
               <span className="text-sm font-normal text-muted"> /mo{yearly && p.monthly ? ", billed yearly" : ""}</span>
             </p>
-            <p className="mt-2 text-sm text-accent">{p.credits}</p>
+            <p className="mt-2 text-sm text-accent-text">{p.credits}</p>
             <ul className="my-5 flex-1 space-y-2 text-sm text-muted">
               {p.perks.map((x) => (
                 <li key={x} className="flex gap-2">
-                  <Check size={16} className="mt-0.5 shrink-0 text-accent" /> {x}
+                  <Check size={16} className="mt-0.5 shrink-0 text-accent-text" /> {x}
                 </li>
               ))}
             </ul>

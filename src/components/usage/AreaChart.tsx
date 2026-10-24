@@ -4,7 +4,7 @@ import { smoothPath, type DayPoint } from "@/lib/usage";
 import { cn } from "@/components/ui/cn";
 
 const W = 600, H = 200, PAD = 8;
-const EARN = "#5eead4";
+const EARN = "var(--earn)";
 
 function niceMax(v: number) {
   if (v <= 4) return 4;
@@ -43,7 +43,7 @@ export function AreaChart({ days }: { days: DayPoint[] }) {
     <div data-testid="usage-chart" className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-accent" aria-hidden />Spent</span>
+          <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-accent-text" aria-hidden />Spent</span>
           <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full" style={{ background: EARN }} aria-hidden />Earned</span>
         </div>
         <button type="button" aria-pressed={table} onClick={() => setTable((v) => !v)} className="min-h-8 rounded-full border border-line px-3 hover:border-accent hover:text-fg">
@@ -85,7 +85,7 @@ export function AreaChart({ days }: { days: DayPoint[] }) {
               <path d={area("earned")} fill={`url(#e${id})`} />
               <path d={line("earned")} fill="none" stroke={EARN} strokeWidth="1.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" />
               <path d={area("spent")} fill={`url(#a${id})`} />
-              <path d={line("spent")} fill="none" stroke="var(--accent)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
+              <path d={line("spent")} fill="none" stroke="var(--accent-text)" strokeWidth="2.5" vectorEffect="non-scaling-stroke" strokeLinecap="round" strokeLinejoin="round" />
               {at && active !== null && <line x1={x(active)} x2={x(active)} y1="0" y2={H} stroke="var(--muted)" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeDasharray="2 3" />}
             </svg>
             {at && active !== null && (
@@ -97,7 +97,7 @@ export function AreaChart({ days }: { days: DayPoint[] }) {
                   style={{ left: `${pctX(active)}%` }}
                 >
                   <div className="font-semibold">{fmtDay(at.date)}</div>
-                  <div className="mt-1 flex justify-between text-muted"><span>Spent</span><b className="text-accent tabular-nums">{at.spent}</b></div>
+                  <div className="mt-1 flex justify-between text-muted"><span>Spent</span><b className="text-accent-text tabular-nums">{at.spent}</b></div>
                   <div className="flex justify-between text-muted"><span>Earned</span><b className="tabular-nums" style={{ color: EARN }}>{at.earned}</b></div>
                 </div>
               </>

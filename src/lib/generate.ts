@@ -1,4 +1,4 @@
-import { PHOTOS, VIDEOS } from "./media-library";
+import { PHOTOS, VIDEOS, motionFor } from "./media-library";
 import { ASPECT_SIZE, type Aspect, type Kind } from "./models";
 
 export function hash(str: string): number {
@@ -78,6 +78,8 @@ export type Generation = GenerateInput & {
   url: string;
   /** Poster frame, present when kind is video. */
   poster?: string;
+  /** Cinematic loop of the generated image (additive; mock provider only). */
+  motion?: string;
   createdAt: string;
 };
 
@@ -86,7 +88,7 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 const ASPECT_ORDER: Aspect[] = ["1:1", "16:9", "9:16", "4:3"];
 
 /** Deterministic pick from the local media library: prompt hash + kind + aspect. */
-export function pickMedia(input: GenerateInput): { url: string; poster?: string } {
+export function pickMedia(input: GenerateInput): { url: string; poster?: string; motion?: string } {
   const h = hash(`${input.prompt}|${input.model}|${input.kind}|${input.aspect}`);
   if (input.kind === "video") {
     // Prefer videos whose orientation matches the requested aspect.
@@ -97,10 +99,11 @@ export function pickMedia(input: GenerateInput): { url: string; poster?: string 
   }
   const exact = PHOTOS.filter((p) => p.aspect === input.aspect);
   const pool = exact.length ? exact : PHOTOS.filter((p) => p.aspect === ASPECT_ORDER[0]);
-  return { url: pool[h % pool.length].src };
+  const url = pool[h % pool.length].src;
+  return { url, motion: motionFor(url) };
 }
 
-async function mock(input: GenerateInput): Promise<{ url: string; poster?: string }> {
+async function mock(input: GenerateInput): Promise<{ url: string; poster?: string; motion?: string }> {
   await sleep(1200 + Math.random() * 1300);
   return pickMedia(input);
 }
@@ -130,6 +133,7 @@ async function fal(input: GenerateInput): Promise<string | null> {
 export async function generate(input: GenerateInput): Promise<Generation> {
   let url: string | null = null;
   let poster: string | undefined;
+  let motion: string | undefined;
   if (process.env.FAL_KEY) {
     try {
       url = await fal(input);
@@ -141,11 +145,13 @@ export async function generate(input: GenerateInput): Promise<Generation> {
     const m = await mock(input);
     url = m.url;
     poster = m.poster;
+    motion = m.motion;
   }
   return {
     id: `gen_${Date.now().toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`,
     url,
     ...(input.kind === "video" && poster ? { poster } : {}),
+    ...(input.kind === "image" && motion ? { motion } : {}),
     kind: input.kind,
     prompt: input.prompt,
     model: input.model,

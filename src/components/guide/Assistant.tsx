@@ -5,6 +5,7 @@ import { Bot, Send, Trash2, X, RotateCcw } from "lucide-react";
 import { SUGGESTIONS } from "@/lib/guide/kb";
 import type { AssistLink } from "@/lib/guide/assist";
 import { lsGet, lsSet, openGuide } from "@/lib/guide/bus";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 
 type Msg = { id: string; role: "user" | "assistant"; text: string; links?: AssistLink[]; mode?: "ai" | "builtin"; error?: boolean };
 const KEY = "kinetic.assist.v1";
@@ -16,6 +17,11 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
   const [msgs, setMsgs] = useState<Msg[]>([]);
   const [text, setText] = useState("");
   const [busy, setBusy] = useState(false);
+  const [askClear, setAskClear] = useState(false);
+  const askRef = useRef(false);
+  useEffect(() => {
+    askRef.current = askClear;
+  });
   const loaded = useRef(false);
   const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,7 +45,7 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
   }, [open]);
   useEffect(() => {
     if (!open) return;
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && !askRef.current && onClose();
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
@@ -107,6 +113,7 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
     setBusy(false);
     setMsgs([]);
     lsSet(KEY, []);
+    setAskClear(false);
   };
   const follow = (l: AssistLink) => {
     if (l.href) {
@@ -137,15 +144,17 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
         <div
           role="dialog"
           aria-label="Assistant"
-          className="fixed inset-x-2 bottom-[calc(8.5rem+env(safe-area-inset-bottom))] z-50 flex max-h-[min(34rem,calc(100dvh-10rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface text-fg shadow-2xl sm:inset-x-auto sm:bottom-20 sm:right-5 sm:w-96"
+          className="fixed inset-x-2 bottom-[calc(8.5rem+env(safe-area-inset-bottom))] z-50 flex max-h-[min(34rem,calc(100dvh-10rem))] flex-col overflow-hidden rounded-2xl border border-line bg-surface text-fg shadow-2xl sm:inset-x-auto sm:bottom-20 sm:right-5 sm:w-96 sm:max-h-[calc(100dvh-6rem)] [@media(max-height:500px)]:bottom-2 [@media(max-height:500px)]:right-20 [@media(max-height:500px)]:max-h-[calc(100dvh-1rem)]"
         >
-          <div className="flex items-center justify-between border-b border-line px-3 py-2">
+          <div className="flex items-center justify-between gap-2 border-b border-line px-3 py-1">
             <h2 className="text-sm font-semibold">Ask Kinetic</h2>
             <div className="flex">
-              <button type="button" onClick={clear} aria-label="Clear conversation" className="grid size-10 place-items-center rounded-lg text-muted hover:text-fg">
-                <Trash2 className="size-4" aria-hidden />
-              </button>
-              <button type="button" onClick={onClose} aria-label="Close assistant" className="grid size-10 place-items-center rounded-lg text-muted hover:text-fg">
+              {msgs.length > 0 && (
+                <button type="button" data-testid="assistant-clear" onClick={() => setAskClear(true)} aria-label="Clear chat" title="Clear chat" className="flex min-h-11 items-center gap-1.5 rounded-lg px-2.5 text-xs font-medium text-muted hover:text-fg">
+                  <Trash2 className="size-4" aria-hidden /> Clear chat
+                </button>
+              )}
+              <button type="button" onClick={onClose} aria-label="Close assistant" className="grid size-11 place-items-center rounded-lg text-muted hover:text-fg">
                 <X className="size-4" aria-hidden />
               </button>
             </div>
@@ -156,7 +165,7 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
                 <p className="text-sm">New to AI creation? Ask me where things are or how to do something.</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {SUGGESTIONS.map((s) => (
-                    <button key={s} type="button" onClick={() => send(s)} className="min-h-9 rounded-full border border-line px-3 text-left text-xs hover:border-accent">
+                    <button key={s} type="button" onClick={() => send(s)} className="min-h-11 max-w-full rounded-full border border-line px-3.5 py-2 text-left text-xs leading-snug hover:border-accent">
                       {s}
                     </button>
                   ))}
@@ -168,10 +177,10 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
                 <div
                   data-testid="assistant-msg"
                   data-role={m.role}
-                  className={`max-w-[88%] rounded-2xl px-3 py-2 text-sm ${m.role === "user" ? "bg-accent text-accent-fg" : m.error ? "border border-red-500/50 bg-red-500/10" : "bg-surface-2"}`}
+                  className={`max-w-[88%] break-words rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${m.role === "user" ? "bg-accent text-accent-fg" : m.error ? "border border-danger-line bg-danger-bg" : "bg-surface-2"}`}
                 >
                   {m.text ? (
-                    <p className="whitespace-pre-wrap">{m.text}</p>
+                    <p className="whitespace-pre-wrap break-words">{m.text}</p>
                   ) : (
                     <span className="inline-flex gap-1 py-1" role="status" aria-label="Assistant is typing">
                       {[0, 1, 2].map((d) => (
@@ -180,14 +189,14 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
                     </span>
                   )}
                   {m.error && (
-                    <button type="button" onClick={retry} className="mt-2 inline-flex min-h-9 items-center gap-1 rounded-lg border border-line px-2 text-xs">
+                    <button type="button" onClick={retry} className="mt-2 inline-flex min-h-11 items-center gap-1 rounded-lg border border-line px-2 text-xs">
                       <RotateCcw className="size-3" aria-hidden /> Retry
                     </button>
                   )}
                   {m.links && m.links.length > 0 && (
                     <div className="mt-2 flex flex-wrap gap-1.5">
                       {m.links.map((l) => (
-                        <button key={l.label + (l.href ?? l.run)} type="button" onClick={() => follow(l)} className="min-h-9 rounded-lg bg-accent px-3 text-xs font-semibold text-accent-fg">
+                        <button key={l.label + (l.href ?? l.run)} type="button" onClick={() => follow(l)} className="min-h-11 rounded-lg bg-accent px-3 text-xs font-semibold text-accent-fg">
                           {l.label}
                         </button>
                       ))}
@@ -226,6 +235,18 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
           </p>
         </div>
       )}
+      <ConfirmDialog
+        open={askClear}
+        title="Clear this chat?"
+        confirmLabel={`Delete ${msgs.length} message${msgs.length === 1 ? "" : "s"}`}
+        cancelLabel="Keep chat"
+        onConfirm={clear}
+        onCancel={() => setAskClear(false)}
+      >
+        <p>
+          This deletes the {msgs.length} message{msgs.length === 1 ? "" : "s"} in your chat with the Kinetic assistant. They&apos;re only saved on this device. This can&apos;t be undone.
+        </p>
+      </ConfirmDialog>
     </>
   );
 }

@@ -66,3 +66,9 @@ export const VIDEOS: VideoAsset[] = [
 ];
 
 export const HERO_VIDEO = { src: "/media/vid/hero.mp4", poster: "/media/poster/hero.jpg", w: 1280, h: 720, blur: b("/9j/4AAQSkZJRgABAgAAEAAPAAD//gAPTGF2YzYzLjEuMTAxAP/bAEMACBwcIRwhJiYmJiYmLSotLy8vLS0tLS8vLzIyMjs7OzIyMi8vMjI4ODs7QEJAPT07PUJCRkZGVFRQUGJiZXh4kf/EAFoAAQEAAAAAAAAAAAAAAAAAAAYHAQEAAAAAAAAAAAAAAAAAAAAEEAABAwUBAQAAAAAAAAAAAAABAgARISJxAzGxMhEBAAMBAQAAAAAAAAAAAAAAAWExAEGB/8AAEQgABgAKAwEiAAIRAAMRAP/aAAwDAQACEQMRAD8Am2kpCCmLzUKN0RnlGQJqWk1fScK8Zk9La0Y9L5PJ3//Z") };
+
+/** Cinematic loop (public/media/motion, built by scripts/media/make-motion.sh) for a local photo; undefined for anything else. */
+export function motionFor(src: string | undefined): string | undefined {
+  const m = src ? /^\/media\/img\/(ph-\d\d)\.jpg$/.exec(src) : null;
+  return m ? `/media/motion/${m[1]}.mp4` : undefined;
+}

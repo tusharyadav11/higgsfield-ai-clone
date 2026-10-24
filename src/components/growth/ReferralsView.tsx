@@ -72,7 +72,7 @@ export function ReferralsView() {
     <div className="flex flex-col gap-6">
       <Card>
         <p className="text-sm text-muted">Your referral code</p>
-        <p data-testid="ref-code" className="mt-1 font-mono text-3xl font-bold tracking-widest text-accent">{code}</p>
+        <p data-testid="ref-code" className="mt-1 font-mono text-3xl font-bold tracking-widest text-accent-text">{code}</p>
         <p className="mt-2 text-sm text-muted">
           Friends get +{REFEREE_BONUS} credits at signup. You get +{REFERRER_BONUS} credits each time your code is redeemed.
         </p>
@@ -96,7 +96,7 @@ export function ReferralsView() {
             </Button>
           )}
         </div>
-        <p role="status" className="mt-2 min-h-5 text-sm text-accent">{msg}</p>
+        <p role="status" className="mt-2 min-h-5 text-sm text-accent-text">{msg}</p>
         <p className="text-xs text-muted">
           {server
             ? "Credits land in your account the moment a friend signs up with your link."
@@ -118,7 +118,7 @@ export function ReferralsView() {
             const ready = n >= t.invites && !done;
             return (
               <li key={t.invites} data-testid={`reward-${t.invites}`} className="rounded-2xl border border-line bg-surface p-4">
-                <Trophy className={`size-5 ${n >= t.invites ? "text-accent" : "text-muted"}`} aria-hidden />
+                <Trophy className={`size-5 ${n >= t.invites ? "text-accent-text" : "text-muted"}`} aria-hidden />
                 <p className="mt-2 font-semibold">{t.badge}</p>
                 <p className="text-sm text-muted">{t.invites} invite{t.invites > 1 ? "s" : ""} · +{t.credits} credits</p>
                 <Button
@@ -143,7 +143,7 @@ export function ReferralsView() {
         <h2 id="inv" className="mb-3 text-lg font-semibold">Invited</h2>
         {n === 0 ? (
           <div data-testid="invited-empty" className="rounded-2xl border border-dashed border-line p-8 text-center text-sm text-muted">
-            No one has used your code yet. Share your link, or <Link href="/signup" className="text-accent hover:underline">try the signup flow</Link> yourself with another browser profile.
+            No one has used your code yet. Share your link, or <Link href="/signup" className="text-accent-text hover:underline">try the signup flow</Link> yourself with another browser profile.
           </div>
         ) : (
           <ol className="divide-y divide-line rounded-2xl border border-line">
@@ -152,7 +152,7 @@ export function ReferralsView() {
                 <span className="w-6 text-muted">#{idx + 1}</span>
                 <span className="flex-1 truncate">Creator {i.id.slice(0, 4)}</span>
                 <span className="text-muted">{new Date(i.at).toLocaleDateString()}</span>
-                <span className="font-semibold text-accent">+{REFERRER_BONUS}</span>
+                <span className="font-semibold text-accent-text">+{REFERRER_BONUS}</span>
               </li>
             ))}
           </ol>

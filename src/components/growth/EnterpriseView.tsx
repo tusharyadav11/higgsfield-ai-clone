@@ -23,7 +23,7 @@ export function EnterpriseView() {
               data-testid={`ent-preset-${p}`}
               aria-pressed={seats === p}
               onClick={() => setSeats(p)}
-              className={`min-h-11 rounded-full border px-4 text-sm font-semibold ${seats === p ? "border-accent bg-accent text-accent-fg" : "border-line hover:border-accent"}`}
+              className={`min-h-11 min-w-11 rounded-full border px-4 text-sm font-semibold ${seats === p ? "border-accent bg-accent text-accent-fg" : "border-line hover:border-accent"}`}
             >
               {p === 500 ? "500+" : p}
             </button>
@@ -92,5 +92,5 @@ function Stat({ label, value, sub, testid }: { label: string; value: string; sub
   );
 }
 function Tick({ on }: { on: boolean }) {
-  return on ? <Check className="size-4 text-accent" aria-label="Included" /> : <Minus className="size-4 text-muted" aria-label="Not included" />;
+  return on ? <Check className="size-4 text-accent-text" aria-label="Included" /> : <Minus className="size-4 text-muted" aria-label="Not included" />;
 }

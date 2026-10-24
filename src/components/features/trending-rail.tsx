@@ -9,7 +9,7 @@ export function TrendingRail() {
     <section aria-labelledby="trending-h">
       <div className="mb-3 flex items-end justify-between gap-3">
         <h2 id="trending-h" className="flex items-center gap-2 text-xl font-semibold text-fg">
-          <Flame size={18} className="text-accent" /> Trending now
+          <Flame size={18} className="text-accent-text" /> Trending now
         </h2>
         <p className="text-xs text-muted">{total.toLocaleString("en-US")} people remixed these today</p>
       </div>

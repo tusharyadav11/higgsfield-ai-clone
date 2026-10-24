@@ -3,8 +3,9 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, useSyncExtern
 import type { KeyboardEvent as ReactKeyboardEvent, PointerEvent as ReactPointerEvent, Ref } from "react";
 import { Check, Pipette, RotateCcw, TriangleAlert } from "lucide-react";
 import { cn } from "@/components/ui/cn";
+import { useTheme } from "./useTheme";
 import {
-  APP_BG, contrast, ensureUsableAccent, hexToHsv, hexToRgb, hsvToHex, normalizeHex, readableOn, rgbToHex, type HSV,
+  bgFor, contrast, ensureUsableAccent, hexToHsv, hexToRgb, hsvToHex, normalizeHex, readableOn, rgbToHex, type HSV,
 } from "@/lib/color";
 
 export type PickerChange = (hex: string, meta: { commit: boolean }) => void;
@@ -257,7 +258,8 @@ export function ColorPicker({
   const fg = readableOn(hex);
   const ratio = contrast(hex, fg);
   const aa = ratio >= 4.5;
-  const dim = contrast(hex, APP_BG) < 3;
+  const { resolved } = useTheme();
+  const dim = contrast(hex, bgFor(resolved)) < 3;
   const hueColor = hsvToHex({ h: hsv.h, s: 1, v: 1 });
   const svText = `Saturation ${Math.round(hsv.s * 100)}%, brightness ${Math.round(hsv.v * 100)}%`;
   const btn =
@@ -303,7 +305,7 @@ export function ColorPicker({
           aria-valuenow={Math.round(hsv.h)}
           aria-valuetext={`Hue ${Math.round(hsv.h)} degrees`}
           onKeyDown={onHueKey}
-          className="relative h-7 w-full cursor-pointer touch-none select-none rounded-full outline-none ring-1 ring-line focus-visible:ring-2 focus-visible:ring-accent"
+          className="relative h-11 w-full cursor-pointer touch-none select-none rounded-full border-y-8 border-transparent bg-clip-padding outline-none focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-accent"
           style={{ background: "linear-gradient(to right,#f00,#ff0,#0f0,#0ff,#00f,#f0f,#f00)" }}
         >
           <span
@@ -332,7 +334,7 @@ export function ColorPicker({
                 autoComplete="off"
                 maxLength={7}
                 aria-invalid={draft !== null && !normalizeHex(draft)}
-                className={cn(field, draft !== null && !normalizeHex(draft) && "border-red-400")}
+                className={cn(field, draft !== null && !normalizeHex(draft) && "border-danger")}
               />
             </label>
             {hasEyeDropper && (
@@ -421,7 +423,7 @@ export function ColorPicker({
           role="status"
           className={cn(
             "flex items-center gap-2 rounded-xl border px-3 py-2 text-xs",
-            aa ? "border-line text-muted" : "border-amber-400/50 text-amber-300",
+            aa ? "border-line text-muted" : "border-warn/50 text-warn",
           )}
         >
           <span className="flex size-7 shrink-0 items-center justify-center rounded-lg text-sm font-bold" style={{ background: hex, color: fg }}>
@@ -433,8 +435,8 @@ export function ColorPicker({
           </span>
         </div>
         {dim && (
-          <button type="button" data-testid="accent-lift" onClick={() => adopt(ensureUsableAccent(hex), false)} className={cn(btn, "text-xs")}>
-            Too dark on the background: lighten
+          <button type="button" data-testid="accent-lift" onClick={() => adopt(ensureUsableAccent(hex, 3, resolved), false)} className={cn(btn, "text-xs")}>
+            {resolved === "light" ? "Too pale on the background: darken" : "Too dark on the background: lighten"}
           </button>
         )}
         <button type="button" data-testid="accent-reset" onClick={doReset} className={btn}>

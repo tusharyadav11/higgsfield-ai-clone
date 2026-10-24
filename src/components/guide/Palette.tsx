@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Search, X, CornerDownLeft, Clock } from "lucide-react";
+import { Search, X, CornerDownLeft, Clock, Zap, Compass, Cpu, Sparkles, Flame, CircleHelp, SearchX } from "lucide-react";
 import { ACTIONS, ARTICLES, PAGES, TOOLS } from "@/lib/guide/kb";
 import { scoreAny } from "@/lib/guide/fuzzy";
 import { lsGet, lsSet, openGuide, useIsMac, type GuideEvent } from "@/lib/guide/bus";
@@ -12,6 +12,7 @@ type Item = { id: string; group: string; title: string; sub?: string; go: () => 
 
 const RECENT_KEY = "kinetic.recent.v1";
 const GROUP_ORDER = ["Actions", "Pages", "Models", "Tools", "Trending prompts", "Help"];
+const GROUP_ICON: Record<string, typeof Zap> = { Actions: Zap, Pages: Compass, Models: Cpu, Tools: Sparkles, "Trending prompts": Flame, Help: CircleHelp };
 const LIMITS: Record<string, number> = { Actions: 4, Pages: 4, Models: 4, Tools: 3, "Trending prompts": 5, Help: 3 };
 
 export function Palette({ onClose }: { onClose: () => void }) {
@@ -122,16 +123,17 @@ export function Palette({ onClose }: { onClose: () => void }) {
   };
 
   let lastGroup = "";
+  const kbd = "rounded border border-line bg-surface-2 px-1.5 py-0.5 font-sans text-[11px] leading-none";
   return (
-    <div className="fixed inset-0 z-[100] flex items-stretch justify-center bg-black/60 sm:items-start sm:px-4 sm:pt-[12vh]" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-[100] flex items-stretch justify-center bg-scrim sm:items-start sm:px-4 sm:pt-[min(10vh,6rem)]" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div
         role="dialog"
         aria-modal="true"
         aria-label="Search Kinetic"
         onKeyDown={onKey}
-        className="flex h-dvh w-full flex-col bg-surface text-fg sm:h-auto sm:max-h-[70vh] sm:max-w-xl sm:rounded-2xl sm:border sm:border-line sm:shadow-2xl"
+        className="flex h-dvh w-full min-w-0 flex-col overflow-hidden bg-surface text-fg sm:h-auto sm:max-h-[min(640px,calc(100dvh-min(10vh,6rem)-1rem))] sm:w-[min(90vw,720px)] sm:rounded-2xl sm:border sm:border-line sm:shadow-2xl"
       >
-        <div className="flex items-center gap-2 border-b border-line px-3 pt-safe transition-colors focus-within:border-accent">
+        <div className="flex h-14 shrink-0 items-center gap-3 border-b border-line px-4 transition-shadow focus-within:shadow-[inset_0_-2px_0_var(--accent)] max-sm:box-content max-sm:pt-[env(safe-area-inset-top)]">
           <Search className="size-5 shrink-0 text-muted" aria-hidden />
           <input
             ref={inputRef}
@@ -150,17 +152,18 @@ export function Palette({ onClose }: { onClose: () => void }) {
             placeholder="Search pages, models, prompts, help..."
             autoComplete="off"
             spellCheck={false}
-            className="min-h-14 w-full min-w-0 flex-1 bg-transparent text-base outline-none placeholder:text-muted focus-visible:outline-none"
+            className="h-full min-w-0 flex-1 appearance-none border-0 bg-transparent p-0 text-base leading-none text-fg shadow-none outline-none ring-0 placeholder:text-muted focus:shadow-none focus:outline-none focus-visible:shadow-none focus-visible:outline-none"
           />
-          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close search" className="grid size-11 place-items-center rounded-lg text-muted hover:text-fg">
-            <X className="size-5" aria-hidden />
+          <button ref={closeRef} type="button" onClick={onClose} aria-label="Close search" className="grid size-11 shrink-0 place-items-center rounded-lg text-muted hover:text-fg sm:size-auto sm:min-h-8 sm:px-0">
+            <X className="size-5 sm:hidden" aria-hidden />
+            <kbd className={`${kbd} hidden sm:inline`}>Esc</kbd>
           </button>
         </div>
-        <div className="min-h-0 flex-1 overflow-y-auto p-2">
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain p-2 max-sm:pb-[max(0.5rem,env(safe-area-inset-bottom))]">
           {!q.trim() && recent.length > 0 && (
-            <div className="mb-2">
-              <p className="px-2 py-1 text-xs font-medium uppercase tracking-wide text-muted">Recent searches</p>
-              <div className="flex flex-wrap gap-1.5 px-2">
+            <div className="mb-1">
+              <p className="px-3 pb-1 pt-2 text-xs font-medium uppercase tracking-wide text-muted">Recent searches</p>
+              <div className="flex flex-wrap gap-1.5 px-3 pb-1">
                 {recent.map((r) => (
                   <button
                     key={r}
@@ -170,9 +173,9 @@ export function Palette({ onClose }: { onClose: () => void }) {
                       setQ(r);
                       inputRef.current?.focus();
                     }}
-                    className="flex min-h-9 items-center gap-1 rounded-full border border-line px-3 text-sm text-muted hover:border-accent hover:text-fg"
+                    className="flex min-h-11 max-w-full items-center gap-1.5 rounded-full border border-line px-3 text-sm text-muted hover:border-accent hover:text-fg"
                   >
-                    <Clock className="size-3" aria-hidden /> {r}
+                    <Clock className="size-3.5 shrink-0" aria-hidden /> <span className="truncate">{r}</span>
                   </button>
                 ))}
               </div>
@@ -182,9 +185,10 @@ export function Palette({ onClose }: { onClose: () => void }) {
             {items.map((it, i) => {
               const header = it.group !== lastGroup;
               lastGroup = it.group;
+              const Icon = GROUP_ICON[it.group] ?? Search;
               return (
                 <li key={`${it.group}-${it.id}`} role="presentation">
-                  {header && <p className="px-2 pb-1 pt-3 text-xs font-medium uppercase tracking-wide text-muted">{!q.trim() && it.group === "Trending prompts" ? "Trending now" : it.group}</p>}
+                  {header && <p className="px-3 pb-1 pt-3 text-xs font-medium uppercase tracking-wide text-muted">{!q.trim() && it.group === "Trending prompts" ? "Trending now" : it.group}</p>}
                   <div
                     id={`pal-opt-${i}`}
                     role="option"
@@ -192,24 +196,28 @@ export function Palette({ onClose }: { onClose: () => void }) {
                     data-testid="search-result"
                     onMouseMove={() => i !== clamped && setActive(i)}
                     onClick={it.go}
-                    className={`flex min-h-11 cursor-pointer items-center gap-3 rounded-xl px-3 py-2 ${i === clamped ? "bg-accent/15 ring-1 ring-accent" : ""}`}
+                    className={`flex w-full min-w-0 cursor-pointer items-center gap-3 rounded-xl p-3 ${i === clamped ? "bg-accent/15 shadow-[inset_0_0_0_1px_var(--accent)]" : ""}`}
                   >
+                    <span className="grid size-9 shrink-0 place-items-center rounded-lg bg-surface-2 text-accent-text">
+                      <Icon className="size-4" aria-hidden />
+                    </span>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-medium">{it.title}</p>
-                      {it.sub && <p className="truncate text-xs text-muted">{it.sub}</p>}
+                      <p className="truncate text-sm font-medium leading-5">{it.title}</p>
+                      {it.sub && <p className="truncate text-xs leading-4 text-muted">{it.sub}</p>}
                     </div>
-                    {i === clamped && <CornerDownLeft className="size-4 shrink-0 text-muted" aria-hidden />}
+                    <CornerDownLeft className={`size-4 shrink-0 text-muted ${i === clamped ? "" : "invisible"}`} aria-hidden />
                   </div>
                 </li>
               );
             })}
           </ul>
           {q.trim() && items.length === 0 && (
-            <div className="px-3 py-8 text-center text-sm text-muted">
-              Nothing found for &ldquo;{q}&rdquo;.{" "}
+            <div className="flex flex-col items-center gap-2 px-4 py-10 text-center text-sm text-muted">
+              <SearchX className="size-8" aria-hidden />
+              <p className="max-w-full break-words">Nothing found for &ldquo;{q}&rdquo;.</p>
               <button
                 type="button"
-                className="text-accent underline"
+                className="min-h-11 text-accent-text underline"
                 onClick={() => {
                   onClose();
                   runEvent("assistant");
@@ -220,9 +228,11 @@ export function Palette({ onClose }: { onClose: () => void }) {
             </div>
           )}
         </div>
-        <div className="hidden items-center justify-between border-t border-line px-3 py-2 text-xs text-muted sm:flex">
-          <span>↑↓ navigate · Enter open · Esc close</span>
-          <span>{mac ? "⌘K" : "Ctrl K"} anywhere</span>
+        <div className="hidden h-11 shrink-0 items-center justify-between gap-3 border-t border-line px-4 text-xs text-muted sm:flex">
+          <span className="flex min-w-0 items-center gap-2 truncate">
+            <kbd className={kbd}>↑↓</kbd> navigate <kbd className={kbd}>Enter</kbd> open <kbd className={kbd}>Esc</kbd> close
+          </span>
+          <span className="shrink-0">{mac ? "⌘K" : "Ctrl K"} anywhere</span>
         </div>
       </div>
     </div>

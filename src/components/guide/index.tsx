@@ -5,6 +5,7 @@ import { HelpCircle, Search, Compass, MessageCircle, Keyboard, Sparkles, X } fro
 import { SHORTCUTS, WHATS_NEW } from "@/lib/guide/kb";
 import { lsGet, lsSet, openGuide, useGuideEvents, useIsMac, type GuideEvent } from "@/lib/guide/bus";
 import type { TourKey } from "@/lib/guide/tour";
+import { ToastHost } from "@/components/ui/Toast";
 import { Palette } from "./Palette";
 import { Tour } from "./Tour";
 import { Assistant } from "./Assistant";
@@ -22,11 +23,11 @@ function InfoDialog({ title, onClose, children }: { title: string; onClose: () =
     };
   }, [onClose]);
   return (
-    <div className="fixed inset-0 z-[100] grid place-items-center bg-black/60 p-4" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
+    <div className="fixed inset-0 z-[100] grid place-items-center bg-scrim p-4" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <div role="dialog" aria-modal="true" aria-label={title} className="w-full max-w-md rounded-2xl border border-line bg-surface p-5 text-fg shadow-2xl">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-semibold">{title}</h2>
-          <button type="button" autoFocus onClick={onClose} aria-label="Close" className="grid size-10 place-items-center rounded-lg text-muted hover:text-fg">
+          <button type="button" autoFocus onClick={onClose} aria-label="Close" className="grid size-11 place-items-center rounded-lg text-muted hover:text-fg">
             <X className="size-5" aria-hidden />
           </button>
         </div>
@@ -115,6 +116,7 @@ export function GuideRoot() {
     <>
       {search && <Palette onClose={() => setSearch(false)} />}
       {tour && <Tour key={tour} tourKey={tour} onEnd={endTour} />}
+      <ToastHost />
       <Assistant open={assistant} onToggle={() => setAssistant((a) => !a)} onClose={closeAssistant} />
       {toast && (
         <div role="status" className="fixed bottom-[calc(5rem+env(safe-area-inset-bottom))] left-3 z-50 flex max-w-[calc(100vw-6rem)] items-center gap-2 rounded-2xl border border-line bg-surface p-2 pl-4 text-sm text-fg shadow-xl sm:bottom-5 sm:left-auto sm:right-24 sm:max-w-sm">
@@ -179,16 +181,17 @@ export function SearchTrigger() {
       onClick={() => openGuide("search")}
       aria-label="Search"
       aria-keyshortcuts="Control+K Meta+K"
-      className="flex size-11 items-center justify-center gap-2 rounded-full border border-line bg-surface text-sm text-muted hover:border-accent hover:text-fg sm:w-auto sm:min-w-11 sm:justify-start sm:px-3 lg:w-64"
+      className="flex size-11 shrink-0 items-center justify-center rounded-full border border-line bg-surface text-sm text-muted transition-colors hover:border-accent hover:text-fg sm:size-auto sm:h-11 sm:min-w-0 sm:max-w-[640px] sm:flex-1 sm:justify-start sm:gap-2.5 sm:px-4"
     >
       <Search className="size-4 shrink-0" aria-hidden />
-      <span className="hidden flex-1 text-left sm:inline">Search...</span>
-      <kbd className="hidden rounded border border-line px-1.5 text-[11px] lg:inline">{mac ? "⌘K" : "Ctrl K"}</kbd>
+      <span className="hidden min-w-0 flex-1 truncate text-left sm:inline">Search pages, models, prompts...</span>
+      <kbd className="hidden shrink-0 rounded-md border border-line bg-surface-2 px-1.5 py-0.5 font-sans text-[11px] leading-none md:inline">{mac ? "⌘K" : "Ctrl K"}</kbd>
     </button>
   );
 }
 
-export function HelpMenu() {
+/** `placement="up-start"`: opens above the button, left-aligned (used inside the phone More sheet, near the bottom-left of the screen). */
+export function HelpMenu({ placement = "down-end" }: { placement?: "down-end" | "up-start" }) {
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
   const mac = useIsMac();
@@ -226,7 +229,7 @@ export function HelpMenu() {
         <HelpCircle className="size-5" aria-hidden />
       </button>
       {open && (
-        <div role="menu" aria-label="Help" className="absolute right-0 top-full z-50 mt-1 w-60 rounded-2xl border border-line bg-surface p-1 shadow-2xl">
+        <div role="menu" aria-label="Help" className={`absolute z-50 w-60 max-w-[calc(100vw-1rem)] rounded-2xl border border-line bg-surface p-1 shadow-2xl ${placement === "up-start" ? "bottom-full left-0 mb-1" : "right-0 top-full mt-1"}`}>
           {items.map(({ id, label, icon: Icon, ev, hint }) => (
             <button
               key={id}
@@ -239,7 +242,7 @@ export function HelpMenu() {
               }}
               className="flex min-h-11 w-full items-center gap-3 rounded-xl px-3 text-left text-sm text-fg hover:bg-surface-2"
             >
-              <Icon className="size-4 text-accent" aria-hidden />
+              <Icon className="size-4 text-accent-text" aria-hidden />
               <span className="flex-1">{label}</span>
               {hint && <span className="text-xs text-muted">{hint}</span>}
             </button>

@@ -20,7 +20,7 @@ export function ToolsGrid() {
           <Link key={name} href={href} data-spot
             data-tilt
             className="spot spot-fill group relative overflow-hidden rounded-2xl border border-line bg-surface/90 p-4">
-            <span className="mb-3 grid size-10 place-items-center rounded-xl bg-accent/12 text-accent transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
+            <span className="mb-3 grid size-10 place-items-center rounded-xl bg-accent/12 text-accent-text transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-6">
               <Icon size={20} />
             </span>
             <p className="text-sm font-medium text-fg">{name}</p>
@@ -59,9 +59,9 @@ export function PromptTicker({ items }: { items: { id: string; prompt: string; m
         href={href(p)}
         prefetch={false}
         tabIndex={hidden ? -1 : undefined}
-        className="group inline-flex max-w-[22rem] shrink-0 items-center gap-2 rounded-full border border-line bg-surface/80 py-2 pl-3 pr-4 text-sm text-fg/90 transition-[border-color,background-color,transform] hover:border-accent hover:bg-surface-2 active:scale-95"
+        className="group inline-flex min-h-11 max-w-[22rem] shrink-0 items-center gap-2 rounded-full border border-line bg-surface/80 py-2 pl-3 pr-4 text-sm text-fg/90 transition-[border-color,background-color,transform] hover:border-accent hover:bg-surface-2 active:scale-95"
       >
-        <Wand2 size={14} className="shrink-0 text-accent transition-transform group-hover:rotate-12" />
+        <Wand2 size={14} className="shrink-0 text-accent-text transition-transform group-hover:rotate-12" />
         <span className="truncate">{p.prompt}</span>
         <span className="shrink-0 text-xs tabular-nums text-muted">{p.remixes.toLocaleString("en-US")}</span>
       </Link>

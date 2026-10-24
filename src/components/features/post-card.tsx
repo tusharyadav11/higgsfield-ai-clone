@@ -35,6 +35,7 @@ export function PostCard({ post, priority = false }: { post: Post; priority?: bo
         kind={post.kind}
         src={post.src}
         poster={post.poster}
+        motion={post.motion}
         aspect={post.aspect}
         alt={post.title}
         blur={post.blur}
@@ -76,7 +77,7 @@ export function PostCard({ post, priority = false }: { post: Post; priority?: bo
               <Heart
                 key={liked ? "on" : "off"}
                 size={16}
-                className={liked ? "heart-pop fill-accent text-accent drop-shadow-[0_0_6px_var(--accent)]" : ""}
+                className={liked ? "heart-pop fill-accent text-accent-text drop-shadow-[0_0_6px_var(--accent)]" : ""}
               />
               {burst > 0 && liked && (
                 <span key={burst} aria-hidden className="pointer-events-none absolute inset-0">

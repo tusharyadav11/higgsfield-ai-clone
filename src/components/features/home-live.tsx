@@ -30,7 +30,7 @@ export function LiveStats({ remixes, models }: { remixes: number; models: number
         <CountUp value={today} from={0} />
       </p>
       <p className="mt-1 flex items-center gap-1.5 text-sm text-muted">
-        <Activity size={14} className="text-accent" /> creations made today
+        <Activity size={14} className="text-accent-text" /> creations made today
       </p>
       <div className="mt-4 grid grid-cols-2 gap-3 border-t border-line pt-4">
         <div>
@@ -64,7 +64,7 @@ export function CompareSlider({ src, blur, prompt, title }: { src: string; blur?
           Prompt in. Magic out.
         </h2>
         <span className="inline-flex items-center gap-1 text-xs text-muted">
-          <ChevronsLeftRight size={14} className="text-accent" /> drag to reveal
+          <ChevronsLeftRight size={14} className="text-accent-text" /> drag to reveal
         </span>
       </div>
       <div
@@ -82,7 +82,7 @@ export function CompareSlider({ src, blur, prompt, title }: { src: string; blur?
           />
           <div className="absolute inset-0 grid place-items-center p-5">
             <p className="max-w-[80%] font-mono text-xs leading-relaxed text-fg/90 sm:text-sm">
-              <span className="text-accent">&gt; </span>
+              <span className="text-accent-text">&gt; </span>
               {prompt}
               <span className="ml-0.5 inline-block h-4 w-1.5 translate-y-0.5 bg-accent motion-safe:animate-[blink_1s_steps(1)_infinite]" />
             </p>

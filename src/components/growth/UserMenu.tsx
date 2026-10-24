@@ -4,12 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import { Coins, Gift, LogOut, Settings } from "lucide-react";
 import { useStore } from "@/lib/store";
 import { logout } from "@/lib/server-sync";
+import { useJobs } from "@/lib/jobs";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { useMounted } from "./hooks";
 
 export function UserMenu() {
   const mounted = useMounted();
   const user = useStore((s) => s.user);
   const credits = useStore((s) => s.credits);
+  const library = useStore((s) => s.library.length);
+  const running = useJobs((s) => s.jobs.filter((j) => j.status === "running").length);
+  const [ask, setAsk] = useState(false);
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -52,12 +57,27 @@ export function UserMenu() {
             <p className="truncate text-sm font-semibold">{user.name}</p>
             <p className="truncate text-xs text-muted">{user.email}</p>
           </div>
-          <Link role="menuitem" href="/pricing" onClick={() => setOpen(false)} className={item}><Coins className="size-4 text-accent" />{credits} credits</Link>
+          <Link role="menuitem" href="/pricing" onClick={() => setOpen(false)} className={item}><Coins className="size-4 text-accent-text" />{credits} credits</Link>
           <Link role="menuitem" href="/referrals" onClick={() => setOpen(false)} className={item}><Gift className="size-4" />Referrals</Link>
           <Link role="menuitem" href="/settings" onClick={() => setOpen(false)} className={item}><Settings className="size-4" />Settings</Link>
-          <button role="menuitem" type="button" data-testid="logout-btn" onClick={() => { setOpen(false); void logout(); }} className={`${item} w-full`}><LogOut className="size-4" />Log out</button>
+          <button role="menuitem" type="button" data-testid="logout-btn" onClick={() => { setOpen(false); setAsk(true); }} className={`${item} w-full`}><LogOut className="size-4" />Log out</button>
         </div>
       )}
+      <ConfirmDialog
+        open={ask}
+        title="Log out?"
+        confirmLabel="Log out"
+        cancelLabel="Stay signed in"
+        onCancel={() => setAsk(false)}
+        onConfirm={() => { setAsk(false); void logout(); }}
+      >
+        {running > 0 && <p><b className="text-fg">{running} generation{running === 1 ? " is" : "s are"} still running.</b> Logging out now may lose {running === 1 ? "its" : "their"} result.</p>}
+        {user.server ? (
+          <p>Your account, {credits} credits and {library} saved generation{library === 1 ? "" : "s"} stay safe on our server. Log in again to get them back. This device&apos;s local copy is cleared.</p>
+        ) : (
+          <p>This is a demo account stored only in this browser. Signing out keeps your {library} saved generation{library === 1 ? "" : "s"} and {credits} credits on this device, but you&apos;ll browse as a guest until you sign in again.</p>
+        )}
+      </ConfirmDialog>
     </div>
   );
 }

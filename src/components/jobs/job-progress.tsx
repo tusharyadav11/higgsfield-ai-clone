@@ -23,7 +23,7 @@ export function JobProgress({ job, compact = false }: { job: Job; compact?: bool
     <div data-testid="job-progress" role="status" aria-live="polite" className="w-full">
       <div className="flex items-center justify-between gap-2 text-sm">
         <span className="flex items-center gap-2 font-medium text-fg">
-          <Loader2 size={14} className="animate-spin text-accent motion-reduce:animate-none" aria-hidden />
+          <Loader2 size={14} className="animate-spin text-accent-text motion-reduce:animate-none" aria-hidden />
           {p.stage}
         </span>
         <span className="tabular-nums text-muted">{p.pct}%</span>

@@ -1,27 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Play } from "lucide-react";
-import { BLUR_DATA_URL } from "@/lib/generate";
+import { BLUR_DATA_URL, hash } from "@/lib/generate";
+import { motionFor } from "@/lib/media-library";
 import { ASPECT_SIZE, type Aspect, type Kind } from "@/lib/models";
+import { createSlotManager } from "@/lib/playback-slots";
+import styles from "./motion.module.css";
 
-/* Only 2 videos may play at once across the whole page. */
-const MAX_PLAYING = 2;
-const active: { id: symbol; stop: () => void }[] = [];
-function claim(id: symbol, stop: () => void) {
-  const i = active.findIndex((a) => a.id === id);
-  if (i >= 0) active.splice(i, 1);
-  active.push({ id, stop });
-  while (active.length > MAX_PLAYING) active.shift()?.stop();
-}
-function release(id: symbol) {
-  const i = active.findIndex((a) => a.id === id);
-  if (i >= 0) active.splice(i, 1);
-}
-
-type Conn = { saveData?: boolean };
-const noop = () => () => undefined;
+type Conn = { saveData?: boolean; effectiveType?: string };
+const conn = () => (typeof navigator === "undefined" ? undefined : (navigator as Navigator & { connection?: Conn }).connection);
+const isLite = (c: Conn | undefined) => !!c && (!!c.saveData || /^(slow-2g|2g|3g)$/.test(c.effectiveType ?? ""));
 
 function useMedia(query: string, server: boolean) {
   return useSyncExternalStore(
@@ -35,16 +25,37 @@ function useMedia(query: string, server: boolean) {
   );
 }
 
-/** False for prefers-reduced-motion and data-saver users (and during SSR). */
-export function useMotionAllowed() {
-  const reduce = useMedia("(prefers-reduced-motion: reduce)", true);
-  const saver = useSyncExternalStore(
-    noop,
-    () => !!(navigator as Navigator & { connection?: Conn }).connection?.saveData,
-    () => true,
+export type MotionMode = "full" | "kb" | "none";
+
+/**
+ * full: play the video loop. kb: Save-Data / slow network, poster-only with a CSS Ken-Burns drift.
+ * none: prefers-reduced-motion, no motion at all.
+ */
+export function useMotionMode(): MotionMode {
+  const reduce = useMedia("(prefers-reduced-motion: reduce)", false);
+  const lite = useSyncExternalStore(
+    (cb) => {
+      const c = conn() as (Conn & EventTarget) | undefined;
+      c?.addEventListener?.("change", cb);
+      return () => c?.removeEventListener?.("change", cb);
+    },
+    () => isLite(conn()),
+    () => false,
   );
-  return !reduce && !saver;
+  return reduce ? "none" : lite ? "kb" : "full";
 }
+
+/** False for prefers-reduced-motion and data-saver / slow-network users. */
+export function useMotionAllowed() {
+  return useMotionMode() === "full";
+}
+
+/* Global playback budget: 3 videos on desktop, 2 on touch; denied entirely when motion is not allowed. */
+const slots = createSlotManager({
+  max: () => (typeof window !== "undefined" && window.matchMedia("(hover: none)").matches ? 2 : 3),
+  allowed: () =>
+    typeof window !== "undefined" && !window.matchMedia("(prefers-reduced-motion: reduce)").matches && !isLite(conn()),
+});
 
 const isLocal = (s: string) => s.startsWith("/");
 
@@ -52,23 +63,54 @@ export type MediaProps = {
   kind: Kind;
   src: string;
   poster?: string;
+  /** Cinematic loop for an image (defaults to the local library's loop for this photo). */
+  motion?: string;
   aspect: Aspect;
   alt: string;
   blur?: string;
   priority?: boolean;
   sizes?: string;
   className?: string;
+  /** Fill an already-sized positioned parent instead of owning an aspect-ratio box. */
+  fillParent?: boolean;
   children?: React.ReactNode;
 };
 
-/** Fixed-aspect box: photo via next/image, or poster-first lazy video. */
-export function MediaView({ kind, src, poster, aspect, alt, blur, priority = false, sizes, className = "", children }: MediaProps) {
+/** Fixed-aspect box: still photo first (blur-up), then an in-view muted loop cross-faded over it. */
+export function MediaView({ kind, src, poster, motion, aspect, alt, blur, priority = false, sizes, className = "", fillParent = false, children }: MediaProps) {
   const { w, h } = ASPECT_SIZE[aspect];
   const still = kind === "video" ? (poster ?? src) : src;
+  const loop = kind === "video" ? src : (motion ?? motionFor(src));
+  const mode = useMotionMode();
+  const box = useRef<HTMLDivElement>(null);
+
+  // Blur-up -> sharp plus a one-shot light sweep, only for images not yet painted at hydration
+  // (so SSR/cached images never flash blurred and nothing waits on JS).
+  useEffect(() => {
+    const wrap = box.current;
+    const img = wrap?.querySelector("img");
+    if (!wrap || !img || img.complete) return;
+    img.classList.add(styles.blurPending);
+    const done = () => {
+      img.classList.add(styles.blurDone);
+      img.classList.remove(styles.blurPending);
+      wrap.classList.add(styles.reveal);
+      window.setTimeout(() => wrap.classList.remove(styles.reveal), 1000);
+    };
+    img.addEventListener("load", done, { once: true });
+    img.addEventListener("error", done, { once: true });
+    return () => {
+      img.removeEventListener("load", done);
+      img.removeEventListener("error", done);
+    };
+  }, [still]);
+
+  const kb = mode === "kb" && loop ? styles[`kb${hash(src) % 4}`] : "";
   return (
     <div
-      className={`relative overflow-hidden bg-surface-2 ${className}`}
-      style={{ aspectRatio: `${w} / ${h}` }}
+      ref={box}
+      className={`${styles.sheen} ${fillParent ? "absolute inset-0" : "relative"} overflow-hidden bg-surface-2 ${className}`}
+      style={fillParent ? undefined : { aspectRatio: `${w} / ${h}` }}
     >
       <Image
         src={still}
@@ -80,74 +122,106 @@ export function MediaView({ kind, src, poster, aspect, alt, blur, priority = fal
         placeholder="blur"
         blurDataURL={blur ?? BLUR_DATA_URL}
         unoptimized={!isLocal(still)}
-        className="object-cover"
+        className={`object-cover ${kb}`}
       />
-      {kind === "video" && <VideoLayer src={src} poster={still} />}
+      {loop && (mode === "full" || kind === "video") && (
+        <VideoLayer src={loop} poster={blur ?? BLUR_DATA_URL} badge={kind === "video"} auto={mode === "full"} />
+      )}
       {children}
     </div>
   );
 }
 
-/** Video layered above the poster. Nothing downloads until it is first asked to play. */
-export function VideoLayer({ src, poster, controlsHint = true }: { src: string; poster?: string; controlsHint?: boolean }) {
+/**
+ * Looping muted video layered above the still image.
+ * - element created only within about one screen of the viewport (phones drop it again when far away to free memory)
+ * - preload="none" until it is visible (>=40%) and granted a playback slot, then "auto"
+ * - paused when off-screen or the tab is hidden; desktop also starts on hover
+ */
+export function VideoLayer({ src, poster, badge = false, auto = true }: { src: string; poster?: string; badge?: boolean; auto?: boolean }) {
   const wrap = useRef<HTMLDivElement>(null);
   const vid = useRef<HTMLVideoElement>(null);
   const id = useRef<symbol>(Symbol("video"));
+  const hoverRef = useRef(false);
+  const tapRef = useRef(false);
+  const touch = useMedia("(hover: none)", false);
+  const [near, setNear] = useState(false);
+  const [vis, setVis] = useState(false);
   const [hover, setHover] = useState(false);
-  const [inView, setInView] = useState(false);
-  const touch = !useMedia("(hover: hover)", true);
-  const motion = useMotionAllowed();
+  const [hidden, setHidden] = useState(false);
   const [tapped, setTapped] = useState<boolean | null>(null);
-  const [mounted, setMounted] = useState(false);
   const [ready, setReady] = useState(false);
+  const [created, setCreated] = useState(false);
+  if (near && !created) setCreated(true);
+  const mounted = touch ? near : created;
 
   useEffect(() => {
     const el = wrap.current;
     if (!el) return;
-    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting && e.intersectionRatio > 0.6), {
-      threshold: [0, 0.6],
-    });
-    io.observe(el);
-    return () => io.disconnect();
+    const far = new IntersectionObserver(([e]) => setNear(e.isIntersecting), { rootMargin: touch ? "60% 0px" : "100% 0px" });
+    const seen = new IntersectionObserver(
+      ([e]) => {
+        const v = e.isIntersecting && e.intersectionRatio >= 0.4;
+        setVis(v);
+        if (!v) {
+          tapRef.current = false;
+          setTapped(null);
+        }
+      },
+      { threshold: [0, 0.4] },
+    );
+    far.observe(el);
+    seen.observe(el);
+    return () => {
+      far.disconnect();
+      seen.disconnect();
+    };
+  }, [touch]);
+
+  useEffect(() => {
+    const on = () => setHidden(document.hidden);
+    document.addEventListener("visibilitychange", on);
+    return () => document.removeEventListener("visibilitychange", on);
   }, []);
 
-  // hover on desktop, in-view (>60%) on touch; an explicit tap overrides either.
-  const auto = motion && (touch ? inView : hover && inView);
-  const want = tapped ?? auto;
-
-  // Evicted by a newer player: pause only; resumes when it is asked to play again.
-  const stop = useCallback(() => vid.current?.pause(), []);
-
-  if (want && !mounted) setMounted(true);
+  const want = !hidden && (tapped ?? (auto && (vis || hover)));
+  if (!mounted && ready) setReady(false);
 
   useEffect(() => {
     const v = vid.current;
     const me = id.current;
-    if (want) {
-      if (!v) return;
-      claim(me, stop);
-      v.play().catch(() => undefined);
-    } else {
-      v?.pause();
-      release(me);
+    if (!v) return;
+    if (!want) {
+      slots.release(me);
+      v.pause();
+      return;
     }
-  }, [want, mounted, stop]);
-
-  useEffect(() => {
-    const me = id.current;
-    return () => release(me);
-  }, []);
+    const go = () => {
+      v.preload = "auto";
+      v.play().catch(() => undefined);
+    };
+    if (slots.request(me, { stop: () => v.pause(), onGrant: go, steal: hoverRef.current || tapRef.current, explicit: tapRef.current })) go();
+    return () => slots.release(me);
+  }, [want, mounted]);
 
   return (
     <div
       ref={wrap}
       className="absolute inset-0"
-      onMouseEnter={() => setHover(true)}
+      onMouseEnter={() => {
+        hoverRef.current = true;
+        setHover(true);
+      }}
       onMouseLeave={() => {
+        hoverRef.current = false;
         setHover(false);
+        tapRef.current = false;
         setTapped(null);
       }}
-      onClick={() => setTapped(!want)}
+      onClick={() => {
+        tapRef.current = !want;
+        setTapped(!want);
+      }}
     >
       {mounted && (
         <video
@@ -159,12 +233,14 @@ export function VideoLayer({ src, poster, controlsHint = true }: { src: string; 
           playsInline
           preload="none"
           aria-hidden
+          tabIndex={-1}
           onPlaying={() => setReady(true)}
           onPause={() => setReady(false)}
-          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-300 ${ready ? "opacity-100" : "opacity-0"}`}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${ready ? "opacity-100" : "opacity-0"}`}
         />
       )}
-      {controlsHint && !ready && (
+      {mounted && ready && <span aria-hidden className={styles.live} />}
+      {badge && !ready && (
         <span className="pointer-events-none absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-xs text-white">
           <Play size={10} fill="currentColor" /> Video
         </span>

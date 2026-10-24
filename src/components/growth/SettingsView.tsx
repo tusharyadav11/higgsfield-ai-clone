@@ -6,7 +6,9 @@ import { ACCENTS, ACCENT_SWATCH, applyAccent, type Accent } from "@/lib/theme";
 import { useStore, type Notifs } from "@/lib/store";
 import { clearAuthData } from "@/lib/auth";
 import { useServerInfo } from "@/lib/server-info";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { Button, Card } from "@/components/ui";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 import { useMounted } from "./hooks";
 
 const NOTIFS: [keyof Notifs, string][] = [
@@ -47,8 +49,13 @@ export function SettingsView() {
           Display name
           <input data-testid="settings-name" value={s.name} maxLength={40} onChange={(e) => { s.setName(e.target.value); setSaved(true); }} placeholder="Guest" className="min-h-11 rounded-xl border border-line bg-surface-2 px-3 text-fg outline-none focus:border-accent" />
         </label>
-        <p className="mt-2 text-sm text-muted">{s.user ? `Signed in as ${s.user.email}` : "You are using Kinetic as a guest."} {saved && <span className="text-accent">Saved.</span>}</p>
+        <p className="mt-2 text-sm text-muted">{s.user ? `Signed in as ${s.user.email}` : "You are using Kinetic as a guest."} {saved && <span className="text-accent-text">Saved.</span>}</p>
         <p className="mt-1 text-xs text-muted">{s.user?.server ? "Your account, credits and library are stored on our server." : serverDb ? "Guest data lives in this browser. Sign up to save it to your account." : "Demo mode: accounts are stored in your browser."}</p>
+      </Card>
+      <Card>
+        <h2 className="font-semibold">Theme</h2>
+        <p className="mt-1 text-xs text-muted">Light, dark, or follow your device.</p>
+        <ThemeToggle id="settings-theme" className="mt-2" />
       </Card>
       <Card>
         <h2 className="font-semibold">Accent</h2>
@@ -69,8 +76,10 @@ export function SettingsView() {
           {NOTIFS.map(([k, label]) => (
             <li key={k} className="flex min-h-11 items-center justify-between gap-3 text-sm">
               <span>{label}</span>
-              <button type="button" role="switch" aria-checked={s.notifs[k]} aria-label={label} data-testid={`notif-${k}`} onClick={() => s.setNotif(k, !s.notifs[k])} className={`relative h-7 w-12 rounded-full border border-line ${s.notifs[k] ? "bg-accent" : "bg-surface-2"}`}>
-                <span className={`absolute top-0.5 size-5 rounded-full bg-fg transition-all ${s.notifs[k] ? "left-6" : "left-0.5"}`} />
+              <button type="button" role="switch" aria-checked={s.notifs[k]} aria-label={label} data-testid={`notif-${k}`} onClick={() => s.setNotif(k, !s.notifs[k])} className="grid h-11 w-12 shrink-0 place-items-center">
+                <span aria-hidden className={`relative block h-7 w-12 rounded-full border border-line ${s.notifs[k] ? "bg-accent" : "bg-surface-2"}`}>
+                  <span className={`absolute top-0.5 size-5 rounded-full bg-fg transition-all ${s.notifs[k] ? "left-6" : "left-0.5"}`} />
+                </span>
               </button>
             </li>
           ))}
@@ -81,16 +90,26 @@ export function SettingsView() {
         <p className="mt-1 text-sm text-muted">{s.user?.server ? "Saved to your account" : "Everything lives in this browser"}: {s.library.length} saved generation(s), {s.credits} credits.</p>
         <div className="mt-3 flex flex-wrap gap-2">
           <Button variant="secondary" data-testid="export-data" onClick={exportData}>Export library (JSON)</Button>
-          {s.user?.server ? null : !confirm ? (
+          {s.user?.server ? null : (
             <Button variant="ghost" data-testid="delete-data" onClick={() => setConfirm(true)}>Delete my local data</Button>
-          ) : (
-            <>
-              <Button data-testid="delete-data-confirm" onClick={wipe} className="!bg-red-500 !text-white">Yes, delete everything</Button>
-              <Button variant="ghost" onClick={() => setConfirm(false)}>Cancel</Button>
-            </>
           )}
         </div>
-        {confirm && <p role="alert" className="mt-2 text-sm text-red-400">This removes your library, credits, streak and demo accounts from this browser. It cannot be undone.</p>}
+      <ConfirmDialog
+        open={confirm}
+        title="Delete all your data on this device?"
+        confirmLabel="Delete everything"
+        cancelLabel="Keep my data"
+        onConfirm={() => { setConfirm(false); wipe(); }}
+        onCancel={() => setConfirm(false)}
+      >
+        <p>This permanently removes the following from this browser:</p>
+        <ul className="list-disc pl-5">
+          <li>{s.library.length} saved generation{s.library.length === 1 ? "" : "s"} in your library</li>
+          <li>{s.credits} credits (your balance on this device) and your daily streak</li>
+          <li>Your preferences (name, notifications) and any demo accounts stored here</li>
+        </ul>
+        <p>{serverDb ? "Anything saved to a server account is not affected: signing in again brings it back." : "Nothing is stored on a server in demo mode, so there is no copy to restore."} This can&apos;t be undone.</p>
+      </ConfirmDialog>
       </Card>
     </div>
   );
