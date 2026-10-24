@@ -1,23 +1,33 @@
 "use client";
 
 import Image from "next/image";
+import { MediaView } from "./media-view";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { Dices, Download, Sparkles, Upload, X, Zap } from "lucide-react";
+import { Check, Clapperboard, Copy, Dices, Download, Link2, RefreshCw, Sparkles, Upload, Wand2, X, Zap } from "lucide-react";
 import { fetchFeedPage } from "@/lib/feed-cache";
 import { ASPECT_SIZE, ASPECTS, MODELS, SURPRISE_PROMPTS, getModel, type Aspect, type Kind } from "@/lib/models";
-import type { Generation } from "@/lib/generate";
 import { useStore } from "@/lib/store";
+import { useJobs } from "@/lib/jobs";
+import { JobProgress, SyncBadge } from "@/components/jobs";
 
 const DEFAULT_PROMPT = "A neon-lit koi pond floating above a rainy Tokyo skyline, cinematic";
-const TIPS = [
-  "Describe lighting and lens (golden hour, 35mm) for more cinematic results.",
-  "Short, concrete prompts beat long vague ones.",
-  "Remix a community prompt and change just one noun.",
-  "Claim your daily streak on Home for free credits.",
-  "Video costs more credits. Draft the idea as an image first.",
-];
+const STYLE_BITS = ["cinematic lighting", "shot on 35mm, shallow depth of field", "ultra detailed", "volumetric light", "rich color grading"];
+
+/** Deterministic local prompt enhancer: appends style/lighting/camera terms that are not already present. */
+export function enhancePrompt(p: string, kind: Kind): string {
+  const base = p.trim().replace(/[.,\s]+$/, "");
+  const lower = base.toLowerCase();
+  const extra = (kind === "video" ? ["slow dolly-in camera move", ...STYLE_BITS] : STYLE_BITS).filter(
+    (t) => !t.split(/,\s*/).some((w) => lower.includes(w.toLowerCase())),
+  );
+  const out = [base, ...extra].join(", ");
+  if (out.length <= 500) return out;
+  let acc = base;
+  for (const t of extra) if ((acc + ", " + t).length <= 500) acc += ", " + t;
+  return acc.slice(0, 500);
+}
 
 export function CreateStudio() {
   const sp = useSearchParams();
@@ -27,16 +37,22 @@ export function CreateStudio() {
   const [model, setModel] = useState(qModel?.id ?? "soul-v2");
   const [prompt, setPrompt] = useState(sp.get("prompt")?.slice(0, 500) ?? (remixId ? "" : DEFAULT_PROMPT));
   const [aspect, setAspect] = useState<Aspect>("1:1");
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [upsell, setUpsell] = useState(false);
-  const [result, setResult] = useState<Generation | null>(null);
-  const [tip, setTip] = useState(0);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [copied, setCopied] = useState<"prompt" | "link" | null>(null);
+  const jobParam = sp.get("job");
+  const [activeId, setActiveId] = useState<string | null>(
+    () => jobParam ?? useJobs.getState().jobs.find((j) => j.status === "running")?.id ?? null,
+  );
   const [ref, setRef] = useState<string | null>(null);
   const promptEl = useRef<HTMLTextAreaElement>(null);
   const credits = useStore((s) => s.credits);
-  const spend = useStore((s) => s.spend);
-  const addToLibrary = useStore((s) => s.addToLibrary);
+  const startJob = useJobs((s) => s.start);
+  const retryJob = useJobs((s) => s.retry);
+  const job = useJobs((s) => s.jobs.find((j) => j.id === activeId) ?? null);
+  const busy = job?.status === "running";
+  const result = job?.status === "done" ? (job.result ?? null) : null;
+  const error = job?.status === "error" ? (job.error ?? "Generation failed") : null;
 
   const models = MODELS.filter((m) => m.kind === kind);
   const cur = getModel(model) ?? models[0];
@@ -65,12 +81,6 @@ export function CreateStudio() {
     };
   }, [remixId, sp]);
 
-  useEffect(() => {
-    if (!busy) return;
-    const t = setInterval(() => setTip((i) => (i + 1) % TIPS.length), 2200);
-    return () => clearInterval(t);
-  }, [busy]);
-
   const pickKind = (k: Kind) => {
     setKind(k);
     if (getModel(model)?.kind !== k) setModel(MODELS.find((m) => m.kind === k)!.id);
@@ -81,40 +91,54 @@ export function CreateStudio() {
     setKind(m.kind);
     setModel(m.id);
     setPrompt(SURPRISE_PROMPTS[Math.floor(Math.random() * SURPRISE_PROMPTS.length)]);
-    setError(null);
+    setNotice(null);
   };
 
-  const run = async () => {
+  const run = () => {
     const p = prompt.trim();
     if (!p || busy) return;
-    setError(null);
+    setNotice(null);
     setUpsell(false);
-    if (!spend(cost)) {
-      setUpsell(true);
-      return;
-    }
-    setBusy(true);
-    setResult(null);
-    try {
-      const res = await fetch("/api/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ kind, model: cur.id, prompt: p, aspect }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data?.error ?? "Generation failed");
-      const gen = data as Generation;
-      setResult(gen);
-      addToLibrary({ id: gen.id, url: gen.url, kind: gen.kind, prompt: gen.prompt, model: gen.model, aspect: gen.aspect, createdAt: gen.createdAt });
-    } catch (e) {
-      useStore.setState((s) => ({ credits: s.credits + cost }));
-      setError(e instanceof Error ? e.message : "Something went wrong. Credits refunded.");
-    } finally {
-      setBusy(false);
-    }
+    const r = startJob({ kind, model: cur.id, prompt: p, aspect });
+    if (r === "insufficient") setUpsell(true);
+    else if (r !== "invalid") setActiveId(r.id);
   };
 
-  const { w, h } = ASPECT_SIZE[result?.aspect ?? aspect];
+  const retry = () => {
+    if (!job) return;
+    setUpsell(false);
+    const r = retryJob(job.id);
+    if (r === "insufficient") setUpsell(true);
+    else if (r !== "invalid") setActiveId(r.id);
+  };
+
+  const flash = (k: "prompt" | "link") => {
+    setCopied(k);
+    setTimeout(() => setCopied(null), 1800);
+  };
+  const copy = async (text: string, k: "prompt" | "link") => {
+    try {
+      await navigator.clipboard.writeText(text);
+      flash(k);
+    } catch {
+      setNotice("Copy was blocked by the browser.");
+    }
+  };
+  const shareLink = (g: { prompt: string; model: string }) =>
+    `${window.location.origin}/create?${new URLSearchParams({ prompt: g.prompt, model: g.model }).toString()}`;
+
+  const toVideo = () => {
+    if (!result) return;
+    const vm = MODELS.find((m) => m.kind === "video")!;
+    setKind("video");
+    setModel(vm.id);
+    setPrompt(result.prompt);
+    setRef(result.url);
+    setNotice("Ready to animate: pick a video model if you like, then hit Generate.");
+    promptEl.current?.focus();
+  };
+
+  const { w, h } = ASPECT_SIZE[result?.aspect ?? job?.aspect ?? aspect];
 
   return (
     <div className="grid gap-6 lg:grid-cols-[400px_1fr]">
@@ -163,6 +187,15 @@ export function CreateStudio() {
             className="mt-2 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent"
           >
             <Dices size={16} className="text-accent" /> Surprise me
+          </button>
+          <button
+            type="button"
+            data-testid="enhance-btn"
+            disabled={!prompt.trim()}
+            onClick={() => setPrompt(enhancePrompt(prompt, kind))}
+            className="ml-2 mt-2 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent disabled:opacity-50"
+          >
+            <Wand2 size={16} className="text-accent" /> Enhance
           </button>
         </div>
 
@@ -236,9 +269,11 @@ export function CreateStudio() {
           <Sparkles size={16} />
           {busy ? "Generating..." : `Generate · ${cost} credits`}
         </button>
-        <p className="text-center text-xs text-muted" suppressHydrationWarning>
-          You have {credits} credits
+        <p className="flex items-center justify-center gap-3 text-center text-xs text-muted" suppressHydrationWarning>
+          <span suppressHydrationWarning>You have {credits} credits</span>
+          <SyncBadge />
         </p>
+        {notice && <p className="text-center text-xs text-muted">{notice}</p>}
 
         {upsell && (
           <div data-testid="credits-upsell" className="rounded-2xl border border-accent bg-accent/10 p-4">
@@ -254,34 +289,46 @@ export function CreateStudio() {
         )}
         {error && (
           <div data-testid="gen-error" role="alert" className="rounded-2xl border border-red-500/50 bg-red-500/10 p-4 text-sm text-fg">
-            {error}
+            <p>{error}</p>
+            <button type="button" data-testid="retry-btn" onClick={retry} className="mt-3 inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent">
+              <RefreshCw size={14} /> Retry
+            </button>
           </div>
         )}
       </div>
 
       <div className="min-h-80">
-        {busy ? (
+        {busy && job ? (
           <div className="mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-line bg-surface">
-            <div className="relative animate-pulse bg-surface-2" style={{ aspectRatio: `${w} / ${h}` }}>
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent motion-safe:animate-pulse" />
+            <div className="relative animate-pulse bg-surface-2 motion-reduce:animate-none" style={{ aspectRatio: `${w} / ${h}` }}>
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             </div>
-            <div className="p-4" role="status" aria-live="polite">
-              <p className="text-sm font-medium text-fg">Creating your {kind}...</p>
-              <p className="mt-1 text-sm text-muted">Tip: {TIPS[tip]}</p>
+            <div className="p-4">
+              <p className="mb-3 text-sm font-medium text-fg">Creating your {job.kind}...</p>
+              <JobProgress job={job} />
             </div>
           </div>
         ) : result ? (
           <div data-testid="result-card" className="mx-auto w-full max-w-xl overflow-hidden rounded-2xl border border-line bg-surface">
-            <div style={{ aspectRatio: `${w} / ${h}` }} className="bg-surface-2">
-              <Image src={result.url} alt={result.prompt} width={w} height={h} unoptimized className="h-full w-full object-cover" />
-            </div>
+            <MediaView kind={result.kind} src={result.url} poster={result.poster} aspect={result.aspect} alt={result.prompt} priority />
             <div className="space-y-3 p-4">
               <p className="text-sm text-fg">{result.prompt}</p>
               <p className="text-xs text-muted">{getModel(result.model)?.name} · {result.aspect} · saved to your library</p>
               <div className="flex flex-wrap gap-2">
-                <a href={result.url} download={`${result.id}.svg`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg">
+                <a href={result.url} download={`${result.id}.${result.url.split(".").pop()?.split("?")[0] || "jpg"}`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg">
                   <Download size={16} /> Download
                 </a>
+                <button type="button" data-testid="copy-prompt-btn" onClick={() => copy(result.prompt, "prompt")} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg">
+                  {copied === "prompt" ? <Check size={16} /> : <Copy size={16} />} {copied === "prompt" ? "Copied" : "Copy prompt"}
+                </button>
+                <button type="button" data-testid="share-btn" onClick={() => copy(shareLink(result), "link")} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg">
+                  {copied === "link" ? <Check size={16} /> : <Link2 size={16} />} {copied === "link" ? "Link copied" : "Share link"}
+                </button>
+                {result.kind === "image" && (
+                  <button type="button" data-testid="to-video-btn" onClick={toVideo} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-4 text-sm text-fg hover:border-accent">
+                    <Clapperboard size={16} /> Make a video from this image
+                  </button>
+                )}
                 <Link href="/library" className="inline-flex min-h-11 items-center rounded-full border border-line px-4 text-sm text-fg">View library</Link>
               </div>
             </div>

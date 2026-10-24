@@ -1,3 +1,4 @@
+import { PHOTOS, VIDEOS } from "./media-library";
 import { ASPECT_SIZE, type Aspect, type Kind } from "./models";
 
 export function hash(str: string): number {
@@ -75,18 +76,33 @@ export type GenerateInput = {
 export type Generation = GenerateInput & {
   id: string;
   url: string;
+  /** Poster frame, present when kind is video. */
+  poster?: string;
   createdAt: string;
 };
 
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-async function mock(input: GenerateInput): Promise<string> {
+const ASPECT_ORDER: Aspect[] = ["1:1", "16:9", "9:16", "4:3"];
+
+/** Deterministic pick from the local media library: prompt hash + kind + aspect. */
+export function pickMedia(input: GenerateInput): { url: string; poster?: string } {
+  const h = hash(`${input.prompt}|${input.model}|${input.kind}|${input.aspect}`);
+  if (input.kind === "video") {
+    // Prefer videos whose orientation matches the requested aspect.
+    const portrait = input.aspect === "9:16";
+    const pool = VIDEOS.filter((v) => (v.aspect === "9:16") === portrait);
+    const v = pool[h % pool.length];
+    return { url: v.src, poster: v.poster };
+  }
+  const exact = PHOTOS.filter((p) => p.aspect === input.aspect);
+  const pool = exact.length ? exact : PHOTOS.filter((p) => p.aspect === ASPECT_ORDER[0]);
+  return { url: pool[h % pool.length].src };
+}
+
+async function mock(input: GenerateInput): Promise<{ url: string; poster?: string }> {
   await sleep(1200 + Math.random() * 1300);
-  return artDataUri(
-    `${input.prompt}|${input.model}`,
-    input.aspect,
-    input.kind === "video",
-  );
+  return pickMedia(input);
 }
 
 async function fal(input: GenerateInput): Promise<string | null> {
@@ -113,6 +129,7 @@ async function fal(input: GenerateInput): Promise<string | null> {
 
 export async function generate(input: GenerateInput): Promise<Generation> {
   let url: string | null = null;
+  let poster: string | undefined;
   if (process.env.FAL_KEY) {
     try {
       url = await fal(input);
@@ -120,10 +137,15 @@ export async function generate(input: GenerateInput): Promise<Generation> {
       url = null;
     }
   }
-  if (!url) url = await mock(input);
+  if (!url) {
+    const m = await mock(input);
+    url = m.url;
+    poster = m.poster;
+  }
   return {
     id: `gen_${Date.now().toString(36)}${Math.floor(Math.random() * 1e6).toString(36)}`,
     url,
+    ...(input.kind === "video" && poster ? { poster } : {}),
     kind: input.kind,
     prompt: input.prompt,
     model: input.model,

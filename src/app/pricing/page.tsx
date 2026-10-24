@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { PricingView } from "@/components/features/pricing-view";
+import { PricingView } from "@/components/growth/PricingView";
 
 export const metadata: Metadata = { title: "Pricing" };
 

@@ -11,6 +11,7 @@ export function StreakCard() {
   const [flash, setFlash] = useState<number | null>(null);
   // "today" is read after mount so the prerender never bakes in a date
   const [today, setToday] = useState<string | null>(null);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => setToday(new Date().toISOString().slice(0, 10)), []);
   const claimed = today !== null && lastClaim === today;
   const nextBonus = claimBonus(claimed ? streak + 1 : lastClaim && streak ? streak + 1 : 1);

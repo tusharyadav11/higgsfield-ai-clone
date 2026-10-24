@@ -1,9 +1,9 @@
 "use client";
 
-import Image from "next/image";
+import { MediaView } from "./media-view";
 import Link from "next/link";
 import { ImageIcon, RefreshCw, Trash2 } from "lucide-react";
-import { ASPECT_SIZE, getModel } from "@/lib/models";
+import { getModel } from "@/lib/models";
 import { useStore } from "@/lib/store";
 
 export function LibraryView() {
@@ -30,7 +30,6 @@ export function LibraryView() {
   return (
     <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
       {library.map((it) => {
-        const { w, h } = ASPECT_SIZE[it.aspect];
         const qs = new URLSearchParams({ prompt: it.prompt, model: it.model });
         return (
           <article
@@ -38,9 +37,7 @@ export function LibraryView() {
             data-testid="library-item"
             className="mb-4 break-inside-avoid overflow-hidden rounded-2xl border border-line bg-surface"
           >
-            <div style={{ aspectRatio: `${w} / ${h}` }} className="bg-surface-2">
-              <Image src={it.url} alt={it.prompt} width={w} height={h} unoptimized loading="lazy" className="h-full w-full object-cover" />
-            </div>
+            <MediaView kind={it.kind} src={it.url} poster={it.poster} aspect={it.aspect} alt={it.prompt} />
             <div className="space-y-2 p-3">
               <p className="line-clamp-2 text-xs text-muted">{it.prompt}</p>
               <p className="text-xs text-muted">{getModel(it.model)?.name ?? it.model}</p>
