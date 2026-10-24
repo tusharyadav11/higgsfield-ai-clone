@@ -3,7 +3,7 @@ import { logout } from "@/lib/server-sync";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { Building2, Compass, Gift, Home, Library, LogIn, LogOut, MoreHorizontal, Plug, Plus, Settings, Tag, Zap } from "lucide-react";
+import { BarChart3, Building2, Compass, Gift, Home, Library, LogIn, LogOut, MoreHorizontal, Plug, Plus, Settings, Tag, Zap } from "lucide-react";
 import { cn } from "@/components/ui/cn";
 import { useStore } from "@/lib/store";
 import { useMounted, useNarrow } from "@/components/growth/hooks";
@@ -16,6 +16,7 @@ const main = [
   { id: "library", href: "/library", label: "Library", icon: Library },
 ] as const;
 const extras = [
+  { id: "usage", href: "/usage", label: "Usage", icon: BarChart3 },
   { id: "pricing", href: "/pricing", label: "Pricing", icon: Tag },
   { id: "referrals", href: "/referrals", label: "Referrals", icon: Gift },
   { id: "enterprise", href: "/enterprise", label: "Enterprise", icon: Building2 },

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { Check } from "lucide-react";
+import { Check, Sparkles } from "lucide-react";
 import { MODELS } from "@/lib/models";
 import { PLANS } from "@/lib/plans";
 import { bestPct, discounted, money, validatePromo, WELCOME_HOURS, type PromoOk } from "@/lib/promo";
@@ -44,8 +44,8 @@ export function PricingView() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-center gap-3 text-sm">
-        <span className={yearly ? "text-muted" : "text-fg"}>Monthly</span>
+      <div className="mb-8 flex items-center justify-center gap-3 text-sm">
+        <span className={`transition-colors ${yearly ? "text-muted" : "font-semibold text-fg"}`}>Monthly</span>
         <button
           type="button"
           role="switch"
@@ -53,12 +53,17 @@ export function PricingView() {
           aria-label="Billing period"
           data-testid="billing-toggle"
           onClick={() => setYearly((v) => !v)}
-          className={`relative h-8 w-14 rounded-full border border-line transition-colors ${yearly ? "bg-accent" : "bg-surface-2"}`}
+          className={`relative h-9 w-16 rounded-full border transition-colors duration-300 ${yearly ? "border-accent bg-accent/25" : "border-line bg-surface-2"}`}
         >
-          <span className={`absolute top-1 size-6 rounded-full bg-fg transition-all ${yearly ? "left-7" : "left-1"}`} />
+          <span
+            className={`absolute left-1 top-1 size-7 rounded-full bg-accent shadow-[0_2px_14px_var(--glow)] transition-transform duration-300 ease-[cubic-bezier(.3,1.5,.5,1)] ${yearly ? "translate-x-7" : "translate-x-0"}`}
+          />
         </button>
-        <span className={yearly ? "text-fg" : "text-muted"}>
-          Yearly <span className="text-accent">save 20%</span>
+        <span className={`transition-colors ${yearly ? "font-semibold text-fg" : "text-muted"}`}>Yearly</span>
+        <span
+          className={`inline-flex items-center gap-1 rounded-full bg-accent px-2.5 py-0.5 text-xs font-bold text-accent-fg transition-transform duration-300 ${yearly ? "scale-110 shadow-[0_0_18px_var(--glow)]" : "scale-100 opacity-80"}`}
+        >
+          <Sparkles size={11} /> Save 20%
         </span>
       </div>
 
@@ -105,16 +110,29 @@ export function PricingView() {
             <div
               key={p.id}
               data-testid={`plan-card-${p.id}`}
-              className={`flex flex-col rounded-2xl border bg-surface p-6 ${"featured" in p ? "border-accent ring-1 ring-accent" : "border-line"}`}
+              data-spot
+              className={`spot relative flex flex-col rounded-3xl border bg-surface/95 p-6 ${
+                "featured" in p
+                  ? "glow-border border-transparent shadow-[0_30px_80px_-40px_var(--glow)] md:-translate-y-3 md:pb-9 md:pt-8"
+                  : "border-line"
+              }`}
             >
+              {"featured" in p && (
+                <span className="absolute left-1/2 top-0 z-10 inline-flex -translate-x-1/2 -translate-y-1/2 items-center gap-1 whitespace-nowrap rounded-full bg-accent px-3 py-1 text-xs font-bold text-accent-fg shadow-[0_6px_20px_-6px_var(--glow)]">
+                  <Sparkles size={12} /> Most popular
+                </span>
+              )}
               <h3 className="text-lg font-semibold text-fg">{p.name}</h3>
-              <p className="mt-3 text-4xl font-semibold text-fg">
-                {final !== base && <s className="mr-2 text-xl font-normal text-muted">{money(base)}</s>}
+              <p key={`${yearly}`} className="price-in mt-3 text-5xl font-bold tracking-tighter text-fg">
+                {final !== base && <s className="mr-2 text-xl font-normal tracking-normal text-muted">{money(base)}</s>}
                 {money(final)}
-                <span className="text-sm font-normal text-muted"> /mo{yearly && p.monthly ? ", billed yearly" : ""}</span>
+                <span className="text-sm font-normal tracking-normal text-muted"> /mo{yearly && p.monthly ? ", billed yearly" : ""}</span>
               </p>
               {final !== base && (
                 <p className="mt-1 text-xs text-accent">{source}: {pct}% off the first month</p>
+              )}
+              {yearly && p.monthly > 0 && (
+                <p className="price-in mt-1 text-xs font-medium text-accent">You save ${(p.monthly - p.yearly) * 12} a year</p>
               )}
               <p className="mt-2 text-sm text-accent">{p.credits}</p>
               <ul className="my-5 flex-1 space-y-2 text-sm text-muted">
@@ -125,14 +143,14 @@ export function PricingView() {
                 ))}
               </ul>
               {p.id === "free" ? (
-                <Link href="/create" className="inline-flex min-h-11 items-center justify-center rounded-full border border-line px-5 text-sm font-semibold text-fg">
+                <Link href="/create" className="inline-flex min-h-11 items-center justify-center rounded-full border border-line px-5 text-sm font-semibold text-fg transition-[border-color,transform] hover:border-accent active:scale-95">
                   {p.cta}
                 </Link>
               ) : (
                 <button
                   type="button"
                   onClick={() => setNotice("Checkout is not live in this demo, so no payment is taken.")}
-                  className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold ${"featured" in p ? "bg-accent text-accent-fg" : "border border-line text-fg"}`}
+                  className={`inline-flex min-h-11 items-center justify-center rounded-full px-5 text-sm font-semibold ${"featured" in p ? "btn-glow bg-accent text-accent-fg" : "border border-line text-fg transition-[border-color,transform] hover:border-accent active:scale-95"}`}
                 >
                   {p.cta}
                 </button>

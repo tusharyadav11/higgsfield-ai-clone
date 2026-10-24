@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Shell } from "@/components/shell";
+import { ACCENT_BOOT_SNIPPET } from "@/lib/color";
 import { ACCENTS, ACCENT_COOKIE, DEFAULT_ACCENT } from "@/lib/theme";
 
 // Runs before first paint: restores the saved accent so there is no colour flash.
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: accentBoot }} />
+        <script dangerouslySetInnerHTML={{ __html: ACCENT_BOOT_SNIPPET }} />
       </head>
       <body className="min-h-full">
         <Shell initialAccent={DEFAULT_ACCENT}>{children}</Shell>

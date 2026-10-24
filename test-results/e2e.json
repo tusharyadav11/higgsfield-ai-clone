@@ -4,7 +4,9 @@
       "/opt/homebrew/Cellar/node/25.2.1/bin/node",
       "/Users/tusharyadav/Desktop/higgsfield ai /node_modules/.bin/playwright",
       "test",
-      "--project=desktop"
+      "tests/e2e/color.spec.ts",
+      "tests/e2e/sticky.spec.ts",
+      "tests/e2e/theme.spec.ts"
     ],
     "configFile": "/Users/tusharyadav/Desktop/higgsfield ai /playwright.config.ts",
     "rootDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
@@ -88,7 +90,7 @@
         "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
         "timeout": 60000,
         "use": {
-          "baseURL": "http://localhost:3217",
+          "baseURL": "http://localhost:3611",
           "trace": "retain-on-failure",
           "screenshot": "only-on-failure",
           "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
@@ -108,6 +110,80 @@
         "dependencies": [],
         "ignoreSnapshots": false,
         "__projectId": "desktop"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "name": "tablet",
+        "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
+        "snapshotDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3611",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 820,
+            "height": 1180
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "tablet"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/Users/tusharyadav/Desktop/higgsfield ai /test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 4
+        },
+        "name": "phone",
+        "testDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
+        "snapshotDir": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e",
+        "testIgnore": [],
+        "testMatch": "**/*.@(spec|test).?(c|m)[jt]s?(x)",
+        "timeout": 60000,
+        "use": {
+          "baseURL": "http://localhost:3611",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 390,
+            "height": 844
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": true,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "phone"
       }
     ],
     "quiet": false,
@@ -134,183 +210,123 @@
     "version": "1.64.1",
     "workers": 4,
     "webServer": {
-      "command": "npm run build && npx next start -p 3217",
-      "url": "http://localhost:3217",
+      "command": "npm run build && npx next start -p 3611",
+      "url": "http://localhost:3611",
       "reuseExistingServer": true,
       "timeout": 300000
     }
   },
   "suites": [
     {
-      "title": "auth.spec.ts",
-      "file": "auth.spec.ts",
+      "title": "color.spec.ts",
+      "file": "color.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "signup -> logout -> login restores the account from the server",
+          "title": "dragging the SV area changes --accent immediately; hex input accepts #ff00aa",
           "ok": true,
           "tags": [],
           "tests": [
             {
               "timeout": 60000,
-              "annotations": [
-                {
-                  "type": "skip",
-                  "description": "DATABASE_URL not set: app is in local demo mode",
-                  "location": {
-                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                    "line": 7,
-                    "column": 8
-                  }
-                }
-              ],
-              "expectedStatus": "skipped",
+              "annotations": [],
+              "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
               "results": [
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "skipped",
-                  "duration": 156,
+                  "status": "passed",
+                  "duration": 71601,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:36:30.995Z",
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "description": "DATABASE_URL not set: app is in local demo mode",
-                      "location": {
-                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                        "line": 7,
-                        "column": 8
-                      }
-                    }
-                  ],
+                  "startTime": "2026-10-24T08:00:34.127Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
-              "status": "skipped"
+              "status": "expected"
             }
           ],
-          "id": "d748ac400d08b85935ef-d44e8153097cb96bf340",
-          "file": "auth.spec.ts",
-          "line": 21,
-          "column": 5
+          "id": "49ab4a598b3bac230e6a-eb32b8e13d6abae0a678",
+          "file": "color.spec.ts",
+          "line": 15,
+          "column": 1
         },
         {
-          "title": "a guest's library follows them into the new account",
+          "title": "custom accent persists across reload with no flash; reset restores lime",
           "ok": true,
           "tags": [],
           "tests": [
             {
               "timeout": 60000,
-              "annotations": [
-                {
-                  "type": "skip",
-                  "description": "DATABASE_URL not set: app is in local demo mode",
-                  "location": {
-                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                    "line": 7,
-                    "column": 8
-                  }
-                }
-              ],
-              "expectedStatus": "skipped",
+              "annotations": [],
+              "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
               "results": [
                 {
                   "workerIndex": 1,
                   "parallelIndex": 1,
-                  "status": "skipped",
-                  "duration": 150,
+                  "status": "passed",
+                  "duration": 72884,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.008Z",
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "description": "DATABASE_URL not set: app is in local demo mode",
-                      "location": {
-                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                        "line": 7,
-                        "column": 8
-                      }
-                    }
-                  ],
+                  "startTime": "2026-10-24T08:00:34.127Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
-              "status": "skipped"
+              "status": "expected"
             }
           ],
-          "id": "d748ac400d08b85935ef-3504e6047ac30481553e",
-          "file": "auth.spec.ts",
-          "line": 42,
-          "column": 5
+          "id": "49ab4a598b3bac230e6a-6e558623eb50bece69e9",
+          "file": "color.spec.ts",
+          "line": 33,
+          "column": 1
         },
         {
-          "title": "referral link flow: both sides are credited immediately, and the code survives navigation",
+          "title": "Escape closes the picker and returns focus to the trigger",
           "ok": true,
           "tags": [],
           "tests": [
             {
               "timeout": 60000,
-              "annotations": [
-                {
-                  "type": "skip",
-                  "description": "DATABASE_URL not set: app is in local demo mode",
-                  "location": {
-                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                    "line": 7,
-                    "column": 8
-                  }
-                }
-              ],
-              "expectedStatus": "skipped",
+              "annotations": [],
+              "expectedStatus": "passed",
               "projectId": "desktop",
               "projectName": "desktop",
               "results": [
                 {
                   "workerIndex": 2,
                   "parallelIndex": 2,
-                  "status": "skipped",
-                  "duration": 131,
+                  "status": "passed",
+                  "duration": 66705,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.039Z",
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "description": "DATABASE_URL not set: app is in local demo mode",
-                      "location": {
-                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                        "line": 7,
-                        "column": 8
-                      }
-                    }
-                  ],
+                  "startTime": "2026-10-24T08:00:34.126Z",
+                  "annotations": [],
                   "attachments": []
                 }
               ],
-              "status": "skipped"
+              "status": "expected"
             }
           ],
-          "id": "d748ac400d08b85935ef-26e4588a91fe61d76e55",
-          "file": "auth.spec.ts",
-          "line": 60,
-          "column": 5
+          "id": "49ab4a598b3bac230e6a-e292228624b4ca7cf331",
+          "file": "color.spec.ts",
+          "line": 55,
+          "column": 1
         },
         {
-          "title": "server-side credits survive a cleared localStorage",
+          "title": "phone: picker is a bottom sheet inside the viewport",
           "ok": true,
           "tags": [],
           "tests": [
@@ -319,10 +335,10 @@
               "annotations": [
                 {
                   "type": "skip",
-                  "description": "DATABASE_URL not set: app is in local demo mode",
+                  "description": "phone project only",
                   "location": {
-                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                    "line": 7,
+                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/color.spec.ts",
+                    "line": 64,
                     "column": 8
                   }
                 }
@@ -335,19 +351,19 @@
                   "workerIndex": 3,
                   "parallelIndex": 3,
                   "status": "skipped",
-                  "duration": 157,
+                  "duration": 497,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:36:30.995Z",
+                  "startTime": "2026-10-24T08:00:34.127Z",
                   "annotations": [
                     {
                       "type": "skip",
-                      "description": "DATABASE_URL not set: app is in local demo mode",
+                      "description": "phone project only",
                       "location": {
-                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                        "line": 7,
+                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/color.spec.ts",
+                        "line": 64,
                         "column": 8
                       }
                     }
@@ -358,75 +374,13 @@
               "status": "skipped"
             }
           ],
-          "id": "d748ac400d08b85935ef-77f54d93a4b676677869",
-          "file": "auth.spec.ts",
-          "line": 86,
-          "column": 5
+          "id": "49ab4a598b3bac230e6a-a681884d312979de0598",
+          "file": "color.spec.ts",
+          "line": 63,
+          "column": 1
         },
         {
-          "title": "signed-in generate is charged by the server exactly once",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [
-                {
-                  "type": "skip",
-                  "description": "DATABASE_URL not set: app is in local demo mode",
-                  "location": {
-                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                    "line": 7,
-                    "column": 8
-                  }
-                }
-              ],
-              "expectedStatus": "skipped",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "skipped",
-                  "duration": 90,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.229Z",
-                  "annotations": [
-                    {
-                      "type": "skip",
-                      "description": "DATABASE_URL not set: app is in local demo mode",
-                      "location": {
-                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/auth.spec.ts",
-                        "line": 7,
-                        "column": 8
-                      }
-                    }
-                  ],
-                  "attachments": []
-                }
-              ],
-              "status": "skipped"
-            }
-          ],
-          "id": "d748ac400d08b85935ef-4a5a9a22274cf43d12a8",
-          "file": "auth.spec.ts",
-          "line": 99,
-          "column": 5
-        }
-      ]
-    },
-    {
-      "title": "create.spec.ts",
-      "file": "create.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "first-visit /create has a prefilled prompt",
+          "title": "works inside the sticky header after scrolling 2000px",
           "ok": true,
           "tags": [],
           "tests": [
@@ -441,12 +395,12 @@
                   "workerIndex": 3,
                   "parallelIndex": 3,
                   "status": "passed",
-                  "duration": 11618,
+                  "duration": 66199,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.256Z",
+                  "startTime": "2026-10-24T08:00:35.211Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -454,735 +408,13 @@
               "status": "expected"
             }
           ],
-          "id": "b3ad99a2734fbb82f670-39548fcec082d6566ecd",
-          "file": "create.spec.ts",
-          "line": 3,
-          "column": 5
-        },
-        {
-          "title": "generate image -> result-card -> appears in /library; credits decrease",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 14271,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.253Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-f36b971d9dc50a6a9bc0",
-          "file": "create.spec.ts",
-          "line": 8,
-          "column": 5
-        },
-        {
-          "title": "generate video costs 10..20",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 13991,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.265Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-e6672fde9963a542014c",
-          "file": "create.spec.ts",
-          "line": 28,
-          "column": 5
-        },
-        {
-          "title": "aspect selection is selectable and sent in request",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 11700,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:31.353Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-bdd97717830fe0167b75",
-          "file": "create.spec.ts",
-          "line": 39,
-          "column": 5
-        },
-        {
-          "title": "insufficient credits -> credits-upsell linking to /pricing, no charge, not a dead end",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 3450,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:43.774Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-13a00be7efd32deff90c",
-          "file": "create.spec.ts",
-          "line": 50,
-          "column": 5
-        },
-        {
-          "title": "insufficient credits with zero balance never goes negative",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2803,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:43.844Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-1f2c08efaae9ede867ea",
-          "file": "create.spec.ts",
-          "line": 64,
-          "column": 5
-        },
-        {
-          "title": "API 500 shows gen-error, no crash, no charge, UI still usable",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 3380,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:46.123Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-201f37c2204f4ba5f477",
-          "file": "create.spec.ts",
-          "line": 72,
-          "column": 5
-        },
-        {
-          "title": "network abort shows gen-error",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 3078,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:46.403Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-b40f5e06b2a116082ebf",
-          "file": "create.spec.ts",
-          "line": 84,
-          "column": 5
-        },
-        {
-          "title": "API 400 shows gen-error",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 2887,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:46.680Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-651b2a4fe2683c51bb57",
-          "file": "create.spec.ts",
-          "line": 94,
-          "column": 5
-        },
-        {
-          "title": "empty / whitespace prompt cannot be submitted to API",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 2990,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:47.287Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-47b2c7ce5a8cbc8fddc9",
-          "file": "create.spec.ts",
-          "line": 101,
-          "column": 5
-        },
-        {
-          "title": "prompt over 500 chars cannot produce a 400 crash",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 6390,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:49.506Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-ad3f4cd7c1d1df775107",
-          "file": "create.spec.ts",
-          "line": 111,
-          "column": 5
-        },
-        {
-          "title": "double-click Generate does not double-charge",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 8807,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:49.530Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-f29c1418aac80fe07dcd",
-          "file": "create.spec.ts",
-          "line": 123,
-          "column": 5
-        },
-        {
-          "title": "keyboard: Ctrl/Cmd+Enter submits",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 4427,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:49.605Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-9c8c633f343edd2c7a4a",
-          "file": "create.spec.ts",
-          "line": 138,
-          "column": 5
-        },
-        {
-          "title": "keyboard: Enter in prompt submits",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 6240,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:50.348Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-566ae0693ef7e01321da",
-          "file": "create.spec.ts",
-          "line": 145,
-          "column": 5
-        },
-        {
-          "title": "keyboard: Tab order reaches generate-btn",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 7564,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:54.063Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-014aad01536677682f68",
-          "file": "create.spec.ts",
-          "line": 152,
-          "column": 5
-        },
-        {
-          "title": "surprise-btn sets a random prompt and model",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 5873,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:55.966Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-b4c213bec0e0e09f22e2",
-          "file": "create.spec.ts",
-          "line": 164,
-          "column": 5
-        },
-        {
-          "title": "model-select lists models for selected kind",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 4596,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:56.768Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b3ad99a2734fbb82f670-93945ebaff9d8e0e2e63",
-          "file": "create.spec.ts",
-          "line": 177,
-          "column": 5
-        }
-      ]
-    },
-    {
-      "title": "explore.spec.ts",
-      "file": "explore.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "remix from /explore prefills /create and focuses prompt",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 8518,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:36:58.779Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "068fad9605609506583e-33663570899858354307",
-          "file": "explore.spec.ts",
-          "line": 3,
-          "column": 5
-        },
-        {
-          "title": "remix works from Home trending rail too",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 6893,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:01.524Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "068fad9605609506583e-5ee0253d4ec3f646191f",
-          "file": "explore.spec.ts",
-          "line": 18,
-          "column": 5
-        },
-        {
-          "title": "like toggles with optimistic count and persists",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 7311,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:01.701Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "068fad9605609506583e-1c46e2eba84287fbc8de",
-          "file": "explore.spec.ts",
-          "line": 27,
-          "column": 5
-        },
-        {
-          "title": "tag filter requests filtered feed and shows cards",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 7502,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:01.929Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "068fad9605609506583e-1233ac9eb7bf833888c6",
-          "file": "explore.spec.ts",
-          "line": 47,
-          "column": 5
-        },
-        {
-          "title": "infinite scroll loads more cards, no duplicates",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
-                  "parallelIndex": 2,
-                  "status": "passed",
-                  "duration": 16813,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:07.397Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "068fad9605609506583e-1e0d4617de598ad27304",
-          "file": "explore.spec.ts",
+          "id": "49ab4a598b3bac230e6a-50de917efeeb97dcfd3a",
+          "file": "color.spec.ts",
           "line": 74,
-          "column": 5
+          "column": 1
         },
         {
-          "title": "feed API failure shows non-crashing state",
+          "title": "dragging the SV area changes --accent immediately; hex input accepts #ff00aa",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1190,19 +422,175 @@
               "timeout": 60000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
+              "projectId": "tablet",
+              "projectName": "tablet",
               "results": [
                 {
-                  "workerIndex": 3,
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 3576,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:01:55.372Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-050a0580bb8ded16cf22",
+          "file": "color.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "custom accent persists across reload with no flash; reset restores lime",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 7414,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:01:56.067Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-044708521051cff36e3e",
+          "file": "color.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "Escape closes the picker and returns focus to the trigger",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6201,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:01:56.545Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-c82c3b220888b21318ef",
+          "file": "color.spec.ts",
+          "line": 55,
+          "column": 1
+        },
+        {
+          "title": "phone: picker is a bottom sheet inside the viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [
+                {
+                  "type": "skip",
+                  "description": "phone project only",
+                  "location": {
+                    "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/color.spec.ts",
+                    "line": 64,
+                    "column": 8
+                  }
+                }
+              ],
+              "expectedStatus": "skipped",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 7,
                   "parallelIndex": 3,
+                  "status": "skipped",
+                  "duration": 1225,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:04.927Z",
+                  "annotations": [
+                    {
+                      "type": "skip",
+                      "description": "phone project only",
+                      "location": {
+                        "file": "/Users/tusharyadav/Desktop/higgsfield ai /tests/e2e/color.spec.ts",
+                        "line": 64,
+                        "column": 8
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "skipped"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-6441bf5e6887e3b931e8",
+          "file": "color.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "works inside the sticky header after scrolling 2000px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
                   "status": "passed",
                   "duration": 5970,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:08.477Z",
+                  "startTime": "2026-10-24T08:01:59.521Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1210,89 +598,191 @@
               "status": "expected"
             }
           ],
-          "id": "068fad9605609506583e-9c5a6ffe9dbddf712dd8",
-          "file": "explore.spec.ts",
-          "line": 91,
-          "column": 5
+          "id": "49ab4a598b3bac230e6a-6fd06a8bdcbcb619f2eb",
+          "file": "color.spec.ts",
+          "line": 74,
+          "column": 1
+        },
+        {
+          "title": "dragging the SV area changes --accent immediately; hex input accepts #ff00aa",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 6062,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:15.116Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-ca49f090fe1b9eb8e145",
+          "file": "color.spec.ts",
+          "line": 15,
+          "column": 1
+        },
+        {
+          "title": "custom accent persists across reload with no flash; reset restores lime",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5730,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:15.330Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-e64e7a201c1994f6e7d4",
+          "file": "color.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "Escape closes the picker and returns focus to the trigger",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3989,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:15.542Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-3efdb2f32b1ce7645842",
+          "file": "color.spec.ts",
+          "line": 55,
+          "column": 1
+        },
+        {
+          "title": "phone: picker is a bottom sheet inside the viewport",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 11,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 8225,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:23.905Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-3e1fe41c827a911288e1",
+          "file": "color.spec.ts",
+          "line": 63,
+          "column": 1
+        },
+        {
+          "title": "works inside the sticky header after scrolling 2000px",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2501,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:21.186Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "49ab4a598b3bac230e6a-0d35409eb7b3a8c92cc9",
+          "file": "color.spec.ts",
+          "line": 74,
+          "column": 1
         }
       ]
     },
     {
-      "title": "library-pricing.spec.ts",
-      "file": "library-pricing.spec.ts",
+      "title": "sticky.spec.ts",
+      "file": "sticky.spec.ts",
       "column": 0,
       "line": 0,
       "specs": [
         {
-          "title": "empty library state",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 5354,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:09.190Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b026111065b03cb86f1c-8be11440b4ea28a644ad",
-          "file": "library-pricing.spec.ts",
-          "line": 3,
-          "column": 5
-        },
-        {
-          "title": "library delete removes item and returns to empty state",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 8190,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:09.917Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b026111065b03cb86f1c-481a31945bae55955637",
-          "file": "library-pricing.spec.ts",
-          "line": 11,
-          "column": 5
-        },
-        {
-          "title": "library re-run goes to /create with prompt",
+          "title": "header (search, colour, credits) stays pinned after scrolling on /",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1307,12 +797,12 @@
                   "workerIndex": 3,
                   "parallelIndex": 3,
                   "status": "passed",
-                  "duration": 5957,
+                  "duration": 8400,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:14.678Z",
+                  "startTime": "2026-10-24T08:01:41.476Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1320,233 +810,13 @@
               "status": "expected"
             }
           ],
-          "id": "b026111065b03cb86f1c-a5e725bfacce2f459dba",
-          "file": "library-pricing.spec.ts",
-          "line": 23,
-          "column": 5
+          "id": "f77950c1283b5899be7b-eb806b79083d2aa1c7db",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
         },
         {
-          "title": "pricing: 3 plans, billing toggle changes prices, cost table",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 3561,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:14.594Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b026111065b03cb86f1c-f3f09bea051da3204c6a",
-          "file": "library-pricing.spec.ts",
-          "line": 35,
-          "column": 5
-        },
-        {
-          "title": "pricing free plan is 0",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 2301,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:18.146Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "b026111065b03cb86f1c-315b759b6fcd5654eee9",
-          "file": "library-pricing.spec.ts",
-          "line": 52,
-          "column": 5
-        }
-      ]
-    },
-    {
-      "title": "navigation.spec.ts",
-      "file": "navigation.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "all routes load 200 with no console errors/hydration warnings",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 9037,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:18.208Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "5d2868f7d23420c27cca-3462371d74445af9c15f",
-          "file": "navigation.spec.ts",
-          "line": 8,
-          "column": 5
-        },
-        {
-          "title": "nav between all routes",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 6112,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:20.530Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "5d2868f7d23420c27cca-aae27e42752135dd2712",
-          "file": "navigation.spec.ts",
-          "line": 18,
-          "column": 5
-        },
-        {
-          "title": "unknown route does not crash (404 page renders)",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 3378,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:20.766Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "5d2868f7d23420c27cca-2eb18d6c6c9fd045ee1c",
-          "file": "navigation.spec.ts",
-          "line": 34,
-          "column": 5
-        },
-        {
-          "title": "responsive nav layout matches breakpoint",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 2650,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:24.182Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "5d2868f7d23420c27cca-67bf517f2d8751b9c2d1",
-          "file": "navigation.spec.ts",
-          "line": 40,
-          "column": 5
-        }
-      ]
-    },
-    {
-      "title": "quality.spec.ts",
-      "file": "quality.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "no horizontal scroll at 320px on every route",
+          "title": "header (search, colour, credits) stays pinned after scrolling on /explore",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1561,12 +831,12 @@
                   "workerIndex": 2,
                   "parallelIndex": 2,
                   "status": "passed",
-                  "duration": 9718,
+                  "duration": 5973,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:24.416Z",
+                  "startTime": "2026-10-24T08:01:41.484Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1574,81 +844,13 @@
               "status": "expected"
             }
           ],
-          "id": "f46baca133b10bf87db1-f653b5a2cd412c76646c",
-          "file": "quality.spec.ts",
-          "line": 3,
-          "column": 5
-        },
-        {
-          "title": "images have dimensions and alt on /",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 6010,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:26.721Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-55864a9ea2f13e640646",
-          "file": "quality.spec.ts",
-          "line": 19,
+          "id": "f77950c1283b5899be7b-acc84c3c1b436b21c2c8",
+          "file": "sticky.spec.ts",
+          "line": 6,
           "column": 7
         },
         {
-          "title": "images have dimensions and alt on /explore",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 6215,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:26.930Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-d3c545bbea9120963dfc",
-          "file": "quality.spec.ts",
-          "line": 19,
-          "column": 7
-        },
-        {
-          "title": "images have dimensions and alt on /library",
+          "title": "header (search, colour, credits) stays pinned after scrolling on /pricing",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1663,12 +865,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6949,
+                  "duration": 3304,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:27.317Z",
+                  "startTime": "2026-10-24T08:01:46.622Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1676,81 +878,13 @@
               "status": "expected"
             }
           ],
-          "id": "f46baca133b10bf87db1-5cab5bcc96daa9a80d34",
-          "file": "quality.spec.ts",
-          "line": 19,
+          "id": "f77950c1283b5899be7b-814bf4b436ad9fa3cccd",
+          "file": "sticky.spec.ts",
+          "line": 6,
           "column": 7
         },
         {
-          "title": "images have dimensions and alt on /create",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 2909,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:32.855Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-ae58f1c1716a498d3935",
-          "file": "quality.spec.ts",
-          "line": 19,
-          "column": 7
-        },
-        {
-          "title": "videos use preload=none, muted, playsInline, poster",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 3284,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:33.196Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-795e70c60437f9e22d86",
-          "file": "quality.spec.ts",
-          "line": 49,
-          "column": 5
-        },
-        {
-          "title": "cumulative layout shift is low on /",
+          "title": "header (search, colour, credits) stays pinned after scrolling on /library",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1765,12 +899,12 @@
                   "workerIndex": 2,
                   "parallelIndex": 2,
                   "status": "passed",
-                  "duration": 7890,
+                  "duration": 2677,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:34.262Z",
+                  "startTime": "2026-10-24T08:01:47.498Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1778,13 +912,13 @@
               "status": "expected"
             }
           ],
-          "id": "f46baca133b10bf87db1-639b0254614a421d745e",
-          "file": "quality.spec.ts",
-          "line": 66,
+          "id": "f77950c1283b5899be7b-13f872dad45017d3f9e9",
+          "file": "sticky.spec.ts",
+          "line": 6,
           "column": 7
         },
         {
-          "title": "cumulative layout shift is low on /explore",
+          "title": "colour picker and search both work after scrolling down",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1796,15 +930,83 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5356,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:01:47.653Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-d340a50a0b3143c7e5b7",
+          "file": "sticky.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 3148,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:04.908Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-1f899439f996d013029d",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /explore",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 6,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11586,
+                  "duration": 3353,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:34.314Z",
+                  "startTime": "2026-10-24T08:02:05.090Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1812,13 +1014,13 @@
               "status": "expected"
             }
           ],
-          "id": "f46baca133b10bf87db1-a5bb25db550dcf27a5e8",
-          "file": "quality.spec.ts",
-          "line": 66,
+          "id": "f77950c1283b5899be7b-5926f49e1c1ad71bb42f",
+          "file": "sticky.spec.ts",
+          "line": 6,
           "column": 7
         },
         {
-          "title": "media renders without external network (seed images are local)",
+          "title": "header (search, colour, credits) stays pinned after scrolling on /pricing",
           "ok": true,
           "tags": [],
           "tests": [
@@ -1826,163 +1028,19 @@
               "timeout": 60000,
               "annotations": [],
               "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
+              "projectId": "tablet",
+              "projectName": "tablet",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 5796,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:35.943Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-6bc822c84e49dae76efd",
-          "file": "quality.spec.ts",
-          "line": 79,
-          "column": 5
-        },
-        {
-          "title": "reduced motion does not break pages",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 5016,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:36.685Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-717b347c58b53b349854",
-          "file": "quality.spec.ts",
-          "line": 90,
-          "column": 5
-        },
-        {
-          "title": "document has title, lang, and a main landmark; title not default",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
-                  "status": "passed",
-                  "duration": 4712,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:41.791Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "f46baca133b10bf87db1-bd759a437c2f6c8db685",
-          "file": "quality.spec.ts",
-          "line": 96,
-          "column": 5
-        }
-      ]
-    },
-    {
-      "title": "streak.spec.ts",
-      "file": "streak.spec.ts",
-      "column": 0,
-      "line": 0,
-      "specs": [
-        {
-          "title": "claim streak once; credits increase; second claim blocked; persists",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 3,
-                  "parallelIndex": 3,
-                  "status": "passed",
-                  "duration": 9952,
-                  "errors": [],
-                  "stdout": [],
-                  "stderr": [],
-                  "retry": 0,
-                  "startTime": "2026-10-24T07:37:41.838Z",
-                  "annotations": [],
-                  "attachments": []
-                }
-              ],
-              "status": "expected"
-            }
-          ],
-          "id": "6e02b10b8c48e14325ce-7b2ef4c1148d422f5a36",
-          "file": "streak.spec.ts",
-          "line": 3,
-          "column": 5
-        },
-        {
-          "title": "streak resets when lastClaim older than yesterday (UI reflects store)",
-          "ok": true,
-          "tags": [],
-          "tests": [
-            {
-              "timeout": 60000,
-              "annotations": [],
-              "expectedStatus": "passed",
-              "projectId": "desktop",
-              "projectName": "desktop",
-              "results": [
-                {
-                  "workerIndex": 2,
+                  "workerIndex": 4,
                   "parallelIndex": 2,
                   "status": "passed",
-                  "duration": 9949,
+                  "duration": 2631,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:42.240Z",
+                  "startTime": "2026-10-24T08:02:05.578Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -1990,9 +1048,247 @@
               "status": "expected"
             }
           ],
-          "id": "6e02b10b8c48e14325ce-0d05567601eaecb7e03f",
-          "file": "streak.spec.ts",
-          "line": 28,
+          "id": "f77950c1283b5899be7b-67057a7ab83177e81dd8",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /library",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 4490,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:07.822Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-e3f2fa12287051d3c677",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "colour picker and search both work after scrolling down",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 5300,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:08.078Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-2b26c5422fd75de7c188",
+          "file": "sticky.spec.ts",
+          "line": 20,
+          "column": 5
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 2254,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:21.483Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-0ec2b71056e88ef11902",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /explore",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2262,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:21.589Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-b47aed75e66cc44048d7",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /pricing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1506,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:23.730Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-a5f163bf4e74a9ac78ed",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "header (search, colour, credits) stays pinned after scrolling on /library",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 1149,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:23.768Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-81d2f887088e9aede83f",
+          "file": "sticky.spec.ts",
+          "line": 6,
+          "column": 7
+        },
+        {
+          "title": "colour picker and search both work after scrolling down",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 3,
+                  "status": "passed",
+                  "duration": 2710,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:23.871Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "f77950c1283b5899be7b-a84358e01b7917a06d1b",
+          "file": "sticky.spec.ts",
+          "line": 20,
           "column": 5
         }
       ]
@@ -2016,15 +1312,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 0,
-                  "parallelIndex": 0,
+                  "workerIndex": 3,
+                  "parallelIndex": 3,
                   "status": "passed",
-                  "duration": 9326,
+                  "duration": 7183,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:46.066Z",
+                  "startTime": "2026-10-24T08:01:49.926Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -2050,15 +1346,15 @@
               "projectName": "desktop",
               "results": [
                 {
-                  "workerIndex": 1,
-                  "parallelIndex": 1,
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 7145,
+                  "duration": 3391,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T07:37:46.554Z",
+                  "startTime": "2026-10-24T08:01:50.037Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -2070,16 +1366,152 @@
           "file": "theme.spec.ts",
           "line": 32,
           "column": 5
+        },
+        {
+          "title": "accent switch applies, persists across reload, and SSR has no flash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 2,
+                  "status": "passed",
+                  "duration": 12140,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:08.293Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8168eb6e17e693d86faf-fed8312bed191a210743",
+          "file": "theme.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "accent value observed before first paint is already the saved one",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "tablet",
+              "projectName": "tablet",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5260,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:08.489Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8168eb6e17e693d86faf-903e28a1265da31f1487",
+          "file": "theme.spec.ts",
+          "line": 32,
+          "column": 5
+        },
+        {
+          "title": "accent switch applies, persists across reload, and SSR has no flash",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 1,
+                  "status": "passed",
+                  "duration": 9506,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:24.983Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8168eb6e17e693d86faf-228d3123ba8abcd862d6",
+          "file": "theme.spec.ts",
+          "line": 3,
+          "column": 5
+        },
+        {
+          "title": "accent value observed before first paint is already the saved one",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 60000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "phone",
+              "projectName": "phone",
+              "results": [
+                {
+                  "workerIndex": 10,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 7936,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T08:02:25.273Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "8168eb6e17e693d86faf-7c62a513e82434314eb7",
+          "file": "theme.spec.ts",
+          "line": 32,
+          "column": 5
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T07:36:11.765Z",
-    "duration": 104025.942,
-    "expected": 47,
-    "skipped": 5,
+    "startTime": "2026-10-24T08:00:24.202Z",
+    "duration": 130431.635,
+    "expected": 34,
+    "skipped": 2,
     "unexpected": 0,
     "flaky": 0
   }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { fetchFeedPage } from "@/lib/feed-cache";
 import type { Post } from "@/lib/seed";
 import { PostCard, PostCardSkeleton } from "./post-card";
@@ -60,29 +60,69 @@ export function ExploreFeed() {
     return () => io.disconnect();
   }, [tag, loadMore, state.next]);
 
+  const chips = useRef<Record<string, HTMLButtonElement | null>>({});
+  const scroller = useRef<HTMLDivElement>(null);
+  const [pill, setPill] = useState<{ x: number; y: number; w: number } | null>(null);
+  const [edge, setEdge] = useState({ l: 0, r: 1 });
+  const measure = useCallback(() => {
+    const b = chips.current[tag];
+    const sc = scroller.current;
+    if (b) setPill({ x: b.offsetLeft, y: b.offsetTop, w: b.offsetWidth });
+    if (sc) setEdge({ l: sc.scrollLeft > 4 ? 1 : 0, r: sc.scrollLeft + sc.clientWidth < sc.scrollWidth - 4 ? 1 : 0 });
+  }, [tag]);
+  useLayoutEffect(() => {
+    measure();
+    const b = chips.current[tag];
+    const sc = scroller.current;
+    if (b && sc) sc.scrollTo({ left: b.offsetLeft - (sc.clientWidth - b.offsetWidth) / 2, behavior: "smooth" });
+    window.addEventListener("resize", measure);
+    return () => window.removeEventListener("resize", measure);
+  }, [tag, measure]);
+
   const first = state.items.length === 0 && !state.done && !state.error;
 
   return (
     <div>
-      <div className="-mx-4 mb-5 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0">
-        {TAGS.map((t) => (
-          <button
-            key={t}
-            type="button"
-            data-testid={`tag-chip-${t}`}
-            aria-pressed={tag === t}
-            onClick={() => {
-              if (t === tag) return;
-              setState({ tag: t, items: [], next: null, done: false, error: false });
-              setTag(t);
-            }}
-            className={`min-h-11 shrink-0 rounded-full border px-4 text-sm capitalize transition-colors ${
-              tag === t ? "border-accent bg-accent text-accent-fg" : "border-line bg-surface text-muted hover:text-fg"
-            }`}
-          >
-            {t}
-          </button>
-        ))}
+      <div className="sticky top-[calc(3.5rem+env(safe-area-inset-top))] z-20 -mx-4 mb-5 border-b border-line/60 bg-bg/70 px-4 py-2 backdrop-blur-xl sm:-mx-6 sm:px-6">
+        <div
+          ref={scroller}
+          onScroll={measure}
+          className="scrollbar-none overflow-x-auto"
+          style={{
+            maskImage: `linear-gradient(90deg, transparent, #000 calc(${edge.l} * 28px), #000 calc(100% - ${edge.r} * 28px), transparent)`,
+          }}
+        >
+          <div className="relative flex w-max gap-1 sm:w-auto sm:flex-wrap">
+            {pill && (
+              <span
+                aria-hidden
+                className="absolute left-0 top-0 h-11 rounded-full bg-accent shadow-[0_6px_22px_-8px_var(--glow)] transition-[transform,width] duration-300 ease-[cubic-bezier(.3,1.3,.5,1)]"
+                style={{ width: pill.w, transform: `translate(${pill.x}px, ${pill.y}px)` }}
+              />
+            )}
+            {TAGS.map((t) => (
+              <button
+                key={t}
+                ref={(el) => {
+                  chips.current[t] = el;
+                }}
+                type="button"
+                data-testid={`tag-chip-${t}`}
+                aria-pressed={tag === t}
+                onClick={() => {
+                  if (t === tag) return;
+                  setState({ tag: t, items: [], next: null, done: false, error: false });
+                  setTag(t);
+                }}
+                className={`relative min-h-11 shrink-0 rounded-full px-4 text-sm font-medium capitalize transition-[color,transform] duration-200 active:scale-95 ${
+                  tag === t ? "text-accent-fg" : "text-muted hover:text-fg"
+                } ${tag === t && !pill ? "bg-accent" : ""}`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="columns-1 gap-4 sm:columns-2 lg:columns-3 xl:columns-4">
         {state.items.map((p, i) => (

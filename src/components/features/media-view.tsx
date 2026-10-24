@@ -58,10 +58,11 @@ export type MediaProps = {
   priority?: boolean;
   sizes?: string;
   className?: string;
+  children?: React.ReactNode;
 };
 
 /** Fixed-aspect box: photo via next/image, or poster-first lazy video. */
-export function MediaView({ kind, src, poster, aspect, alt, blur, priority = false, sizes, className = "" }: MediaProps) {
+export function MediaView({ kind, src, poster, aspect, alt, blur, priority = false, sizes, className = "", children }: MediaProps) {
   const { w, h } = ASPECT_SIZE[aspect];
   const still = kind === "video" ? (poster ?? src) : src;
   return (
@@ -81,13 +82,14 @@ export function MediaView({ kind, src, poster, aspect, alt, blur, priority = fal
         unoptimized={!isLocal(still)}
         className="object-cover"
       />
-      {kind === "video" && <VideoLayer src={src} />}
+      {kind === "video" && <VideoLayer src={src} poster={still} />}
+      {children}
     </div>
   );
 }
 
 /** Video layered above the poster. Nothing downloads until it is first asked to play. */
-export function VideoLayer({ src, controlsHint = true }: { src: string; controlsHint?: boolean }) {
+export function VideoLayer({ src, poster, controlsHint = true }: { src: string; poster?: string; controlsHint?: boolean }) {
   const wrap = useRef<HTMLDivElement>(null);
   const vid = useRef<HTMLVideoElement>(null);
   const id = useRef<symbol>(Symbol("video"));
@@ -151,10 +153,11 @@ export function VideoLayer({ src, controlsHint = true }: { src: string; controls
         <video
           ref={vid}
           src={src}
+          poster={poster}
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           aria-hidden
           onPlaying={() => setReady(true)}
           onPause={() => setReady(false)}

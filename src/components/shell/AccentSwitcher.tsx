@@ -22,6 +22,11 @@ export function AccentSwitcher({ initial }: { initial: Accent }) {
           aria-label={`${name} accent`}
           data-testid={`accent-option-${name}`}
           onClick={() => {
+            const root = document.documentElement;
+            if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+              root.classList.add("accent-fade");
+              window.setTimeout(() => root.classList.remove("accent-fade"), 520);
+            }
             setAccent(name);
             applyAccent(name);
           }}
@@ -29,8 +34,8 @@ export function AccentSwitcher({ initial }: { initial: Accent }) {
         >
           <span
             className={cn(
-              "flex size-6 items-center justify-center rounded-full ring-offset-2 ring-offset-bg transition",
-              accent === name ? "ring-2 ring-accent scale-110" : "ring-0 opacity-80 hover:opacity-100",
+              "flex size-6 items-center justify-center rounded-full ring-offset-2 ring-offset-bg transition-[transform,opacity,box-shadow] duration-300 ease-[cubic-bezier(.3,1.6,.5,1)]",
+              accent === name ? "ring-2 ring-accent scale-110 shadow-[0_0_16px_-2px_var(--glow)]" : "ring-0 opacity-80 hover:opacity-100",
             )}
             style={{ background: ACCENT_SWATCH[name] }}
           >
