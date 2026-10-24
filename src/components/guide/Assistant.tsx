@@ -121,7 +121,7 @@ export function Assistant({ open, onToggle, onClose }: { open: boolean; onToggle
       onClose();
     } else if (l.run) {
       onClose();
-      setTimeout(() => openGuide(l.run === "tour" ? "tour" : l.run === "first-video" ? "first-video" : "claim"), 120);
+      setTimeout(() => openGuide(l.run === "tour" || l.run === "tour-video" || l.run === "first-video" ? l.run : "claim"), 120);
     }
   };
 

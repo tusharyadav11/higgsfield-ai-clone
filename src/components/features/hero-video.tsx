@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { MediaView, useMotionAllowed } from "./media-view";
 import "./motion.css";
-import { Sparkles, Wand2 } from "lucide-react";
+import { PlayCircle, Sparkles, Wand2 } from "lucide-react";
+import { openTourVideo } from "@/lib/guide/bus";
 import { HERO_VIDEO } from "@/lib/media-library";
 import { remixHref } from "./post-card";
 import type { Post } from "@/lib/seed";
@@ -116,6 +117,14 @@ export function HeroVideo() {
           >
             Explore
           </Link>
+          <button
+            type="button"
+            data-testid="hero-watch-tour"
+            onClick={openTourVideo}
+            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-fg/25 bg-fg/5 px-6 text-sm font-medium text-fg backdrop-blur-md transition-[background-color,transform,border-color] hover:border-accent-text hover:bg-fg/10 active:scale-95"
+          >
+            <PlayCircle size={16} aria-hidden /> Watch how it works
+          </button>
         </div>
       </div>
     </section>

@@ -206,7 +206,7 @@ export function CreateStudio() {
             data-testid="model-select"
             value={cur.id}
             onChange={(e) => setModel(e.target.value)}
-            className="min-h-11 w-full rounded-xl border border-line bg-surface px-3 text-sm text-fg outline-none focus:ring-2 focus:ring-accent"
+            className="h-11 min-h-11 w-full rounded-xl border border-line bg-surface px-3 text-sm text-fg outline-none focus:ring-2 focus:ring-accent"
           >
             {models.map((m) => (
               <option key={m.id} value={m.id}>

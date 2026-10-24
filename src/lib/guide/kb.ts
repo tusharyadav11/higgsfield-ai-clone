@@ -5,7 +5,7 @@ export type KbAction = {
   title: string;
   blurb: string;
   href?: string;
-  run?: "tour" | "first-video" | "assistant" | "claim" | "shortcuts" | "invite";
+  run?: "tour" | "tour-video" | "first-video" | "assistant" | "claim" | "shortcuts" | "invite";
   keywords: string[];
 };
 export type KbArticle = { id: string; title: string; body: string; href?: string; keywords: string[] };
@@ -31,7 +31,8 @@ export const ACTIONS: KbAction[] = [
   { id: "claim", title: "Claim daily credits", blurb: "Go home and collect today's credits and streak.", run: "claim", keywords: ["streak", "free", "bonus", "daily", "credits"] },
   { id: "invite", title: "Invite a friend", blurb: "Share Kinetic and earn bragging rights.", run: "invite", keywords: ["share", "referral", "friend", "link"] },
   { id: "claude", title: "Connect to Claude", blurb: "Use the assistant to get help, or open claude.ai.", run: "assistant", keywords: ["ai", "chat", "anthropic", "assistant", "help"] },
-  { id: "tour", title: "Take the product tour", blurb: "30-second guided tour with a moving cursor.", run: "tour", keywords: ["tutorial", "onboarding", "learn", "help", "how"] },
+  { id: "tour-video", title: "Watch the 60-second tour", blurb: "A short video that shows how Kinetic works, with chapters you can skip to.", run: "tour-video", keywords: ["video", "watch", "demo", "how", "works", "show", "overview", "walkthrough"] },
+  { id: "tour", title: "Take the interactive tour", blurb: "30-second guided tour with a moving cursor.", run: "tour", keywords: ["tutorial", "onboarding", "learn", "help", "how"] },
   { id: "shortcuts", title: "Keyboard shortcuts", blurb: "See every shortcut.", run: "shortcuts", keywords: ["keys", "hotkeys", "cmd", "ctrl"] },
 ];
 

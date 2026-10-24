@@ -1,14 +1,15 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { HelpCircle, Search, Compass, MessageCircle, Keyboard, Sparkles, X } from "lucide-react";
+import { HelpCircle, Search, Compass, PlayCircle, MessageCircle, Keyboard, Sparkles, X } from "lucide-react";
 import { SHORTCUTS, WHATS_NEW } from "@/lib/guide/kb";
-import { lsGet, lsSet, openGuide, useGuideEvents, useIsMac, type GuideEvent } from "@/lib/guide/bus";
+import { TOUR_VIDEO_EVENT, lsGet, lsSet, openGuide, useGuideEvents, useIsMac, type GuideEvent } from "@/lib/guide/bus";
 import type { TourKey } from "@/lib/guide/tour";
 import { ToastHost } from "@/components/ui/Toast";
 import { Palette } from "./Palette";
 import { Tour } from "./Tour";
 import { Assistant } from "./Assistant";
+import { TourVideo } from "./TourVideo";
 
 const SEEN_KEY = "kinetic.tour.seen";
 
@@ -42,6 +43,7 @@ export function GuideRoot() {
   const [search, setSearch] = useState(false);
   const [assistant, setAssistant] = useState(false);
   const [tour, setTour] = useState<TourKey | null>(null);
+  const [video, setVideo] = useState(false);
   const [info, setInfo] = useState<"shortcuts" | "whatsnew" | null>(null);
   const [toast, setToast] = useState<{ text: string; offer?: boolean } | null>(null);
   const tourRef = useRef(tour);
@@ -54,7 +56,20 @@ export function GuideRoot() {
     setToast(null);
     setSearch(false);
     setAssistant(false);
+    setVideo(false);
     setTour(k);
+  }, []);
+
+  useEffect(() => {
+    const open = () => {
+      lsSet(SEEN_KEY, "1");
+      setToast(null);
+      setSearch(false);
+      setAssistant(false);
+      setVideo(true);
+    };
+    window.addEventListener(TOUR_VIDEO_EVENT, open);
+    return () => window.removeEventListener(TOUR_VIDEO_EVENT, open);
   }, []);
 
   useGuideEvents((k: GuideEvent) => {
@@ -93,7 +108,7 @@ export function GuideRoot() {
   useEffect(() => {
     const t = setTimeout(() => {
       if (lsGet<string | null>(SEEN_KEY, null) || tourRef.current) return;
-      setToast({ text: "New here? Take a 30-second tour.", offer: true });
+      setToast({ text: "New here? Watch the 60-second tour.", offer: true });
     }, 2500);
     return () => clearTimeout(t);
   }, []);
@@ -115,6 +130,15 @@ export function GuideRoot() {
   return (
     <>
       {search && <Palette onClose={() => setSearch(false)} />}
+      {video && (
+        <TourVideo
+          onClose={() => setVideo(false)}
+          onTry={() => {
+            setVideo(false);
+            setTimeout(() => startTour("main"), 0);
+          }}
+        />
+      )}
       {tour && <Tour key={tour} tourKey={tour} onEnd={endTour} />}
       <ToastHost />
       <Assistant open={assistant} onToggle={() => setAssistant((a) => !a)} onClose={closeAssistant} />
@@ -123,19 +147,18 @@ export function GuideRoot() {
           <span>{toast.text}</span>
           {toast.offer && (
             <>
-              <button type="button" data-testid="tour-start" onClick={() => startTour("main")} className="min-h-11 shrink-0 rounded-xl bg-accent px-3 font-semibold text-accent-fg">
-                Start
+              <button type="button" data-testid="tour-start" onClick={() => openGuide("tour-video")} className="min-h-11 shrink-0 rounded-xl bg-accent px-3 font-semibold text-accent-fg">
+                Watch 60s tour
               </button>
               <button
                 type="button"
-                aria-label="Dismiss"
                 onClick={() => {
                   lsSet(SEEN_KEY, "1");
                   setToast(null);
                 }}
-                className="grid size-11 shrink-0 place-items-center rounded-xl text-muted hover:text-fg"
+                className="min-h-11 shrink-0 rounded-xl px-3 text-muted hover:text-fg"
               >
-                <X className="size-4" aria-hidden />
+                Skip
               </button>
             </>
           )}
@@ -194,6 +217,7 @@ export function SearchTrigger() {
 export function HelpMenu({ placement = "down-end" }: { placement?: "down-end" | "up-start" }) {
   const [open, setOpen] = useState(false);
   const wrap = useRef<HTMLDivElement>(null);
+  const trigger = useRef<HTMLButtonElement>(null);
   const mac = useIsMac();
   useEffect(() => {
     if (!open) return;
@@ -209,7 +233,8 @@ export function HelpMenu({ placement = "down-end" }: { placement?: "down-end" | 
     };
   }, [open]);
   const items: { id: string; label: string; icon: typeof Search; ev: GuideEvent; hint?: string }[] = [
-    { id: "tour-start", label: "Take the tour", icon: Compass, ev: "tour" },
+    { id: "help-tour-video", label: "Watch the 60-second tour", icon: PlayCircle, ev: "tour-video" },
+    { id: "tour-start", label: "Take the interactive tour", icon: Compass, ev: "tour" },
     { id: "help-assistant", label: "Ask the assistant", icon: MessageCircle, ev: "assistant" },
     { id: "help-search", label: "Search", icon: Search, ev: "search", hint: mac ? "⌘K" : "Ctrl K" },
     { id: "help-shortcuts", label: "Keyboard shortcuts", icon: Keyboard, ev: "shortcuts" },
@@ -218,6 +243,7 @@ export function HelpMenu({ placement = "down-end" }: { placement?: "down-end" | 
   return (
     <div ref={wrap} className="relative">
       <button
+        ref={trigger}
         type="button"
         data-testid="help-menu"
         aria-label="Help"
@@ -237,6 +263,7 @@ export function HelpMenu({ placement = "down-end" }: { placement?: "down-end" | 
               role="menuitem"
               data-testid={id}
               onClick={() => {
+                trigger.current?.focus(); // so dialogs opened from here can return focus to the Help button
                 setOpen(false);
                 setTimeout(() => openGuide(ev), 0);
               }}

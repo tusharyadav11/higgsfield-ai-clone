@@ -1,7 +1,7 @@
 import { ACTIONS, ARTICLES, PAGES, SUGGESTIONS, TOOLS } from "./kb";
 import { scoreAny } from "./fuzzy";
 
-export type AssistLink = { label: string; href?: string; run?: "tour" | "first-video" | "claim" };
+export type AssistLink = { label: string; href?: string; run?: "tour" | "tour-video" | "first-video" | "claim" };
 export type AssistReply = { text: string; links: AssistLink[] };
 
 const STOP = new Set(["the", "a", "an", "to", "do", "i", "how", "where", "is", "can", "my", "me", "what", "of", "in", "on", "for", "and", "it", "get", "find", "need", "want", "please", "you"]);
@@ -10,6 +10,9 @@ const STOP = new Set(["the", "a", "an", "to", "do", "i", "how", "where", "is", "
 export function localAnswer(question: string): AssistReply {
   const q = question.toLowerCase().trim();
   const links: AssistLink[] = [];
+  if (/(how (it|this|kinetic) works|show me how|demo|overview|watch)/.test(q) && !/(make|create|generate|first)/.test(q)) {
+    return { text: "Here is a 60-second video that shows how Kinetic works. You can jump to any chapter.", links: [{ label: "Watch tour", run: "tour-video" }, { label: "Take the interactive tour", run: "tour" }] };
+  }
   if (/\b(tour|tutorial|walk ?through|show me around|onboard)/.test(q) && !/video/.test(q)) {
     return { text: "Happy to show you around. The tour takes about 30 seconds and I will move the cursor for you.", links: [{ label: "Start the tour", run: "tour" }] };
   }
@@ -53,7 +56,7 @@ export function localAnswer(question: string): AssistReply {
     const a = ACTIONS[top.i];
     text = `${a.title}: ${a.blurb}`;
     if (a.href) add("Take me there", a.href);
-    else if (a.run === "tour" || a.run === "first-video" || a.run === "claim") links.push({ label: "Do it with me", run: a.run });
+    else if (a.run === "tour" || a.run === "tour-video" || a.run === "first-video" || a.run === "claim") links.push({ label: "Do it with me", run: a.run });
   }
   return { text, links: links.slice(0, 3) };
 }

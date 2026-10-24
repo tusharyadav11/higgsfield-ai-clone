@@ -1,10 +1,18 @@
 "use client";
 import { useEffect, useRef, useSyncExternalStore } from "react";
 
-export type GuideEvent = "search" | "assistant" | "tour" | "first-video" | "claim" | "shortcuts" | "whatsnew" | "invite";
+export type GuideEvent = "search" | "assistant" | "tour" | "first-video" | "claim" | "shortcuts" | "whatsnew" | "invite" | "tour-video";
 const NAME = "guide:open";
 
+export const TOUR_VIDEO_EVENT = "kinetic:tour-video";
+
+/** Opens the product-tour video modal from anywhere (also: `window.dispatchEvent(new Event("kinetic:tour-video"))`). */
+export function openTourVideo() {
+  if (typeof window !== "undefined") window.dispatchEvent(new Event(TOUR_VIDEO_EVENT));
+}
+
 export function openGuide(kind: GuideEvent) {
+  if (kind === "tour-video") return openTourVideo();
   if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent<GuideEvent>(NAME, { detail: kind }));
 }
 

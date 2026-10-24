@@ -415,7 +415,7 @@ test("overlay: help menu, shortcuts dialog, tour step, tour offer toast", async 
     const overlapsFab = !(t.x + t.width <= fab.x || fab.x + fab.width <= t.x || t.y + t.height <= fab.y || fab.y + fab.height <= t.y);
     expect.soft(overlapsFab, "tour offer toast overlaps assistant FAB").toBe(false);
     await shot(page, "overlay-tour-offer", info.project.name);
-    await page.getByRole("button", { name: "Dismiss" }).first().click();
+    await page.getByRole("button", { name: "Skip" }).first().click();
   }
   // help menu (lives in the More sheet on narrow phones)
   if (!(await page.locator('[data-testid="help-menu"]:visible').count())) await page.getByTestId("nav-more").click();
