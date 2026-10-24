@@ -388,6 +388,9 @@ test("overlay: assistant FAB + panel (+ keyboard-open)", async ({ page, hasTouch
     expect.soft(hit, "assistant FAB / fixed element covers the generate button label").toEqual([]);
     void g2; void fb;
   }
+  // scrolling down tucks the FAB away on phones (by design); scroll back to the top, as a user would, before tapping it
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await expect(fab).not.toHaveAttribute("data-tucked", /.*/);
   await fab.click();
   await expect(page.getByTestId("assistant-input")).toBeVisible();
   await page.waitForTimeout(300);

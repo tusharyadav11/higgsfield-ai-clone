@@ -1,4 +1,4 @@
-import { date, index, integer, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
+import { date, index, integer, jsonb, pgTable, primaryKey, text, timestamp, uniqueIndex, uuid } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -98,5 +98,10 @@ export const quotes = pgTable("quotes", {
   company: text("company").notNull(),
   teamSize: integer("team_size").notNull(),
   useCase: text("use_case").notNull().default(""),
+  expectedCredits: integer("expected_credits"),
+  message: text("message").notNull().default(""),
+  billingCycle: text("billing_cycle").notNull().default("monthly"),
+  config: jsonb("config"),
+  kind: text("kind").notNull().default("quote"), // 'quote' | 'demo'
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

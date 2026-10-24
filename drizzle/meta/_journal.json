@@ -8,6 +8,13 @@
       "when": 1792824805330,
       "tag": "0000_yellow_blur",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1792846995899,
+      "tag": "0001_enterprise_quotes_v2",
+      "breakpoints": true
     }
   ]
 }
