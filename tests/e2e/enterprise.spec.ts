@@ -324,9 +324,19 @@ test.describe("enterprise page", () => {
       await page.getByTestId(`ent-nav-${id}`).click();
       await expect(page.getByTestId(`ent-nav-${id}`)).toHaveAttribute("aria-current", "location", { timeout: 5000 });
       await expect(page).toHaveURL(new RegExp(`#${id}$`));
-      const top = await page.evaluate((i) => document.getElementById(i)!.getBoundingClientRect().top, id);
-      expect(top).toBeGreaterThan(-5);
-      expect(top).toBeLessThan(300);
+      // smooth scrolling is still animating when aria-current flips, so wait for it to settle
+      await expect
+        .poll(
+          () =>
+            page.evaluate((i) => {
+              const top = document.getElementById(i)!.getBoundingClientRect().top;
+              // the last sections cannot scroll to the top when the page ends first
+              const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2;
+              return top > -5 && (top < 300 || atBottom);
+            }, id),
+          { timeout: 5000 },
+        )
+        .toBe(true);
     }
     // sticky: the nav stays on screen
     const box = await page.getByRole("navigation", { name: "On this page" }).boundingBox();

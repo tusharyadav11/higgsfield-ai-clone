@@ -204,8 +204,12 @@ test.describe("security", () => {
     await expect(page.getByTestId("sso-result")).toHaveAttribute("data-result", "ok");
     await expect(page.getByTestId("sso-result")).toContainText("not connected");
     await expect(page.getByTestId("sso-acs")).toContainText("/api/sso/acs");
-    await page.getByTestId("sso-oidc").check({ force: true });
-    await expect(page.getByTestId("sso-issuer")).toBeVisible();
+    // retry: under heavy load the first click can land before hydration and be dropped
+    await expect(async () => {
+      // click the visible label, as a user would (the radio itself is visually hidden)
+      await page.locator('label:has([data-testid="sso-oidc"])').click();
+      await expect(page.getByTestId("sso-issuer")).toBeVisible({ timeout: 1500 });
+    }).toPass({ timeout: 15_000 });
     await page.getByTestId("sso-save").click();
     await expect(page.getByTestId("toast").last()).toContainText(/not applied to a real identity provider/i);
   });
