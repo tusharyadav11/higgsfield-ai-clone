@@ -9,7 +9,7 @@ $V link --yes --project kinetic-studio >/dev/null
 url=$(grep '^DATABASE_URL_NEON=' .env.local | cut -d= -f2- || true)
 if [ -n "$url" ]; then
   $V env rm DATABASE_URL production --yes >/dev/null 2>&1 || true
-  printf '%s' "$url" | $V env add DATABASE_URL production >/dev/null
+  printf "%s" "${url%&channel_binding=require}" | $V env add DATABASE_URL production >/dev/null
   echo "DATABASE_URL set on Vercel (production)"
 fi
 for k in ANTHROPIC_API_KEY FAL_KEY; do
